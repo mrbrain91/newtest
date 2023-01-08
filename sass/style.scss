@@ -7,6 +7,7 @@ $background-color_2: #2B3643;
 $background-color_3: #4e5e70;
 $border-bottom-color_1: #337ab7;
 
+
 /*start of login page style*/
 /* body {
     background-color: #3C3C3C;
@@ -77,6 +78,9 @@ input[type='radio']:checked:after {
 	visibility: visible;
 	border: 1px solid white;
 }
+
+
+
 .container {
 	width: 100%;
 }
@@ -216,10 +220,39 @@ input[type='radio']:checked:after {
 	width: 20%;
 }
 
+.w3 {
+	width: 3%;
+}
+
+
 .prepay {
     color: green;
     font-size: 12px;
     float: right;
     margin: 10px 17px 0 0;
 	border-bottom: green solid 1px;
+}
+
+.notification {
+	margin: 9px auto;
+    height: 44px;
+    width: 405px;
+    line-height: 12px;
+    text-align: center;
+	border: 1px dashed #a94442; 
+	span {
+		border-bottom: 1px solid #a94442;
+	}
+}
+
+
+.custom_input {
+	height: 100%;
+    font-size: 12px;
+    padding: 7px 7px;
+    color: #333333;
+}
+
+.custom_td {
+	padding-top: 15px;
 }

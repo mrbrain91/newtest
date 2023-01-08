@@ -50,7 +50,7 @@ $rs_result = mysqli_query ($connect, $query);
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Должники</span>
+        <span class="right_cus">Взаиморасчеты с клиентами</span>
     </div>    
 </div>
 
@@ -58,7 +58,7 @@ $rs_result = mysqli_query ($connect, $query);
         <div class="container-fluid">
            <!-- <a href="#"> <button type="button" class="btn btn-success">Взаимозачет</button> </a> -->
            <a href="debtor.php"> <button type="button" class="btn btn-primary">должники</button> </a>
-           <a href="#"> <button type="button" class="btn">история взаимарасчетов</button> </a>
+           <a href="booked_payment_list.php"> <button type="button" class="btn">история взаимарасчетов</button> </a>
         </div>
 </div>
 

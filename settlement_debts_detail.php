@@ -15,25 +15,35 @@ if (isset($_GET['id']) and isset($_GET['prepayment'])) {
 $query = "SELECT * FROM debts WHERE id_counterpartie='$id' AND debt>0 ORDER BY id DESC";
 $rs_result = mysqli_query ($connect, $query);   
 
-
+$display = "none";
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
-    
 
+        $total_count = 0; 
         foreach($_POST['payment'] as $row => $value){
-
-            $order_id=$_POST['order_id'][$row];
             $payment=$_POST['payment'][$row];
-            $id_counterpartie=$_POST['id_counterpartie'][$row];
-
-
-            if ($payment > 0 ) {
-                $sql = "INSERT INTO `debts` (`order_id`, `prepayment`, `id_counterpartie`)  VALUES ('".$order_id."','".$payment."','".$id_counterpartie."');";
-                mysqli_query($connect, $sql);
-            }
-                
+            $total_count += $payment;
         }
-        redirect("debtor.php"); 
+        if ($prepayment >= $total_count) {
+            foreach($_POST['payment'] as $row => $value){
+
+                $order_id=$_POST['order_id'][$row];
+                $payment=$_POST['payment'][$row];
+                $id_counterpartie=$_POST['id_counterpartie'][$row];
+    
+    
+                if ($payment > 0 ) {
+                    $sql = "INSERT INTO `debts` (`order_id`, `prepayment`, `id_counterpartie`)  VALUES ('".$order_id."','".$payment."','".$id_counterpartie."');";
+                    mysqli_query($connect, $sql);
+                }
+                    
+            }
+            redirect("debtor.php"); 
+        }else {
+           $display = 'true';
+        }
+
+        
 }
 
 
@@ -67,6 +77,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
         <span class="right_cus">Перерасчет</span>
+        <div class="alert alert-danger notification" role="alert" style="display:<?php echo $display; ?>;">
+            !!! Сумма оплаты должна быть меньше или равно <span><?php echo $prepayment; ?></span>
+        </div>
     </div>    
 </div>
 
@@ -79,6 +92,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
         </div>
 </div>
 
+
 <div class="all_table">
     <div class="container-fluid">
         <form action="#"  method="POST" class="horizntal-form" id="order_form">
@@ -90,7 +104,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
                 <th scope="col">Дата заказа</th>
                 <th scope="col">Тип оплаты</th>
                 <th scope="col">Долг</th>
-                <th class="w20" scope="col">Сумма</th>
+                <th class="w20" scope="col">Оплата</th>
+                <th scope="col"><button class="btn btn-light"><i class="fa fa-check" aria-hidden="true"></i></button></th>
+                
 
                 </tr>
             </thead>
@@ -123,14 +139,16 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
                 ?> 
 
                 <tr style="display:<?php echo $display; ?>;" data-toggle="collapse" data-target="#hidden_<?php echo $i;?>">
-                    <td><?php echo $row['order_id']?></td>
+                    <td class="custom_td"><?php echo $row['order_id']?></td>
                     <input type="hidden" value='<?php echo $row['order_id']?>' name="order_id[]" form="order_form">
                     <input type="hidden" value='<?php echo $row['id_counterpartie']?>' name="id_counterpartie[]" form="order_form">
-                    <td><?php $user = get_contractor($connect, $row["id_counterpartie"]); echo $user["name"];?></td>
-                    <td><?php echo $row['order_date']?></td>
-                    <td><?php echo $row['payment_type']?></td>
-                    <td><?php echo $balance?></td>
-                    <td><input required type="text" value='0' class="form-control" name="payment[]" form="order_form"></td>
+                    <td class="custom_td"><?php $user = get_contractor($connect, $row["id_counterpartie"]); echo $user["name"];?></td>
+                    <td class="custom_td"><?php echo $row['order_date']?></td>
+                    <td class="custom_td"><?php echo $row['payment_type']?></td>
+                    <td class="custom_td"><?php echo $balance?></td>
+                    <td><input required type="number" min="0" max="<?php echo $balance?>" id="<?php echo $i;?>" value='0' class="form-control custom_input" name="payment[]" form="order_form"></td>
+                    <td><button type="button"  onclick="change(<?php echo $balance?>,<?php echo $i;?>)"  class="btn btn-light"><i class="fa fa-check" aria-hidden="true"></i></button></td>
+                    
                 </tr>
 
                 <?php       
@@ -155,5 +173,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
 </div>
 
 
+<script>
+    function change(value,id){
+          document.getElementById(id).value=value;
+    }
+</script>
+
+
 </body>
+
 </html>

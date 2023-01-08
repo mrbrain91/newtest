@@ -66,7 +66,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Перерасчет</span>
+        <span class="right_cus">Детали</span>
     </div>    
 </div>
 
