@@ -13,12 +13,12 @@ if (isset($_GET['id']) and isset($_GET['prepayment'])) {
 }
 
 $query = "SELECT * FROM debts WHERE id_counterpartie='$id' AND debt>0 ORDER BY id DESC";
-$rs_result = mysqli_query ($connect, $query);   
+$rs_result = mysqli_query ($connect, $query);
+
 
 $display = "none";
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
-
         $total_count = 0; 
         foreach($_POST['payment'] as $row => $value){
             $payment=$_POST['payment'][$row];
@@ -38,12 +38,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
                 }
                     
             }
-            redirect("debtor.php"); 
+            redirect("settlements_clients.php"); 
         }else {
            $display = 'true';
         }
-
-        
 }
 
 
@@ -60,6 +58,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.6.0/autoNumeric.js" integrity="sha512-/lbeISSLChIunUcgNvSFJSC+LFCZg08JHFhvDfDWDlY3a/NYb/NPKOcfDte3aA6E3mxm9a3sdxvkktZJSCpxGw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,7 +78,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
         <i class="fa fa-angle-double-right right_cus"></i>
         <span class="right_cus">Перерасчет</span>
         <div class="alert alert-danger notification" role="alert" style="display:<?php echo $display; ?>;">
-            !!! Сумма оплаты должна быть меньше или равно <span><?php echo $prepayment; ?></span>
+            !!! Сумма оплаты должна быть меньше или равно <span><?php echo number_format($prepayment, 0, ',', ' '); ?></span>
         </div>
     </div>    
 </div>
@@ -87,8 +87,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
         <div class="container-fluid">
            <!-- <a href="#"> <button type="button" class="btn btn-success">Взаимозачет</button> </a> -->
            <input class="btn btn-primary" type="submit" form="order_form" name="submit" value="завершить" />
-           <a href="debtor.php"> <button type="button" class="btn">закрыть</button> </a>
-        <div class="prepay">Предоплата: <?php echo $prepayment; ?></div>
+           <a href="settlements_clients.php"> <button type="button" class="btn">закрыть</button> </a>
+            <input  type="text"  id="prepay"  value="<?php echo $prepayment;?> " readonly><span style="float: right; font-weight: 600; margin: 9px 10px 0px 0px;">Предоплата:</span>
         </div>
 </div>
 
@@ -105,7 +105,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
                 <th scope="col">Тип оплаты</th>
                 <th scope="col">Долг</th>
                 <th class="w20" scope="col">Оплата</th>
-                <th scope="col"><button class="btn btn-light"><i class="fa fa-check" aria-hidden="true"></i></button></th>
+                <th scope="col" class="w60px"></th>
                 
 
                 </tr>
@@ -140,22 +140,20 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
 
                 <tr style="display:<?php echo $display; ?>;" data-toggle="collapse" data-target="#hidden_<?php echo $i;?>">
                     <td class="custom_td"><?php echo $row['order_id']?></td>
+                    
                     <input type="hidden" value='<?php echo $row['order_id']?>' name="order_id[]" form="order_form">
                     <input type="hidden" value='<?php echo $row['id_counterpartie']?>' name="id_counterpartie[]" form="order_form">
                     <td class="custom_td"><?php $user = get_contractor($connect, $row["id_counterpartie"]); echo $user["name"];?></td>
-                    <td class="custom_td"><?php echo $row['order_date']?></td>
+                    <td class="custom_td"><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
                     <td class="custom_td"><?php echo $row['payment_type']?></td>
-                    <td class="custom_td"><?php echo $balance?></td>
-                    <td><input required type="number" min="0" max="<?php echo $balance?>" id="<?php echo $i;?>" value='0' class="form-control custom_input" name="payment[]" form="order_form"></td>
+                    <td class="custom_td"><a style="color:#333333;" href="settlement_order_detail.php?order_id=<?php echo $row['order_id'];?>&&id=<?php echo $row['id_counterpartie'];?>&&prepayment=<?php echo $prepayment;?>"><?php echo number_format($balance, 0, '.', ' ');?></a></td>
+                    <td><input onblur="changeInput(<?php echo $i;?>);"  required min="0" max="<?php echo $balance?>" id="<?php echo $i;?>" value='0' class="form-control custom_input" name="payment[]" form="order_form"></td>
                     <td><button type="button"  onclick="change(<?php echo $balance?>,<?php echo $i;?>)"  class="btn btn-light"><i class="fa fa-check" aria-hidden="true"></i></button></td>
-                    
                 </tr>
-
+   
                 <?php       
                     };     
                 ?>
-
-
 
             </tbody>
             </table>
@@ -174,9 +172,58 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
 
 
 <script>
+
+
+    const autoNumericOptionsEuro = {
+    decimalPlaces: '0',
+    digitGroupSeparator        : ' ',
+    decimalCharacter           : ',',
+    decimalCharacterAlternative: '.',
+    // roundingMethod: AutoNumeric.options.roundingMethod.halfUpSymmetric,
+    };
+
+    // Initialization
+    // new AutoNumeric.multiple('.autonumber', autoNumericOptionsEuro);
+
+
+                    
+
+    const prepay = document.getElementById('prepay');
+    prepay.value = numberWithSpaces(prepay.value);
+
+    
     function change(value,id){
-          document.getElementById(id).value=value;
+        const valueNumber = numberWithoutSpaces(prepay.value);
+        document.getElementById(id).setAttribute('value',value);
+        prepay.value = numberWithSpaces(Number(valueNumber) - Number(value));
     }
+
+    // function changeSeparator(id) {
+    //     spaceNum = numberWithSpaces(document.getElementById(id).value);
+    //     document.getElementById(id).setAttribute('value',spaceNum);
+    // }
+
+    function changeInput(id){
+        const valueNumber = numberWithoutSpaces(prepay.value);
+        const valueInput = numberWithoutSpaces(document.getElementById(id).value);
+        prepay.value = numberWithSpaces(Number(valueNumber) - Number(valueInput));
+    }
+
+   
+
+
+
+
+    function numberWithSpaces(nr) {
+        return nr.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+    function numberWithoutSpaces(nr) {
+        return nr.toString().replace(/ /g,"");
+    }
+
+
+    
+
 </script>
 
 

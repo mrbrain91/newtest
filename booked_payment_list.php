@@ -70,7 +70,7 @@ $rs_result = mysqli_query ($connect, $query);
             <th scope="col">Н/З</th>
             <th scope="col">Контрагент</th>
             <th scope="col">Дата пересчета</th>
-            <th scope="col">Тип оплатаы</th>
+            <th scope="col">Тип оплата</th>
             <th scope="col">Сумма</th>
             <th>Отмена</th>
 
@@ -88,9 +88,10 @@ $rs_result = mysqli_query ($connect, $query);
             <tr data-toggle="collapse" data-target="#hidden_<?php echo $i;?>">
                 <td><?php echo $row["order_id"]; ?></td>
                 <td><?php $user = get_contractor($connect, $row["id_counterpartie"]); echo $user["name"];?></td>
-                <td><?php echo $row["order_date"]; ?></td>
+                <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
+
                 <td><?php echo $row["payment_type"]; ?></td>
-                <td><?php echo $row["prepayment"]; ?></td>
+                <td><?php echo number_format($row["prepayment"], 0, ',', ' '); ?></td>
                 <td><a href="#">отмена</a></td>
             </tr>
 

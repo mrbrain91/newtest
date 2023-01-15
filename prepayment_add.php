@@ -14,10 +14,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
 
         $id_counterpartie = $_POST['id_counterpartie'];
         $prepayment_date = $_POST['prepayment_date'];
-        $prepayment_sum = $_POST['prepayment_sum'];
+        echo $prepayment_sum = str_replace(' ', '', $_POST['prepayment_sum']);
         $payment_type = $_POST['payment_type'];
-    add_main_prepayment($connect, $id_counterpartie, $prepayment_date, $prepayment_sum, $payment_type);
-    // add_prepayment($connect, $id_counterpartie, $prepayment_date, $prepayment_sum, $payment_type);
+    
+        add_main_prepayment($connect, $id_counterpartie, $prepayment_date, $prepayment_sum, $payment_type);
 }
 
 //get counterparties
@@ -36,7 +36,7 @@ $counterparties_tbl = mysqli_query ($connect, $sql);
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap-grid.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css" />
@@ -124,7 +124,7 @@ $counterparties_tbl = mysqli_query ($connect, $sql);
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <input required type="number" class="form-control" name="prepayment_sum">
+                    <input required  class="form-control autonumeric" name="prepayment_sum">
                 </div>
                 
             </div>
@@ -144,11 +144,29 @@ $counterparties_tbl = mysqli_query ($connect, $sql);
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.6.0/autoNumeric.js" integrity="sha512-/lbeISSLChIunUcgNvSFJSC+LFCZg08JHFhvDfDWDlY3a/NYb/NPKOcfDte3aA6E3mxm9a3sdxvkktZJSCpxGw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
 </body>
 </html>
 
 <script>
 $('.normalize').selectize();
-</script>
 
+
+
+//AutoMuneric
+const autoNumericOptionsEuro = {
+    decimalPlaces: '0',
+    digitGroupSeparator        : ' ',
+    decimalCharacter           : ',',
+    decimalCharacterAlternative: '.'
+};
+
+// Initialization
+new  AutoNumeric.multiple('.autonumeric', autoNumericOptionsEuro);
+
+
+//End AutoMuneric
+
+</script>

@@ -125,7 +125,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Добавить') {
 ?> 
             <tr>
                 <td><?php echo $row["name"]; ?></td>
-                <td><?php echo $row["cost"]; ?></td>
+                <td><?php echo number_format($row["cost"], 0, ',', ' '); ?></td>
                 <td><a href="#" onclick="return confirm('Удалить?')" role="button">Удалить</a></td>
             </tr>
 <?php       

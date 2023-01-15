@@ -6,19 +6,10 @@ include('bot_lib.php');
 if (!isset($_SESSION['usersname'])) {
   header("location: index.php");
 }
-
-
-
-// $query = "SELECT * FROM settlements WHERE status='0' AND debt>'0' ORDER BY id DESC";
-// $rs_result = mysqli_query ($connect, $query);
-
  
 
 $query = "SELECT id_counterpartie, SUM(prepayment) as total_prepayment, SUM(debt) AS total_debt, SUM(main_prepayment) AS total_main_prepayment FROM debts GROUP BY id_counterpartie";
 $rs_result = mysqli_query ($connect, $query);
-
-// $row1 = mysqli_fetch_assoc(mysqli_query($connect, $query1));
-// $total_prepayment = $row1['total_prepayment'];
 
 
 ?>
@@ -27,8 +18,7 @@ $rs_result = mysqli_query ($connect, $query);
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -57,23 +47,22 @@ $rs_result = mysqli_query ($connect, $query);
 <div class="toolbar">
         <div class="container-fluid">
            <!-- <a href="#"> <button type="button" class="btn btn-success">Взаимозачет</button> </a> -->
-           <a href="debtor.php"> <button type="button" class="btn btn-primary">должники</button> </a>
-           <a href="booked_payment_list.php"> <button type="button" class="btn">история взаимарасчетов</button> </a>
+           <!-- <a href="add_order.php"> <button type="button" class="btn btn-primary">должники</button> </a> -->
+           <a href="booked_payment_list.php"> <button type="button" class="btn btn-primary">история взаимарасчетов</button> </a>
         </div>
 </div>
 
 <div class="all_table">
     <div class="container-fluid">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered" style="margin-bottom:0;">
         <thead>
             <tr>
             <th scope="col">Контрагент</th>
             <th scope="col">ИНН</th>
             <th scope="col">Долг</th>
             <th scope="col">Предоплата</th>
-            <th scope="col">Заказ</th>
             <th scope="col">Итог</th>
-            <th scope="col">Детали</th>
+            <th scope="col">Перерасчёт</th>
             </tr>
         </thead>
         <tbody>
@@ -81,38 +70,59 @@ $rs_result = mysqli_query ($connect, $query);
 
             <?php     
                 $i = 0;
+                $sum_last_debt = 0;
+                $sum_last_tot = 0;
+                $balance_sum = 0;
+                
                 while ($row = mysqli_fetch_array($rs_result)) {
-                $i++;
+                
                 
                 $last_debt = $row['total_debt']- $row['total_prepayment'];
                 $last_tot = $row['total_main_prepayment'] - $row['total_prepayment'];
+                $sum = $last_tot - $last_debt;
+
+                $sum_last_debt += $last_debt;
+                $sum_last_tot += $last_tot;
+                $balance_sum += $sum;
+                
+                
+
+
                 if ($last_debt == 0 AND $last_tot == 0 ) {
-                  $display = 'none';
-                }else {
-                  $display = 'true';
-                }
+                    $display = 'none';
+                  }else {
+                    $display = 'true';
+                    $i++;
+                  }
             ?> 
 
-            <tr style="display:<?php echo $display; ?>;" data-toggle="collapse" data-target="#hidden_<?php echo $i;?>">
+            <tr class="rowDis" style="display:<?php echo $display; ?>;" data-toggle="collapse" data-target="#hidden_<?php echo $i;?>">
             <td><?php $user = get_contractor($connect, $row["id_counterpartie"]); echo $user["name"];?></td>
             <td><?php echo $user['inn']?></td>
-                <td><?php echo $last_debt; ?></td>
-                <td><?php echo $last_tot; ?></td>
-                <td>0</td>
-                <td><?php echo $sum = $last_debt - $last_tot; ?></td>
-                <td><a href="settlement_detail.php?id=<?php echo $row["id_counterpartie"]?>&&prepayment=<?php echo $last_tot;?>">Детали</a></td>
+                <td><?php echo number_format($last_debt, 0, ',', ' '); ?></td>
+                <td><?php echo number_format($last_tot, 0, ',', ' '); ?></td>
+                <td><?php echo number_format($sum, 0, ',', ' '); ?></td>
+                <td><a href="settlement_debts_detail.php?id=<?php echo $row["id_counterpartie"]?>&&prepayment=<?php echo $last_tot;?>">Перерасчёт</a></td>
             </tr>
 
             <?php       
                 };     
             ?>
-
-
-
         </tbody>
+        </table>
+        <table class="table" style="background-color:#ebf0ff; border-left: 4px solid #7396ff;">
+            <tr>
+                <td style="text-align:center;">Количество: <?php echo number_format($i, 0, ',', ' '); ?></td>
+                <td style="text-align:center;">Сумма долгов: <?php echo number_format($sum_last_debt, 0, ',', ' '); ?></td>
+                <td style="text-align:center;">Сумма предоплат: <?php echo number_format($sum_last_tot, 0, ',', ' '); ?></td>
+                <td style="text-align:center;">Итоговая сумма: <?php echo number_format($balance_sum, 0, ',', ' '); ?></td>
+                
+            </tr>
         </table>
     </div>
 </div>
+
+
 
 
 
@@ -122,7 +132,6 @@ $rs_result = mysqli_query ($connect, $query);
     <?php include 'partSite/modal.php'; ?>
     
 </div>
-
 
 </body>
 </html>

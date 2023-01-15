@@ -79,8 +79,8 @@ $rs_result = mysqli_query ($connect, $query);
             <td><?php $user = get_contractor($connect, $row["id_counterpartie"]); echo $user["name"];?></td>
             <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
 
-            <td><?php echo $row['payment_type']?></td>
-            <td><?php echo $row['main_prepayment']?></td>
+            <td><?php echo $row['payment_type']; ?></td>
+            <td><?php echo number_format($row['main_prepayment'], 0, ',', ' '); ?></td>
             <td><a href="#">Просмотр</a></td>
             <td><a href="#">Редактировать</a></td>
 

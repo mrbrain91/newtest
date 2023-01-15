@@ -80,7 +80,7 @@ if (isset($_GET['restore_id'])) {
         $query = "UPDATE rest_tbl SET rest = rest + '$count_name', bron = bron + '$count_name', archived = archived - '$count_name' WHERE prod_name='$prod_name'";
         mysqli_query($connect, $query);
     }
-//--------------------------------------------------------
+//--------------------------------------++++------------------
 
 
     if (upd_order_sts_res($connect, $restore_id)) {

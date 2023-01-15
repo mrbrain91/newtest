@@ -30,7 +30,6 @@ body {
 
 
 
-
 .form {
 	display: block;
 	margin: 0 auto;
@@ -161,6 +160,8 @@ input[type='radio']:checked:after {
 	padding-top: 10px;
 
 }
+
+
 .card_head {
 	padding: 3px;
 	margin-top: 20px;
@@ -224,19 +225,25 @@ input[type='radio']:checked:after {
 	width: 3%;
 }
 
+.w60px {
+	width: 60px;
+}
 
-.prepay {
+
+#prepay {
+		border: none;
     color: green;
     font-size: 12px;
     float: right;
-    margin: 10px 17px 0 0;
-	border-bottom: green solid 1px;
+    margin: 10px 124px 0 0;
+	background-color: $background-color_1;
+	outline: none;
 }
 
 .notification {
 	margin: 9px auto;
     height: 44px;
-    width: 405px;
+    width: 440px;
     line-height: 12px;
     text-align: center;
 	border: 1px dashed #a94442; 
@@ -255,4 +262,14 @@ input[type='radio']:checked:after {
 
 .custom_td {
 	padding-top: 15px;
+}
+
+.ordernum {
+	color: #333333;
+    font-weight: 600;
+}
+
+.dotedline{
+	padding-bottom: 23px;
+    border-bottom: 1px dotted #CDCDCD;
 }

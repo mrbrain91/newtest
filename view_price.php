@@ -75,7 +75,7 @@ if (isset($_GET['id'])) {
 ?> 
             <tr>
                 <td><?php echo $row["name"]; ?></td>
-                <td><?php echo $row["cost"]; ?></td>
+                <td><?php echo number_format($row["cost"], 0, ',', ' '); ?></td>
             </tr>
 <?php       
     };    

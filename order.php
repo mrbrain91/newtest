@@ -84,7 +84,7 @@ $rs_result = mysqli_query ($connect, $query);
             <td><?php $user = get_user($connect, $row["sale_agent"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
             <td><?php echo $date = date("d.m.Y", strtotime($row["ord_date"])); ?></td>
             <td><?php echo $row["payment_type"]; ?></td>
-            <td><?php echo number_format($row['transaction_amount']); ?></td>
+            <td><?php echo number_format($row['transaction_amount'], 0, '.', ' '); ?></td>
             <td>
 
             <select class="form-control" onchange="location = this.value;">
