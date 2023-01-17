@@ -273,3 +273,31 @@ input[type='radio']:checked:after {
 	padding-bottom: 23px;
     border-bottom: 1px dotted #CDCDCD;
 }
+
+
+.act_td {
+	td{
+		padding: 3px!important;
+
+	}
+	.non_border {
+		border-top-style : hidden!important;
+		border-left-style : hidden!important;
+		border-right-style : hidden!important;
+		
+	}
+	.head_txt{
+		text-align: center;
+		span {
+			font-size: 14px;
+			font-weight: bold;
+		}
+	}
+	.table_wrap {
+		width: 70%;
+		margin: 0 auto;
+		padding: 10px;
+		border: 1px solid #CDCDCD;
+	}
+}
+	

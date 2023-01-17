@@ -96,8 +96,8 @@ if (isset($_POST['id_contractor'])) {
         <div class="container-fluid">
            <!-- <a href="#"> <button type="button" class="btn btn-success">Взаимозачет</button> </a> -->
            <!-- <a href="add_order.php"> <button type="button" class="btn btn-primary">должники</button> </a> -->
-          <input class="btn btn-success" type="submit" form="order_form" name="submit" value="сформировать" />
-          <button style="display:<?php echo $btn_display; ?>" class="btn btn-info" onclick="exportTableToExcel('tblData', 'act')">скачать excel</button>
+          <input class="btn btn-success" type="submit" form="order_form" name="submit" value="сформировать акт" />
+          <button style="display:<?php echo $btn_display; ?>" class="btn btn-info" onclick="exportTableToExcel('tblData', 'act')">скачать (.xls)</button>
 
         </div>
 </div>
@@ -144,100 +144,177 @@ if (isset($_POST['id_contractor'])) {
 
 <div class="all_table" style='display: <?php echo $display;?>' >
     <div class="container-fluid">
-        <table id="tblData" class="table table-dark table-bordered" style="width:50%; margin: 0 auto; margin-top: 30px;">
-               
-                <caption><span class="ordernum">Контрагент: <?php echo $contractor["name"];?></span></caption>
-                <tr>
-                    <th scope="col">Дата</th>
-                    <th scope="col">Дебет</th>
-                    <th scope="col">Кредит</th>
-                </tr>
-           
-
-                
-                <tr>
-                    <td class="ordernum">Сальдо начальное</th>
-                    <td class="ordernum" scope="col"><?php echo number_format($sum_debt_saldo, 0, ',', ' ') ?></th>
-                    <td class="ordernum" scope="col"><?php echo number_format($sum_main_prepayment_saldo, 0, ',', ' ') ?></th>
-                </tr>   
-                            
-                <?php     
-                    $i = 0;
-                    $sum_debt = 0;
-                    $sum_prepayment = 0;
-                    $row_display = 'true';
-                    while ($row = mysqli_fetch_array($rs_qr)) {
-                    $i++;
-                    $sum_debt += $row["debt"];
-                    $sum_prepayment += $row["main_prepayment"];
-                    
-                ?> 
-
-                <tr>
-                    <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
-
-                    <td><?php 
-                        if ($row["debt"] == "0") {
-                            echo '';
-                        }else{
-                            echo number_format($row["debt"], 0, ',', ' ');
-                        }
-                        ?>
-                    </td>
-                    <td><?php 
-                        if ($row["main_prepayment"] == "0") {
-                            echo '';
-                        }else{
-                            echo number_format($row["main_prepayment"], 0, ',', ' ');
-                        }
-                        ?>
-                    </td>
-                </tr>
-
-                <?php       
-                    };    
-
-                    $sum_last_debt = 0;
-                    $sum_last_prepayment = 0;
-                    if ($sum_debt_saldo != '0') {
-                        $sum_debt_t = $sum_debt;
-                        $sum_debt = $sum_debt + $sum_debt_saldo;
-                    }else {
-                        $sum_debt_t = $sum_debt;
-                    }
-                    
-                    
-                    if ($sum_main_prepayment_saldo != '0') {
-                        $sum_prepayment_t = $sum_prepayment;
-                        $sum_prepayment = $sum_prepayment + $sum_main_prepayment_saldo; 
-                    }else {
-                        $sum_prepayment_t = $sum_prepayment;
-                    }
-
-                    if ($sum_debt > $sum_prepayment) {
-                        $sum_last_debt =  $sum_debt - $sum_prepayment;
+        <div class="table_wrap">
+            <table id="tblData" class="table table-dark table-bordered act_td" style="width:70%; margin: 0 auto; margin-top: 30px;">
+                    <tr>
+                        <td class="non_border head_txt" colspan="6">
+                            <span>Акт сверки</span> <br> 
                         
-                    }else if ($sum_debt < $sum_prepayment) {
-                        $sum_last_prepayment = $sum_prepayment - $sum_debt;
-                    }
-                ?>
-                <tr>
-                    <td class="ordernum">Обороты за период:</td>
-                    <td class="ordernum"><?php echo number_format($sum_debt_t, 0, ',', ' '); ?></td>
-                    <td class="ordernum"><?php echo number_format($sum_prepayment_t, 0, ',', ' '); ?></td>
-                </tr>
-                <tr>
-                    <td class="ordernum">Сальдо конечное:</th>
-                    <td class="ordernum"><?php 
-                    echo number_format($sum_last_debt, 0, ',', ' '); 
-                    ?></td>
-                    <td class="ordernum"><?php 
-                    echo number_format($sum_last_prepayment, 0, ',', ' '); 
-                    ?></td>
-                </tr>  
+                            взаимных расчетов за период: <?php echo $date = date("d.m.Y", strtotime($from_date)); ?> - <?php echo $date = date("d.m.Y", strtotime($to_date)); ?> <br>
+                            между ООО "ORTOPHARM" и <?php echo $contractor["name"];?> 
+                            <!-- по договору Основной договор  -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="non_border" colspan="6"> Мы, нижеподписавшиеся, ООО "ORTOPHARM", с одной стороны, и <?php echo $contractor["name"];?>, с другой стороны, составили настоящий акт сверки в том, что состояние взаимных расчетов по данным учета следующее:</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">По данным ООО "ORTOPHARM", сум.</td>
+                        <td colspan="3">По данным <?php echo $contractor["name"];?>, сум.</td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Дата</th>
+                        <th scope="col">Дебет</th>
+                        <th scope="col">Кредит</th>
+                        <th scope="col">Дата</th>
+                        <th scope="col">Дебет</th>
+                        <th scope="col">Кредит</th>
+                    </tr>
+            
 
+                    
+                    <tr>
+                        <td class="ordernum">Сальдо начальное</th>
+                        <td class="ordernum" scope="col"><?php echo number_format($sum_debt_saldo, 0, ',', ' ') ?></th>
+                        <td class="ordernum" scope="col"><?php echo number_format($sum_main_prepayment_saldo, 0, ',', ' ') ?></th>
+                        <td class="ordernum">Сальдо начальное</th>
+                        <td class="ordernum" scope="col"><?php echo number_format($sum_main_prepayment_saldo, 0, ',', ' ') ?></th>
+                        <td class="ordernum" scope="col"><?php echo number_format($sum_debt_saldo, 0, ',', ' ') ?></th>
+                    </tr>   
+                                
+                    <?php     
+                        $i = 0;
+                        $sum_debt = 0;
+                        $sum_prepayment = 0;
+                        $row_display = 'true';
+                        while ($row = mysqli_fetch_array($rs_qr)) {
+                        $i++;
+                        $sum_debt += $row["debt"];
+                        $sum_prepayment += $row["main_prepayment"];
+                        
+                    ?> 
 
-        </table>
+                    <tr>
+                        <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
+
+                        <td><?php 
+                            if ($row["debt"] == "0") {
+                                echo '';
+                            }else{
+                                echo number_format($row["debt"], 0, ',', ' ');
+                            }
+                            ?>
+                        </td>
+                        <td><?php 
+                            if ($row["main_prepayment"] == "0") {
+                                echo '';
+                            }else{
+                                echo number_format($row["main_prepayment"], 0, ',', ' ');
+                            }
+                            ?>
+                        </td>
+
+                        <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
+
+                        <td><?php 
+                            if ($row["main_prepayment"] == "0") {
+                                echo '';
+                            }else{
+                                echo number_format($row["main_prepayment"], 0, ',', ' ');
+                            }
+                            ?>
+                        </td>
+
+                        <td><?php 
+                            if ($row["debt"] == "0") {
+                                echo '';
+                            }else{
+                                echo number_format($row["debt"], 0, ',', ' ');
+                            }
+                            ?>
+                        </td>
+                    </tr>
+
+                    <?php       
+                        };      
+                        $display_non_debt = 'none';
+                        $display_debt_1 = 'none';
+                        $display_debt_2 = 'none';
+                        $sum_last_debt = 0;
+                        $sum_last_prepayment = 0;
+                        if ($sum_debt_saldo != '0') {
+                            $sum_debt_t = $sum_debt;
+                            $sum_debt = $sum_debt + $sum_debt_saldo;
+                        }else {
+                            $sum_debt_t = $sum_debt;
+                        }
+                        
+                        
+                        if ($sum_main_prepayment_saldo != '0') {
+                            $sum_prepayment_t = $sum_prepayment;
+                            $sum_prepayment = $sum_prepayment + $sum_main_prepayment_saldo; 
+                        }else {
+                            $sum_prepayment_t = $sum_prepayment;
+                        }
+
+                        if ($sum_debt > $sum_prepayment) {
+                            $sum_last_debt =  $sum_debt - $sum_prepayment;
+                            
+                        }else if ($sum_debt < $sum_prepayment) {
+                            $sum_last_prepayment = $sum_prepayment - $sum_debt;
+                        }
+                        
+                        if ($sum_last_debt == 0 AND $sum_last_prepayment == 0) {
+                            $display_non_debt = "true";
+                        }elseif ($sum_last_debt != 0) {
+                            $display_debt_1 = "true";
+                        }elseif ($sum_last_prepayment != 0) {
+                            $display_debt_2 = "true";
+                        }
+                    ?>
+                    <tr>
+                        <td class="ordernum">Обороты за период:</td>
+                        <td class="ordernum"><?php echo number_format($sum_debt_t, 0, ',', ' '); ?></td>
+                        <td class="ordernum"><?php echo number_format($sum_prepayment_t, 0, ',', ' '); ?></td>
+                        <td class="ordernum">Обороты за период:</td>
+                        <td class="ordernum"><?php echo number_format($sum_prepayment_t, 0, ',', ' '); ?></td>
+                        <td class="ordernum"><?php echo number_format($sum_debt_t, 0, ',', ' '); ?></td>
+                    </tr>
+                    <tr>
+                        <td class="ordernum">Сальдо конечное:</th>
+                        <td class="ordernum"><?php 
+                        echo number_format($sum_last_debt, 0, ',', ' '); 
+                        ?></td>
+                        <td class="ordernum"><?php 
+                        echo number_format($sum_last_prepayment, 0, ',', ' '); 
+                        ?></td>
+                        <td class="ordernum">Сальдо конечное:</th>
+                        <td class="ordernum"><?php 
+                        echo number_format($sum_last_prepayment, 0, ',', ' '); 
+                        ?></td>
+                        <td class="ordernum"><?php 
+                        echo number_format($sum_last_debt, 0, ',', ' '); 
+                        ?></td>
+                    </tr>  
+                    <tr>
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr>
+                    <tr style="display: <?php echo $display_non_debt;?>">
+                        <td class="ordernum" colspan="6">на <?php echo $date = date("d.m.Y", strtotime($to_date)); ?> задолженность отсутствует. </td>
+                    </tr>
+                    <tr style="display: <?php echo $display_debt_1;?>">
+                        <td class="ordernum" colspan="6">на <?php echo $date = date("d.m.Y", strtotime($to_date)); ?> задолженность в ползу ООО "ORTOPHARM" 
+                        <?php echo number_format($sum_last_debt, 0, ',', ' '); ?> (<?php echo str_price($sum_last_debt)?>) сум.
+                    </td>
+                    </tr>
+                    <tr style="display: <?php echo $display_debt_2;?>">
+                        <td class="ordernum" colspan="6">на <?php echo $date = date("d.m.Y", strtotime($to_date)); ?> задолженность в ползу <?php echo $contractor["name"];?>
+                        <?php echo number_format($sum_last_prepayment, 0, ',', ' '); ?> (<?php echo str_price($sum_last_prepayment)?>) сум.
+                    </td>
+                    </tr>
+            </table>
+        </div>
     </div>
 </div>
 

@@ -105,6 +105,20 @@ function select_cron_mess_idd($connect){
 // ------------------get_data_rest_tbl-----------------------------------------
 
 
+function str_price($value)
+{
+	$value = explode('.', number_format($value, 2, '.', ''));
+ 
+	$f = new NumberFormatter('ru', NumberFormatter::SPELLOUT);
+	$str = $f->format($value[0]);
+ 
+	// Первую букву в верхний регистр.
+	$str = mb_strtoupper(mb_substr($str, 0, 1)) . mb_substr($str, 1, mb_strlen($str));
+	
+	return $str;
+}
+
+
 
 function get_data_rest_tbl($connect){
 	$query = "SELECT * FROM rest_tbl WHERE rest != 0";
