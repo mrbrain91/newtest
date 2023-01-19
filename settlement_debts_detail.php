@@ -166,8 +166,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
 
 <div class="container-fluid">
 
-    <?php include 'partSite/modal.php'; ?>
-    
+ <?php 
+//  include 'partSite/modal.php'; 
+ ?> 
+
 </div>
 
 

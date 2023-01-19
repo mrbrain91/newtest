@@ -7,6 +7,9 @@ if (!isset($_SESSION['usersname'])) {
   header("location: index.php");
 }
 
+//---get counterparties
+$sql = "SELECT * FROM counterparties_tbl";
+$counterparties_tbl = mysqli_query ($connect, $sql);
 
 
 $count_query = "SELECT count(*) as allcount FROM debts WHERE prepayment > '0' ORDER BY id DESC";
@@ -14,6 +17,15 @@ $count_result = mysqli_query($connect,$count_query);
 $count_fetch = mysqli_fetch_array($count_result);
 $postCount = $count_fetch['allcount'];
 $limit = 10;
+
+
+$all_debt_query = "SELECT sum(prepayment) as all_debt, count(id) as allcount FROM debts WHERE prepayment > '0'";
+$all_debt_result = mysqli_query ($connect, $all_debt_query);
+$all_debt_fetch = mysqli_fetch_array($all_debt_result);
+$all_debt = $all_debt_fetch['all_debt'];
+$all_count = $all_debt_fetch['allcount'];
+
+
 
  
 $query = "SELECT * FROM debts WHERE prepayment > '0' ORDER BY id desc LIMIT 0,".$limit;
@@ -40,6 +52,7 @@ $rs_result = mysqli_query ($connect, $query);
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css" />
     <link rel="stylesheet" href="css/style.css">
     <title>ortosavdo</title>
 </head>
@@ -59,7 +72,26 @@ $rs_result = mysqli_query ($connect, $query);
         <div class="container-fluid">
            <!-- <a href="#"> <button type="button" class="btn btn-success">Взаимозачет</button> </a> -->
            <!-- <a href="add_order.php"> <button type="button" class="btn btn-primary">должники</button> </a> -->
-           <a href="settlements_clients.php"> <button type="button" class="btn">закрыть</button> </a>
+           <div class="toolbar_wrapper">
+                <div><a href="settlements_clients.php"> <button type="button" class="btn">закрыть</button> </a></div>
+
+                <div class="filter-container">
+                    <div class="filter-container-item first" data-toggle="modal" data-target="#filter">
+                     <span class="glyphicon glyphicon-filter"></span>
+                    </div>
+                    <div class="filter-container-item">
+                        <span>10/<?php echo $all_count; ?></span>
+                    </div>
+                    <div class="filter-container-item">
+                        <div class="loadmore">
+                            
+                            <button class="btn btn-outline-info" type="button" id="loadBtn" value="+10"><span class="glyphicon glyphicon-arrow-down"></span></button>
+                            <input type="hidden" id="row" value="0">
+                            <input type="hidden" id="postCount" value="<?php echo $postCount; ?>">
+                        </div>
+                    </div>
+                </div>                
+           </div>
         </div>
 </div>
 
@@ -82,10 +114,8 @@ $rs_result = mysqli_query ($connect, $query);
 
             <?php     
                 $i = 0;
-                $all_debt = 0;
                 while ($row = mysqli_fetch_array($rs_result)) {
                 $i++;
-                $all_debt += $row["prepayment"];
             ?> 
 
             <tr class="item">
@@ -112,16 +142,8 @@ $rs_result = mysqli_query ($connect, $query);
                 <td >Общая задолженность: <?php echo number_format($all_debt, 0, ',', ' '); ?></td>
             </tr>
         </table>
-        <div class="loadmore">
-                <input type="button" id="loadBtn" value="Load More">
-                <input type="hidden" id="row" value="0">
-                <input type="hidden" id="postCount" value="<?php echo $postCount; ?>">
-            </div> 
-
     </div>
 </div>
-
-
 
 
 <div class="container-fluid">
@@ -129,7 +151,11 @@ $rs_result = mysqli_query ($connect, $query);
     <?php include 'partSite/modal.php'; ?>
     
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"></script>
 <script>
+
+$('.normalize').selectize();
+
 $(document).ready(function () {
     $(document).on('click', '#loadBtn', function () {
         
@@ -152,7 +178,7 @@ $(document).ready(function () {
           if (rowCount >= count) {
             $('#loadBtn').css("display", "none");
           } else {
-            $("#loadBtn").val('Load More');
+            $("#loadBtn").val('+10');
           }
         }
       });

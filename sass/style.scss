@@ -314,6 +314,60 @@ input[type='radio']:checked:after {
 	pointer-events: none;
 }
 
+.toolbar_wrapper {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+// .filter {
+// 	min-width: 10%;
+// 	display: flex;
+// 	align-items: center;
+// 	justify-content: space-between;
+// 	&_icon {
+// 		height: 31.14px;
+// 		width: 30px;
+// 		border: 1px solid green;
+// 	}
+// 	.loadmore {
+// 		input {
+// 			border: 1px solid green;
+// 			border-radius: 0%;
+// 		}
+// 	}
+// }
+
+.filter-container {
+	min-height: 35px;
+	display: grid;
+	grid-template-columns: auto auto auto;
+	align-items: center;
+	justify-content: end;
+	background-color: #fafafb;
+	.first {
+		cursor: pointer;
+	}
+	&-item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 50px;
+		height: 100%;
+		border: 1px solid #dddddd;
+		button {
+			width: 100%;
+			background-color: #fafafb;
+			outline: none!important;
+		}
+	}
+  }
+
+
+
+
+
 
 
 	
