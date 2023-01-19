@@ -278,13 +278,20 @@ input[type='radio']:checked:after {
 .act_td {
 	td{
 		padding: 3px!important;
-
+		
 	}
 	.non_border {
 		border-top-style : hidden!important;
 		border-left-style : hidden!important;
 		border-right-style : hidden!important;
-		
+	}
+	.non_border_lr {
+		border-left-style : hidden!important;
+		border-right-style : hidden!important;
+		border-bottom-style : hidden!important;
+	}
+	.non_border_all {
+		border-style : hidden!important;
 	}
 	.head_txt{
 		text-align: center;
@@ -300,4 +307,13 @@ input[type='radio']:checked:after {
 		border: 1px solid #CDCDCD;
 	}
 }
+
+.noContent {
+	color: #000 !important;
+	background-color: transparent !important;
+	pointer-events: none;
+}
+
+
+
 	

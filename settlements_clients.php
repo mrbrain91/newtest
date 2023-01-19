@@ -73,6 +73,8 @@ $rs_result = mysqli_query ($connect, $query);
                 $sum_last_debt = 0;
                 $sum_last_tot = 0;
                 $balance_sum = 0;
+
+
                 
                 while ($row = mysqli_fetch_array($rs_result)) {
                 
@@ -86,19 +88,19 @@ $rs_result = mysqli_query ($connect, $query);
                 $balance_sum += $sum;
                 
                 
-
-
                 if ($last_debt == 0 AND $last_tot == 0 ) {
                     $display = 'none';
                   }else {
                     $display = 'true';
                     $i++;
+                    
                   }
+                
             ?> 
 
             <tr class="rowDis" style="display:<?php echo $display; ?>;" data-toggle="collapse" data-target="#hidden_<?php echo $i;?>">
-            <td><?php $user = get_contractor($connect, $row["id_counterpartie"]); echo $user["name"];?></td>
-            <td><?php echo $user['inn']?></td>
+                <td  style="background-color:<?php echo $bg_clr;?>"><?php $user = get_contractor($connect, $row["id_counterpartie"]); echo $user["name"];?></td>
+                <td><?php echo $user['inn']?></td>
                 <td><?php echo number_format($last_debt, 0, ',', ' '); ?></td>
                 <td><?php echo number_format($last_tot, 0, ',', ' '); ?></td>
                 <td><?php echo number_format($sum, 0, ',', ' '); ?></td>

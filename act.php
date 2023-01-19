@@ -280,7 +280,7 @@ if (isset($_POST['id_contractor'])) {
                         <td class="ordernum"><?php echo number_format($sum_prepayment_t, 0, ',', ' '); ?></td>
                         <td class="ordernum"><?php echo number_format($sum_debt_t, 0, ',', ' '); ?></td>
                     </tr>
-                    <tr>
+                    <tr style="border-bottom-style: 1px solid green">
                         <td class="ordernum">Сальдо конечное:</th>
                         <td class="ordernum"><?php 
                         echo number_format($sum_last_debt, 0, ',', ' '); 
@@ -296,22 +296,56 @@ if (isset($_POST['id_contractor'])) {
                         echo number_format($sum_last_debt, 0, ',', ' '); 
                         ?></td>
                     </tr>  
-                    <tr>
+                    <tr class="non_border_lr">
                         <td colspan="6"> </td>
                     </tr>
                     <tr>
-                    <tr style="display: <?php echo $display_non_debt;?>">
+                    <tr class="non_border_all"  style="display: <?php echo $display_non_debt;?>">
                         <td class="ordernum" colspan="6">на <?php echo $date = date("d.m.Y", strtotime($to_date)); ?> задолженность отсутствует. </td>
                     </tr>
-                    <tr style="display: <?php echo $display_debt_1;?>">
+                    <tr class="non_border_all" style="display: <?php echo $display_debt_1;?>">
                         <td class="ordernum" colspan="6">на <?php echo $date = date("d.m.Y", strtotime($to_date)); ?> задолженность в ползу ООО "ORTOPHARM" 
                         <?php echo number_format($sum_last_debt, 0, ',', ' '); ?> (<?php echo str_price($sum_last_debt)?>) сум.
                     </td>
                     </tr>
-                    <tr style="display: <?php echo $display_debt_2;?>">
+                    <tr class="non_border_all" style="display: <?php echo $display_debt_2;?>">
                         <td class="ordernum" colspan="6">на <?php echo $date = date("d.m.Y", strtotime($to_date)); ?> задолженность в ползу <?php echo $contractor["name"];?>
                         <?php echo number_format($sum_last_prepayment, 0, ',', ' '); ?> (<?php echo str_price($sum_last_prepayment)?>) сум.
                     </td>
+                    </tr>
+                    <tr class="non_border_all">
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr class="non_border_all">
+                        <td class="non_border_all"  colspan="3">от ООО "ORTOPHARM"</td>
+                        <td colspan="3">От <?php echo $contractor["name"];?></td>
+                    </tr>
+                    <tr class="non_border_all">
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr class="non_border_all">
+                        <td class="non_border_all" colspan="3">Директор</td>
+                        <td colspan="3">Директор</td>
+                    </tr>
+                    <tr class="non_border_all">
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr class="non_border_all">
+                        <td class="non_border_all" colspan="3">________________________________________________________</td>
+                        <td colspan="3">________________________________________________________</td>
+                    </tr>
+                    <tr class="non_border_all">
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr class="non_border_all">
+                        <td class="non_border_all" colspan="3">М.П.</td>
+                        <td colspan="3">М.П.</td>
+                    </tr>
+                    <tr class="non_border_all">
+                        <td colspan="6"> </td>
+                    </tr>
+                    <tr class="non_border_all">
+                        <td colspan="6"> </td>
                     </tr>
             </table>
         </div>

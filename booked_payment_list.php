@@ -9,16 +9,17 @@ if (!isset($_SESSION['usersname'])) {
 
 
 
-// $query = "SELECT * FROM settlements WHERE status='0' AND debt>'0' ORDER BY id DESC";
-// $rs_result = mysqli_query ($connect, $query);
+$count_query = "SELECT count(*) as allcount FROM debts WHERE prepayment > '0' ORDER BY id DESC";
+$count_result = mysqli_query($connect,$count_query);
+$count_fetch = mysqli_fetch_array($count_result);
+$postCount = $count_fetch['allcount'];
+$limit = 10;
 
  
-
-$query = "SELECT * FROM debts WHERE prepayment > '0' ORDER BY id DESC";
+$query = "SELECT * FROM debts WHERE prepayment > '0' ORDER BY id desc LIMIT 0,".$limit;
 $rs_result = mysqli_query ($connect, $query);
 
-// $row1 = mysqli_fetch_assoc(mysqli_query($connect, $query1));
-// $total_prepayment = $row1['total_prepayment'];
+
 
 
 ?>
@@ -76,16 +77,18 @@ $rs_result = mysqli_query ($connect, $query);
 
             </tr>
         </thead>
-        <tbody>
+        <tbody class="postList">
 
 
             <?php     
                 $i = 0;
+                $all_debt = 0;
                 while ($row = mysqli_fetch_array($rs_result)) {
                 $i++;
+                $all_debt += $row["prepayment"];
             ?> 
 
-            <tr data-toggle="collapse" data-target="#hidden_<?php echo $i;?>">
+            <tr class="item">
                 <td><?php echo $row["order_id"]; ?></td>
                 <td><?php $user = get_contractor($connect, $row["id_counterpartie"]); echo $user["name"];?></td>
                 <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
@@ -103,6 +106,18 @@ $rs_result = mysqli_query ($connect, $query);
 
         </tbody>
         </table>
+        
+        <table class="table" style="background-color:#ebf0ff; border-left: 4px solid #7396ff;">
+            <tr>
+                <td >Общая задолженность: <?php echo number_format($all_debt, 0, ',', ' '); ?></td>
+            </tr>
+        </table>
+        <div class="loadmore">
+                <input type="button" id="loadBtn" value="Load More">
+                <input type="hidden" id="row" value="0">
+                <input type="hidden" id="postCount" value="<?php echo $postCount; ?>">
+            </div> 
+
     </div>
 </div>
 
@@ -114,5 +129,35 @@ $rs_result = mysqli_query ($connect, $query);
     <?php include 'partSite/modal.php'; ?>
     
 </div>
+<script>
+$(document).ready(function () {
+    $(document).on('click', '#loadBtn', function () {
+        
+      var row = Number($('#row').val());
+      var count = Number($('#postCount').val());
+      var limit = 3;
+
+      row = row + limit;
+
+      $('#row').val(row);
+      $("#loadBtn").val('Loading...');
+ 
+      $.ajax({
+        type: 'POST',
+        url: 'loadmore-data.php',
+        data: 'row=' + row,
+        success: function (data) {
+          var rowCount = row + limit;
+          $('.postList').append(data);
+          if (rowCount >= count) {
+            $('#loadBtn').css("display", "none");
+          } else {
+            $("#loadBtn").val('Load More');
+          }
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>
