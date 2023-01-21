@@ -353,8 +353,9 @@ input[type='radio']:checked:after {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 50px;
+		min-width: 50px;
 		height: 100%;
+		padding: 0 3px;
 		border: 1px solid #dddddd;
 		button {
 			width: 100%;
@@ -363,7 +364,9 @@ input[type='radio']:checked:after {
 		}
 	}
   }
-
+.table-bordered {
+	margin-bottom: 0!important;
+}
 
 
 

@@ -92,7 +92,7 @@ $counterparties_tbl = mysqli_query ($connect, $sql);
             </div>
             <div class="row">
                 <div class="col-md-3"> 
-                <select required class="normalize" name="id_counterpartie">
+                <select required class="normalize" name="id_counterpartie" onchange="showCustomer(this.value)">
                         <option value=""></option>
                         <?php    
                             while ($option_contractor = mysqli_fetch_array($counterparties_tbl)) {    
@@ -104,7 +104,9 @@ $counterparties_tbl = mysqli_query ($connect, $sql);
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <input disabled type="text" class="form-control" value="22 000">
+                    <div id="balance">
+                        <input disabled type="text" class="form-control" value="">
+                    </div>
                 </div>
             </div>
             <div class="row mt">
@@ -133,7 +135,6 @@ $counterparties_tbl = mysqli_query ($connect, $sql);
 </section>
 
 
-
 <div class="container-fluid">
 
     <?php include 'partSite/modal.php'; ?>
@@ -150,7 +151,10 @@ $counterparties_tbl = mysqli_query ($connect, $sql);
 </body>
 </html>
 
-<script>
+<script type ="text/javascript">
+    
+
+    
 $('.normalize').selectize();
 
 
@@ -168,5 +172,27 @@ new  AutoNumeric.multiple('.autonumeric', autoNumericOptionsEuro);
 
 
 //End AutoMuneric
+
+// -------------------------------------------- select bazadan olish-------------------------------------------------------
+
+function showCustomer(str) {
+    // console.log(str);
+  var xhttp;    
+  if (str == "") {
+    document.getElementById("balance").innerHTML = "";
+    // document.getElementById("sample").innerHTML = 'hi';
+    return;
+  }
+  xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+    document.getElementById("balance").innerHTML = this.responseText;
+
+    }
+  };
+  xhttp.open("GET", "getcustomer.php?id_c="+str+"", true);
+  xhttp.send();
+}
+
 
 </script>
