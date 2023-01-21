@@ -105,6 +105,47 @@ function select_cron_mess_idd($connect){
 // ------------------get_data_rest_tbl-----------------------------------------
 
 
+
+
+
+function get_status_in($connect, $id){
+	$query = "SELECT * FROM state_in WHERE id='$id'";
+	$result = mysqli_query($connect, $query);
+	if(!$result)
+		die(mysqli_error($connect));
+	$name = mysqli_fetch_assoc($result);
+	return $name;
+}
+function get_status_out($connect, $id){
+	$query = "SELECT * FROM state_out WHERE id='$id'";
+	$result = mysqli_query($connect, $query);
+	if(!$result)
+		die(mysqli_error($connect));
+	$name = mysqli_fetch_assoc($result);
+	return $name;
+}
+
+
+
+function add_state_in($connect, $name, $status) {
+
+	$sql = "INSERT INTO `state_in` (`name`, `status_id`) VALUES ('".$name."','".$status."');";
+	if(mysqli_query($connect, $sql)) {
+		redirect("type_cash_in.php");
+	}
+}
+
+function add_state_out($connect, $name, $status) {
+
+	$sql = "INSERT INTO `state_out` (`name`, `status_id`) VALUES ('".$name."','".$status."');";
+	if(mysqli_query($connect, $sql)) {
+		redirect("type_cash_out.php");
+	}
+}
+
+
+
+
 function str_price($value)
 {
 	$value = explode('.', number_format($value, 2, '.', ''));

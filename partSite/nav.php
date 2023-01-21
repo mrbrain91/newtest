@@ -30,8 +30,8 @@
           <li><a href="prepayment_list.php">Оплаты от контрагентов</a></li>
           <!-- <li><a href="#">Вызаиморасчеты с поставщиками</a></li> -->
           <!-- <li><a href="#">Оплаты поставщиком</a></li> -->
-          <li><a href="#">Приход</a></li>
-          <li><a href="#">Расход</a></li>
+          <li><a href="cash_in.php">Приход в кассу (ПКО)</a></li>
+          <li><a href="#">Расход с кассы (РКО)</a></li>
           <li><a href="act.php">Акт-сверки</a></li>
           <li><a href="#">Оплаты</a></li>
 
@@ -46,6 +46,8 @@
           <li><a href="products.php">Продукт</a></li>
           <li><a href="price.php">Цена</a></li>
           <li><a href="users.php">Пользователи</a></li>
+          <li><a href="type_cash_in.php">Статья доходов</a></li>
+          <li><a href="type_cash_out.php">Статья расходов</a></li>
           <!-- <li><a href="#">Роль</a></li> -->
         </ul>
       </li>

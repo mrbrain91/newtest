@@ -136,7 +136,7 @@ $rs_result = mysqli_query ($connect, $query);
         </div>
 </div>
 
-<div class="all_table">
+<div class="all_table" style="margin-top:5px;">
     <div class="container-fluid">
         <table class="table table-striped table-bordered">
         <thead>
