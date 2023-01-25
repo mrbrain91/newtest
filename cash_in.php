@@ -8,7 +8,7 @@ if (!isset($_SESSION['usersname'])) {
 
 
 
-$query = "SELECT * FROM cashbox WHERE cash_in!='0' ORDER BY id DESC";
+$query = "SELECT * FROM cashbox WHERE sum_in!='0' ORDER BY id DESC";
 $rs_result = mysqli_query ($connect, $query);   
 
 
@@ -19,7 +19,7 @@ $sql = "SELECT * FROM state_in";
 $state_in = mysqli_query ($connect, $sql);
 
 // for count
-$count_query = "SELECT count(*) as allcount FROM cashbox WHERE cash_in!='0' ORDER BY id DESC";
+$count_query = "SELECT count(*) as allcount FROM cashbox WHERE sum_in!='0' ORDER BY id DESC";
 $count_result = mysqli_query($connect,$count_query);
 $count_fetch = mysqli_fetch_array($count_result);
 $postCount = $count_fetch['allcount'];
@@ -30,8 +30,8 @@ $display_sts_filer_on = 'none';
 
 
 // filter form 
-if (isset($_POST['id_contractor']) AND isset($_POST['from_date']) AND isset($_POST['to_date'])) {
-   $id_cont = $_POST['id_contractor'];
+if (isset($_POST['id_state']) AND isset($_POST['from_date']) AND isset($_POST['to_date'])) {
+   $id_state = $_POST['id_state'];
    $fr_date = $_POST['from_date'];
    $to_date = $_POST['to_date'];
 
@@ -40,9 +40,9 @@ if (isset($_POST['id_contractor']) AND isset($_POST['from_date']) AND isset($_PO
    $display_sts_filer_on = 'true';
    
    
-    $query = "SELECT * FROM cashbox WHERE types_id = '$id_cont' AND cash_in!='0' AND order_date >= '$fr_date' AND order_date <= '$to_date' ORDER BY id DESC";
+    $query = "SELECT * FROM cashbox WHERE types_id = '$id_state' AND sum_in!='0' AND date_cash >= '$fr_date' AND date_cash <= '$to_date' ORDER BY id DESC";
 
-    $all_debt_query = "SELECT sum(sum_in) as all_debt, count(id) as allcount FROM cashbox WHERE types_id = '$id_cont' AND cash_in!='0' AND order_date >= '$fr_date' AND order_date <= '$to_date' ORDER BY id DESC";
+    $all_debt_query = "SELECT sum(sum_in) as all_debt, count(id) as allcount FROM cashbox WHERE types_id = '$id_state' AND sum_in!='0' AND date_cash >= '$fr_date' AND date_cash <= '$to_date' ORDER BY id DESC";
    
  
 
@@ -50,12 +50,10 @@ if (isset($_POST['id_contractor']) AND isset($_POST['from_date']) AND isset($_PO
 else {
     //list all
     $query = "SELECT * FROM cashbox WHERE sum_in!='0' ORDER BY id desc LIMIT 0,".$limit;
-    $all_debt_query = "SELECT sum(sum_in) as all_debt, count(id) as allcount FROM cashbox WHERE cash_in!='0'";
+    $all_debt_query = "SELECT sum(sum_in) as all_debt, count(id) as allcount FROM cashbox WHERE sum_in!='0'";
     
     $display_true = 'true';
     $display_none = 'none';
-
-
 
 
 }
@@ -65,6 +63,10 @@ $all_debt_result = mysqli_query ($connect, $all_debt_query);
 $all_debt_fetch = mysqli_fetch_array($all_debt_result);
 $all_debt = $all_debt_fetch['all_debt'];
 $all_count = $all_debt_fetch['allcount'];
+
+if ($all_count < $limit) {
+  $limit  = $all_count;
+}
 
 //for list 
 $rs_result = mysqli_query ($connect, $query);
@@ -111,7 +113,7 @@ $rs_result = mysqli_query ($connect, $query);
         <div class="container-fluid">
             <div class="toolbar_wrapper">
                 <div class="toolbar_wrapper">
-                <div><a href="prepayment_add.php"> <button type="button" class="btn btn-success">Добавить</button> </a></div>
+                <div><a href="cash_in_add.php"> <button type="button" class="btn btn-success">Добавить</button> </a></div>
                 <div class="filter-container">
                     <div style="background-color:<?php echo $bg_sts;?>" class="filter-container-item first" data-toggle="modal" data-target="#filter">
                      <span class="glyphicon glyphicon-filter"></span>
@@ -145,9 +147,10 @@ $rs_result = mysqli_query ($connect, $query);
             <th scope="col">Вид движения</th>
             <th scope="col">Тип оплаты</th>
             <th scope="col">Сумма оплата</th>
+            <th scope="col">Дата</th>
             <th scope="col">Просмотр</th>
             <th scope="col">Редактировать</th>
-            
+            <th scope="col">Отменить</th>
 
             </tr>
         </thead>
@@ -161,12 +164,16 @@ $rs_result = mysqli_query ($connect, $query);
             <tr>
             <td><?php echo $row["id"]; ?></td>
 
-            <td><?php $name  = get_status_in($connect, $row["id"]); echo $name[name]; ?></td>
+            <td><?php $name  = get_status_in($connect, $row["types_id"]); echo $name["name"]; ?></td>
+
+            
 
             <td><?php echo $row['type_payment']; ?></td>
             <td><?php echo number_format($row['sum_in'], 0, ',', ' '); ?></td>
+            <td><?php echo $date = date("d.m.Y", strtotime($row["date_cash"])); ?></td>
             <td><a href="#">Просмотр</a></td>
             <td><a href="#">Редактировать</a></td>
+            <td><a href="#">Отменить</a></td>
 
             </tr>
         <?php       
@@ -220,7 +227,7 @@ $rs_result = mysqli_query ($connect, $query);
             </div>
             <div class="row">
                 <div class="col-md-6"> 
-                    <select required class="normalize" name="id_contractor" form="filer_form">
+                    <select required class="normalize" name="id_state" form="filer_form">
                         <option value="">выберите</option>
                         <?php    
                             while ($state = mysqli_fetch_array($state_in)) {    
@@ -274,8 +281,8 @@ $(document).ready(function () {
  
       $.ajax({
         type: 'POST',
-        url: 'loadmore-data.php?otkont=1',
-        data: 'rowpredo=' + row,
+        url: 'loadmore-data.php',
+        data: 'rowcashin=' + row,
         success: function (data) {
           var rowCount = row + limit;
           $("#row_c").text(rowCount);

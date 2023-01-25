@@ -12,11 +12,20 @@ if (!isset($_SESSION['usersname'])) {
 $last_id = get_id_new_order($connect);
 
 
+//get supplier
+$sql = "SELECT * FROM supplier_tbl";
+$supplier_tbl = mysqli_query ($connect, $sql);
+//end get supplier 
+
 if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
     add_each_pro($connect);
     $summ_prod = get_sum($connect);
+    $prepayment_sum = $summ_prod;
+    $come_id = $last_id +1;
+    //creditni prixod orqali dostavshikka qoshish
+    add_credit_supplier($connect, $prepayment_sum, $come_id);
+    //prixod list uchun chiqarish
     add_prod($connect, $summ_prod);
-
 }
 
 $sql = "SELECT * FROM products_tbl";  
@@ -73,19 +82,41 @@ $product_list = mysqli_query ($connect, $sql);
                 <label class="col-sm-2">
                     <span>Номер прихода</span>
                 </label>
-                <div class="col-sm-1 dash">
+                <div class="col dash">
                     <?php echo $last_id+1; ?>
                 </div>
-                <label class="col-sm-1">
+                <label class="col">
                     <span>Дата</span>
                 </label>
-                <div class="col-sm-2">
+                <div class="col">
                     <input required type="date" value="<?php echo date("Y-m-d"); ?>"  class="form-control" name="order_date" form="order_form">
                 </div>
-                <label class="col-sm-2">
+
+
+                <label class="col">
+                    <span>Доставщик</span>
+                </label>
+                <div class="col-sm-2">
+                <select required name="order_supplier" form="order_form" class="form-control">
+                        <option value="">--выберитe---</option>
+                        <?php    
+                            while ($option_supplier = mysqli_fetch_array($supplier_tbl)) {    
+                        ?>
+                            <option value="<?php echo $option_supplier["id"];?>"><?php echo $option_supplier["name"]?></option>
+                        <?php
+                            };    
+                        ?>
+                    </select>
+                </div>
+                
+                
+
+
+
+                <label class="col">
                     <span>Примечание</span>
                 </label>
-                <div class="col-sm-4">
+                <div class="col-3">
                  <textarea required  form="order_form" name="order_note" class="form-control" id="exampleFormControlTextarea1" rows="1">Приход продукции на склад</textarea>
                 </div>
             </div>

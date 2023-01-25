@@ -106,23 +106,23 @@ function select_cron_mess_idd($connect){
 
 
 
-
-
 function get_status_in($connect, $id){
 	$query = "SELECT * FROM state_in WHERE id='$id'";
 	$result = mysqli_query($connect, $query);
 	if(!$result)
 		die(mysqli_error($connect));
-	$name = mysqli_fetch_assoc($result);
-	return $name;
+	$state = mysqli_fetch_assoc($result);
+	// exit();
+	return $state;
 }
 function get_status_out($connect, $id){
 	$query = "SELECT * FROM state_out WHERE id='$id'";
 	$result = mysqli_query($connect, $query);
 	if(!$result)
 		die(mysqli_error($connect));
-	$name = mysqli_fetch_assoc($result);
-	return $name;
+	$state = mysqli_fetch_assoc($result);
+	// exit();
+	return $state;
 }
 
 
@@ -228,6 +228,15 @@ function get_contractor($connect, $contractor_id){
 		die(mysqli_error($connect));
 	$contractor = mysqli_fetch_assoc($result);
 	return $contractor;
+}
+
+function get_supplier($connect, $supplier_id){
+	$query = "SELECT * FROM supplier_tbl WHERE id='$supplier_id'";
+	$result = mysqli_query($connect, $query);
+	if(!$result)
+		die(mysqli_error($connect));
+	$supplier = mysqli_fetch_assoc($result);
+	return $supplier;
 }
 
 
@@ -703,6 +712,36 @@ function add_product_price($connect, $id, $product_price, $product_name){
 	}
 
 }
+// dostavshikka credit qoshish-prixod tovar orqali
+function add_credit_supplier($connect, $prepayment_sum, $come_id){
+
+	$prepayment_date = $_POST['order_date'];
+	$id_supplier = $_POST['order_supplier'];
+	$sql = "INSERT INTO `supplier` (`id_supplier`, `order_date`, `credit`, `come_id`) VALUES ('".$id_supplier."','".$prepayment_date."','".$prepayment_sum."','".$come_id."');";
+	mysqli_query($connect, $sql);
+}
+
+function add_credit($connect, $archive_id, $contractor_id, $debt, $ord_date, $payment_type){
+
+	$sql = "INSERT INTO `debts` (`order_id`, `id_counterpartie`, `debt`, `order_date`, `payment_type`) VALUES ('".$archive_id."','".$contractor_id."','".$debt."','".$ord_date."','".$payment_type."');";
+	if(mysqli_query($connect, $sql)) {
+		$query = "SELECT  * FROM settlements WHERE id_counterpartie='$contractor_id'";
+		$rs = mysqli_query($connect, $query);
+		if(mysqli_num_rows($rs)<=0){
+			$sql = "INSERT INTO `settlements` (`id_counterpartie`, `debt`) VALUES ('".$contractor_id."','".$debt."');";
+			mysqli_query($connect, $sql);
+		}else {
+			$query = "UPDATE settlements SET debt = debt + '$debt' WHERE id_counterpartie='$contractor_id'";
+			mysqli_query($connect, $query);
+		}
+
+		redirect("order.php");
+	}
+	else {
+		die(mysqli_error($connect));
+	}
+
+}
 
 function add_debt($connect, $archive_id, $contractor_id, $debt, $ord_date, $payment_type){
 
@@ -726,6 +765,25 @@ function add_debt($connect, $archive_id, $contractor_id, $debt, $ord_date, $paym
 
 }
 
+function cash_in_add($connect, $state_id,  $cash_sum, $cash_type, $cash_comment, $cash_date){
+
+	$sql = "INSERT INTO `cashbox` (`types_id`, `sum_in`, `type_payment`, `comment`, `date_cash`) VALUES ('".$state_id."','".$cash_sum."','".$cash_type."','".$cash_comment."','".$cash_date."');";
+	
+	if (mysqli_query($connect, $sql)) {
+		redirect("cash_in.php");
+	}
+
+}
+function cash_out_add($connect, $state_id,  $cash_sum, $cash_type, $cash_comment, $cash_date){
+
+	$sql = "INSERT INTO `cashbox` (`types_id`, `sum_out`, `type_payment`, `comment`, `date_cash`) VALUES ('".$state_id."','".$cash_sum."','".$cash_type."','".$cash_comment."','".$cash_date."');";
+	
+	if (mysqli_query($connect, $sql)) {
+		redirect("cash_out.php");
+	}
+
+}
+
 function add_main_prepayment($connect, $id_counterpartie, $prepayment_date, $prepayment_sum, $payment_type){
 
 	$sql = "INSERT INTO `debts` (`id_counterpartie`, `order_date`, `main_prepayment`, `payment_type`) VALUES ('".$id_counterpartie."','".$prepayment_date."','".$prepayment_sum."','".$payment_type."');";
@@ -735,6 +793,18 @@ function add_main_prepayment($connect, $id_counterpartie, $prepayment_date, $pre
 	}
 
 }
+
+
+function add_debt_supplier($connect, $id_counterpartie, $prepayment_date, $prepayment_sum, $payment_type){
+
+	$sql = "INSERT INTO `supplier` (`id_supplier`, `order_date`, `debt`, `payment_type`) VALUES ('".$id_counterpartie."','".$prepayment_date."','".$prepayment_sum."','".$payment_type."');";
+	
+	if (mysqli_query($connect, $sql)) {
+		redirect("supplier_list.php");
+	}
+
+}
+
 
 function add_prepayment($connect, $id_counterpartie, $prepayment_date, $prepayment_sum, $payment_type){
 
@@ -791,9 +861,25 @@ function add_counterparties($connect) {
 	$sql = "INSERT INTO `counterparties_tbl` (`name`, `alternative_name`, `inn`, `nds`, `raschetny_schet`, `mfo`, `address`, `contact`, `director`, `accountant`) VALUES ('".$name."','".$alternative_name."','".$inn."','".$nds."','".$raschetny_schet."','".$mfo."','".$address."','".$contact."','".$director."','".$accountant."');";
 	if(mysqli_query($connect, $sql)) {
 		redirect("counterparties.php");
-	}
-	
-	
+	}	
+}
+
+function add_supplier($connect) {
+	$name=$_POST['name'];
+	$alternative_name=$_POST['alternative_name'];
+	$inn=$_POST['inn'];        
+	$nds=$_POST['nds'];
+	$raschetny_schet=$_POST['raschetny_schet'];
+	$mfo=$_POST['mfo'];
+	$address=$_POST['address'];
+	$contact=$_POST['contact'];
+	$director=$_POST['director'];
+	$accountant=$_POST['accountant'];
+
+	$sql = "INSERT INTO `supplier_tbl` (`name`, `alternative_name`, `inn`, `nds`, `raschetny_schet`, `mfo`, `address`, `contact`, `director`, `accountant`) VALUES ('".$name."','".$alternative_name."','".$inn."','".$nds."','".$raschetny_schet."','".$mfo."','".$address."','".$contact."','".$director."','".$accountant."');";
+	if(mysqli_query($connect, $sql)) {
+		redirect("supplier.php");
+	}	
 }
 
 
@@ -928,7 +1014,9 @@ function add_prod($connect, $summ_prod) {
     $result = mysqli_query($connect, $query);
 	if(!$result)
 		die(mysqli_error($connect));
-	return true;
+	elseif($result) {
+		redirect('in_store.php');
+	}
 }
 
 // orto 

@@ -8,18 +8,18 @@ if (!isset($_SESSION['usersname'])) {
 
 
 
-$query = "SELECT * FROM debts WHERE main_prepayment!='0' ORDER BY id DESC";
+$query = "SELECT * FROM supplier WHERE debt!='0' ORDER BY id DESC";
 $rs_result = mysqli_query ($connect, $query);   
 
 
 
 
 //---get counterparties
-$sql = "SELECT * FROM counterparties_tbl";
-$counterparties_tbl = mysqli_query ($connect, $sql);
+$sql = "SELECT * FROM supplier_tbl";
+$supplier_tbl = mysqli_query ($connect, $sql);
 
 // for count
-$count_query = "SELECT count(*) as allcount FROM debts WHERE main_prepayment!='0' ORDER BY id DESC";
+$count_query = "SELECT count(*) as allcount FROM supplier WHERE debt!='0' ORDER BY id DESC";
 $count_result = mysqli_query($connect,$count_query);
 $count_fetch = mysqli_fetch_array($count_result);
 $postCount = $count_fetch['allcount'];
@@ -40,22 +40,20 @@ if (isset($_POST['id_contractor']) AND isset($_POST['from_date']) AND isset($_PO
    $display_sts_filer_on = 'true';
    
    
-    $query = "SELECT * FROM debts WHERE id_counterpartie = '$id_cont' AND main_prepayment!='0' AND order_date >= '$fr_date' AND order_date <= '$to_date' ORDER BY id DESC";
+    $query = "SELECT * FROM supplier WHERE id_supplier = '$id_cont' AND debt!='0' AND order_date >= '$fr_date' AND order_date <= '$to_date' ORDER BY id DESC";
 
-    $all_debt_query = "SELECT sum(main_prepayment) as all_debt, count(id) as allcount FROM debts WHERE id_counterpartie = '$id_cont' AND main_prepayment!='0' AND order_date >= '$fr_date' AND order_date <= '$to_date' ORDER BY id DESC";
+    $all_debt_query = "SELECT sum(debt) as all_debt, count(id) as allcount FROM supplier WHERE id_supplier = '$id_cont' AND debt!='0' AND order_date >= '$fr_date' AND order_date <= '$to_date' ORDER BY id DESC";
    
  
 
 }
 else {
     //list all
-    $query = "SELECT * FROM debts WHERE main_prepayment!='0' ORDER BY id desc LIMIT 0,".$limit;
-    $all_debt_query = "SELECT sum(main_prepayment) as all_debt, count(id) as allcount FROM debts WHERE main_prepayment!='0'";
+    $query = "SELECT * FROM supplier WHERE debt!='0' ORDER BY id desc LIMIT 0,".$limit;
+    $all_debt_query = "SELECT sum(debt) as all_debt, count(id) as allcount FROM supplier WHERE debt!='0'";
     
     $display_true = 'true';
     $display_none = 'none';
-
-
 
 
 }
@@ -65,6 +63,11 @@ $all_debt_result = mysqli_query ($connect, $all_debt_query);
 $all_debt_fetch = mysqli_fetch_array($all_debt_result);
 $all_debt = $all_debt_fetch['all_debt'];
 $all_count = $all_debt_fetch['allcount'];
+
+
+if ($all_count < $limit) {
+    $limit  = $all_count;
+  }
 
 //for list 
 $rs_result = mysqli_query ($connect, $query);
@@ -103,15 +106,14 @@ $rs_result = mysqli_query ($connect, $query);
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Оплаты от контрагентов</span>
+        <span class="right_cus">Оплаты поставщикам</span>
     </div>    
 </div>
-
 <div class="toolbar">
         <div class="container-fluid">
             <div class="toolbar_wrapper">
                 <div class="toolbar_wrapper">
-                <div><a href="prepayment_add.php"> <button type="button" class="btn btn-success">Добавить</button> </a></div>
+                <div><a href="supplier_add.php"> <button type="button" class="btn btn-success">Добавить</button> </a></div>
                 <div class="filter-container">
                     <div style="background-color:<?php echo $bg_sts;?>" class="filter-container-item first" data-toggle="modal" data-target="#filter">
                      <span class="glyphicon glyphicon-filter"></span>
@@ -141,7 +143,7 @@ $rs_result = mysqli_query ($connect, $query);
         <table class="table table-hover">
         <thead>
             <tr>
-            <th scope="col">Контрагент</th>
+            <th scope="col">Доставщик</th>
             <!-- <th scope="col">Торговый представитель</th> -->
             <th scope="col">Дата оплата</th>
             <th scope="col">Тип оплаты</th>
@@ -160,11 +162,11 @@ $rs_result = mysqli_query ($connect, $query);
             $i++;
         ?> 
             <tr>
-            <td><?php $user = get_contractor($connect, $row["id_counterpartie"]); echo $user["name"];?></td>
+            <td><?php $user = get_supplier($connect, $row["id_supplier"]); echo $user["name"];?></td>
             <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
 
             <td><?php echo $row['payment_type']; ?></td>
-            <td><?php echo number_format($row['main_prepayment'], 0, ',', ' '); ?></td>
+            <td><?php echo number_format($row['debt'], 0, ',', ' '); ?></td>
             <td><a href="#">Просмотр</a></td>
             <td><a href="#">Редактировать</a></td>
 
@@ -223,9 +225,9 @@ $rs_result = mysqli_query ($connect, $query);
                     <select required class="normalize" name="id_contractor" form="filer_form">
                         <option value="">выберите</option>
                         <?php    
-                            while ($option_contractor = mysqli_fetch_array($counterparties_tbl)) {    
+                            while ($option_supplier = mysqli_fetch_array($supplier_tbl)) {    
                         ?>
-                            <option value="<?php echo $option_contractor["id"];?>"><?php echo $option_contractor["name"]?></option>
+                            <option value="<?php echo $option_supplier["id"];?>"><?php echo $option_supplier["name"]?></option>
                         <?php
                             };    
                         ?>
@@ -270,12 +272,12 @@ $(document).ready(function () {
       row = row + limit;
     
       $('#row').val(row);
-      $("#loadBtn").val('Loading...');
+      $("#loadBtn").val('...');
  
       $.ajax({
         type: 'POST',
-        url: 'loadmore-data.php?otkont=1',
-        data: 'rowpredo=' + row,
+        url: 'loadmore-data.php',
+        data: 'rowopsup=' + row,
         success: function (data) {
           var rowCount = row + limit;
           $("#row_c").text(rowCount);

@@ -10,16 +10,16 @@ if (!isset($_SESSION['usersname'])) {
 
 $display = 'none';
 $btn_display = 'none';
-//---get counterparties
-$sql = "SELECT * FROM counterparties_tbl";
-$counterparties_tbl = mysqli_query ($connect, $sql);
+//---get supplier
+$sql = "SELECT * FROM supplier_tbl";
+$supplier_tbl = mysqli_query ($connect, $sql);
 //---
 if (isset($_POST['id_contractor'])) {
     $display = 'true';
     $btn_display = 'true';
     $id_contractor = $_POST['id_contractor'];
 
-    $contractor = get_contractor($connect, $id_contractor); 
+    $contractor = get_supplier($connect, $id_contractor); 
 
     $from_date = $_POST['from_date'];
     $to_date = $_POST['to_date'];
@@ -27,7 +27,7 @@ if (isset($_POST['id_contractor'])) {
     
 
 
-    $qr_start = "SELECT * FROM debts WHERE id_counterpartie = '$id_contractor' AND prepayment=0 AND order_date < '$from_date' ORDER BY order_date";
+    $qr_start = "SELECT * FROM supplier WHERE id_supplier = '$id_contractor' AND order_date < '$from_date' ORDER BY order_date";
     $rs_qr_start = mysqli_query ($connect, $qr_start);
     
     $sum_debt_saldo = 0;
@@ -35,7 +35,7 @@ if (isset($_POST['id_contractor'])) {
 
     while ($row_qr = mysqli_fetch_array($rs_qr_start)) {
         $sum_debt_saldo = $sum_debt_saldo + $row_qr['debt'];
-        $sum_main_prepayment_saldo = $sum_main_prepayment_saldo + $row_qr['main_prepayment'];
+        $sum_main_prepayment_saldo = $sum_main_prepayment_saldo + $row_qr['credit'];
     }
 
 
@@ -51,7 +51,7 @@ if (isset($_POST['id_contractor'])) {
     }
 
 
-    $qr = "SELECT * FROM debts WHERE id_counterpartie = '$id_contractor' AND prepayment=0 AND order_date >= '$from_date' AND order_date <= '$to_date' ORDER BY order_date";
+    $qr = "SELECT * FROM supplier WHERE id_supplier = '$id_contractor' AND order_date >= '$from_date' AND order_date <= '$to_date' ORDER BY order_date";
     $rs_qr = mysqli_query ($connect, $qr);
 
 
@@ -71,8 +71,6 @@ if (isset($_POST['id_contractor'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous"> -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,14 +97,13 @@ if (isset($_POST['id_contractor'])) {
 <!-- Tab item -->
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a style="border-bottom: none; background-color: #dddddd; color: #666666;" class="nav-link active" aria-current="page" href="#">Акт сверки с клиентами</a>
+    <a style="color: #666666;" class="nav-link" aria-current="page" href="act.php">Акт сверки с клиентами</a>
   </li>
   <li class="nav-item">
-    <a style="color: #666666;" class="nav-link" href="act_supplier.php">Акт сверки с поставщиками</a>
+    <a style="border-bottom: none; background-color: #dddddd; color: #666666;" class="nav-link" href="act_supplier.php">Акт сверки с поставщиками</a>
   </li>
 </ul>
 <!-- End tab item -->
-
 
 
 <div class="toolbar">
@@ -138,7 +135,7 @@ if (isset($_POST['id_contractor'])) {
                     <select required class="normalize" name="id_contractor" form="order_form">
                         <option value="">Выберите: </option>
                         <?php    
-                            while ($option_contractor = mysqli_fetch_array($counterparties_tbl)) {    
+                            while ($option_contractor = mysqli_fetch_array($supplier_tbl)) {    
                         ?>
                             <option value="<?php echo $option_contractor["id"];?>"><?php echo $option_contractor["name"]?></option>
                         <?php
@@ -207,7 +204,7 @@ if (isset($_POST['id_contractor'])) {
                         while ($row = mysqli_fetch_array($rs_qr)) {
                         $i++;
                         $sum_debt += $row["debt"];
-                        $sum_prepayment += $row["main_prepayment"];
+                        $sum_prepayment += $row["credit"];
                         
                     ?> 
 
@@ -223,10 +220,10 @@ if (isset($_POST['id_contractor'])) {
                             ?>
                         </td>
                         <td><?php 
-                            if ($row["main_prepayment"] == "0") {
+                            if ($row["credit"] == "0") {
                                 echo '';
                             }else{
-                                echo number_format($row["main_prepayment"], 0, ',', ' ');
+                                echo number_format($row["credit"], 0, ',', ' ');
                             }
                             ?>
                         </td>
@@ -234,10 +231,10 @@ if (isset($_POST['id_contractor'])) {
                         <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
 
                         <td><?php 
-                            if ($row["main_prepayment"] == "0") {
+                            if ($row["credit"] == "0") {
                                 echo '';
                             }else{
-                                echo number_format($row["main_prepayment"], 0, ',', ' ');
+                                echo number_format($row["credit"], 0, ',', ' ');
                             }
                             ?>
                         </td>

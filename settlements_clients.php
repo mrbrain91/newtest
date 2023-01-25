@@ -54,7 +54,7 @@ $rs_result = mysqli_query ($connect, $query);
 
 <div class="all_table">
     <div class="container-fluid">
-        <table class="table table-striped table-bordered" style="margin-bottom:0;">
+        <table class="table table-hover" style="margin-bottom:0;">
         <thead>
             <tr>
             <th scope="col">Контрагент</th>

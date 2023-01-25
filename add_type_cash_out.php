@@ -45,7 +45,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Добавление статьи рас   ходов</span>
+        <span class="right_cus">Добавление статьи расходов</span>
     </div>    
 </div>
 
@@ -55,7 +55,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
         <!-- <button type="submit" form="order_form" name="save_add_pro" class="btn btn-success">Принять</button> -->
         <td><input class="btn btn-success" type="submit" form="state_in_form" name="submit" value="Сохранить" />
 
-        <a href="type_cash_in.php"><button type="button" class="btn btn-light">Закрыть</button></a>
+        <a href="type_cash_out.php"><button type="button" class="btn btn-light">Закрыть</button></a>
 
     </div>
 </div>

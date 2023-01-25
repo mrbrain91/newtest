@@ -59,6 +59,37 @@ if (isset($_GET['id_c'])) {
 
 
 
+  //get_balance supplier
+
+if (isset($_GET['id_s'])) {
+  $i = $_GET['id_s'];
+  
+  // echo $_GET['i'];
+  $sql = "SELECT (sum(credit) - sum(debt)) as balance FROM supplier WHERE id_supplier = '$i' GROUP BY id_supplier";
+
+  $stmt = $mysqli->prepare($sql);
+  $stmt->bind_param("s", $_GET['q']);
+  $stmt->execute();
+  $stmt->store_result();
+  $stmt->bind_result($pn);
+  $stmt->fetch();
+  $stmt->close();
+  if ($pn>=0) {
+   $color = 'green';
+  }else {
+    $color = 'red';
+  }
+  ?> 
+  
+  <input readonly style="color: <?php echo $color; ?>; background-color:<?php echo "#fafafb"; ?>" type="text" class="form-control" value="<?php echo number_format($pn, 0, ',', ' ');?>">
+
+  
+  <?php
+  }
+
+
+
+
 
 
 ?>
