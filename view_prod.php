@@ -59,7 +59,7 @@ $rs_result = mysqli_query ($connect, $query);
 
 <div class="toolbar">
         <div class="container-fluid">
-            <a href="in_store.php"><button type="button" class="btn btn-light">Закрыть</button></a>
+            <a href="in_store.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
         </div>
 </div>
@@ -101,7 +101,7 @@ $rs_result = mysqli_query ($connect, $query);
 </div>
 
 <div class="container-fluid">
-    <table id="myTable" class="table table-striped table-bordered">
+    <table id="myTable" class="table table-hover">
     <thead>
         <tr class="w600">
             <td>Продукция  / Производитель </td>
@@ -118,7 +118,7 @@ $rs_result = mysqli_query ($connect, $query);
     ?> 
         <tr>
             <td class="col-sm-4" >
-                <span><?php echo $row["prod_name"]; ?></span>
+                <span><?php $name = get_prod_name($connect, $row["prod_name"]); echo $name['name']; ?></span>
             </td>
             <td class="col-sm-1">
                 <span><?php echo $row["count_name"]; ?></span>
@@ -136,7 +136,6 @@ $rs_result = mysqli_query ($connect, $query);
             <td class="col-sm-2">
                 <span><?php echo number_format($row['total_name']); ?></span>
             </td>
-
         </tr>
     <?php     
         };    

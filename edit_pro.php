@@ -62,7 +62,7 @@ $rs_result = mysqli_query ($connect, $query);
 
 <div class="toolbar">
         <div class="container-fluid">
-            <a href="in_store.php"><button type="button" class="btn btn-light">Закрыть</button></a>
+            <a href="in_store.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
         </div>
 </div>
@@ -104,7 +104,7 @@ $rs_result = mysqli_query ($connect, $query);
 </div>
 
 <div class="container-fluid">
-    <table id="myTable" class="table table-striped table-bordered">
+    <table id="myTable" class="table table-hover">
     <thead>
         <tr class="w600">
             <td>Продукция  / Производитель </td>

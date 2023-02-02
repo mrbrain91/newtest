@@ -140,7 +140,7 @@ $rs_result = mysqli_query ($connect, $query);
 
 <div class="all_table" style="margin-top:5px;">
     <div class="container-fluid">
-        <table class="table table-striped table-bordered">
+        <table class="table table-hover">
         <thead>
             <tr>
             <th scope="col">Номер</th>
@@ -182,7 +182,7 @@ $rs_result = mysqli_query ($connect, $query);
            
         </tbody>
         </table>
-        <table class="table" style="background-color:#ebf0ff; border-left: 4px solid #7396ff;">
+        <table class="table table-hover" style="background-color:#ebf0ff; border-left: 4px solid #7396ff;">
             <tr>
                 <td style="text-align:left;">Сумма оплат: <?php echo number_format($all_debt, 0, ',', ' '); ?></td>
             </tr>

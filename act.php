@@ -99,7 +99,7 @@ if (isset($_POST['id_contractor'])) {
 <!-- Tab item -->
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a style="border-bottom: none; background-color: #dddddd; color: #666666;" class="nav-link active" aria-current="page" href="#">Акт сверки с клиентами</a>
+    <a style="color: #666666; border-bottom: 2px solid #5db85c;" class="nav-link active" aria-current="page" href="#">Акт сверки с клиентами</a>
   </li>
   <li class="nav-item">
     <a style="color: #666666;" class="nav-link" href="act_supplier.php">Акт сверки с поставщиками</a>
@@ -162,7 +162,7 @@ if (isset($_POST['id_contractor'])) {
 <div class="all_table" style='display: <?php echo $display;?>' >
     <div class="container-fluid">
         <div class="table_wrap">
-            <table id="tblData" class="table table-dark table-bordered act_td" style="width:70%; margin: 0 auto; margin-top: 30px;">
+            <table id="tblData" class="table table-striped table-bordered act_td" style="width:70%; margin: 0 auto; margin-top: 30px;">
                     <tr>
                         <td class="non_border head_txt" colspan="6">
                             <span>Акт сверки</span> <br> 

@@ -70,7 +70,7 @@ $product_list = mysqli_query ($connect, $sql);
             <td><input class="btn btn-success" type="submit" form="order_form" name="submit" value="Принять" />
 
 
-            <a href="in_store.php"><button type="button" class="btn btn-light">Закрыть</button></a>
+            <a href="in_store.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
         </div>
 </div>
@@ -154,7 +154,7 @@ $product_list = mysqli_query ($connect, $sql);
                             <?php     
                                 while ($option = mysqli_fetch_array($product_list)) {    
                             ?> 
-                                <option value="<?php echo $option["name"];?>"><?php echo $option["name"];?></option>
+                                <option value="<?php echo $option["id"];?>"><?php echo $option["name"];?></option>
                             <?php       
                                 };    
                             ?>
@@ -224,7 +224,7 @@ $(document).ready(function () {
         var newRow = $("<tr>");
         var cols = "";                                                      
         
-        cols += '<td class="col-sm-4"><select required name="prod_name[]" form="order_form" class="form-control"><option value="">--выберитe продукцию---</option><?php while ($option = mysqli_fetch_array($product_list)) { ?> <option value="<?php echo $option["name"];?>"><?php echo $option["name"];?></option> <?php }; ?></select></td>'
+        cols += '<td class="col-sm-4"><select required name="prod_name[]" form="order_form" class="form-control"><option value="">--выберитe продукцию---</option><?php while ($option = mysqli_fetch_array($product_list)) { ?> <option value="<?php echo $option["id"];?>"><?php echo $option["name"];?></option> <?php }; ?></select></td>'
         cols += '<td><input required type="text" name="count_name[]"  class="form-control" form="order_form"/></td>'; 
         cols += '<td><input required type="date" name="date_name[]"  class="form-control" form="order_form"/></td>';
         cols += '<td><input required type="text" name="price_name[]"  class="form-control" form="order_form"/></td>';

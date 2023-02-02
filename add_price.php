@@ -69,7 +69,7 @@ $j = 'Пластырь One Aid PU 60x70 №3';
             <!-- <button type="button" class="btn btn-primary">Сохранить</button> -->
             <!-- <button type="button" class="btn btn-success">Принять</button> -->
             <td><input class="btn btn-success" type="submit" form="order_form" name="submit" value="Сохранить" />
-            <a href="price.php"><button type="button" class="btn btn-light">Закрыть</button></a>
+            <a href="price.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
         </div>
 </div>

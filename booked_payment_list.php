@@ -106,7 +106,7 @@ $all_count = $all_debt_fetch['allcount'];
            <!-- <a href="#"> <button type="button" class="btn btn-success">Взаимозачет</button> </a> -->
            <!-- <a href="add_order.php"> <button type="button" class="btn btn-primary">должники</button> </a> -->
            <div class="toolbar_wrapper">
-                <div><a href="settlements_clients.php"> <button type="button" class="btn">закрыть</button> </a></div>
+                <div><a href="settlements_clients.php"> <button type="button" class="btn btn-custom">закрыть</button> </a></div>
 
                 <div class="filter-container">
                     <div style="background-color:<?php echo $bg_sts;?>" class="filter-container-item first" data-toggle="modal" data-target="#filter">

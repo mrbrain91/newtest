@@ -81,7 +81,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
             <!-- <button type="button" class="btn btn-primary">Сохранить</button> -->
             <!-- <button type="button" class="btn btn-success">Принять</button> -->
             <td><input class="btn btn-success" type="submit" form="order_form" name="submit" value="Принять" />
-            <a href="order.php"><button type="button" class="btn btn-light">Закрыть</button></a>
+            <a href="order.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
         </div>
 </div>
@@ -138,6 +138,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                             while ($option_contractor = mysqli_fetch_array($counterparties_tbl)) {    
                         ?>
                             <option value="<?php echo $option_contractor["id"];?>"><?php echo $option_contractor["name"]?></option>
+
                         <?php
                             };    
                         ?>
@@ -178,7 +179,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                     <?php     
                         while ($option = mysqli_fetch_array($product_list)) {    
                     ?> 
-                        <option value="<?php echo $option["name"];?>"><?php echo $option["name"];?></option>
+                        <option value="<?php echo $option["name"];?>"><?php $name = get_prod_name($connect, $option['name']); echo $name['name'];?></option>
+
                     <?php       
                         };    
                     ?>
@@ -345,7 +347,8 @@ $(document).ready(function () {
         var newRow = $("<tr>");
         var cols = "";                                                      
                 
-        cols += '<td><select required name="prod_name[]" form="order_form" class="form-control" id="prod_name_'+inc+'" for="'+inc+'" onchange="showCustomer(this.value,'+inc+')"><option value="">--выберите продукцию--</option><?php while ($option = mysqli_fetch_array($product_list)) { ?> <option value="<?php echo $option["name"];?>"><?php echo $option["name"];?></option> <?php }; ?></select></td>';
+        cols += '<td><select required name="prod_name[]" form="order_form" class="form-control" id="prod_name_'+inc+'" for="'+inc+'" onchange="showCustomer(this.value,'+inc+')"><option value="">--выберите продукцию--</option><?php while ($option = mysqli_fetch_array($product_list)) { ?> <option value="<?php echo $option["name"];?>"><?php  $name = get_prod_name($connect, $option["name"]); echo $name["name"]; ?></option> <?php }; ?></select></td>';
+
         cols += '<td><input required type="number" name="quantity[]"  class="form-control quantity" id="quantity_'+inc+'" for="'+inc+'" form="order_form"/></td>';
         cols += '<td><div id="txtHint_'+inc+'"><input disabled data-type="product_price" type="number" name="product_price[]"  class="form-control product_price" id="product_price_'+inc+'" for="'+inc+'" form="order_form"/></div></td>';
         cols += '<td><input required type="number" name="sale[]" class="form-control sale" id="sale_'+inc+'" for="'+inc+'" form="order_form"/></td>';

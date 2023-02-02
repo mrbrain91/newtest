@@ -100,7 +100,7 @@ if (isset($_POST['id_contractor'])) {
     <a style="color: #666666;" class="nav-link" aria-current="page" href="act.php">Акт сверки с клиентами</a>
   </li>
   <li class="nav-item">
-    <a style="border-bottom: none; background-color: #dddddd; color: #666666;" class="nav-link" href="act_supplier.php">Акт сверки с поставщиками</a>
+    <a style="border-bottom: 2px solid #5db85c; color: #666666;" class="nav-link" href="act_supplier.php">Акт сверки с поставщиками</a>
   </li>
 </ul>
 <!-- End tab item -->
@@ -121,7 +121,7 @@ if (isset($_POST['id_contractor'])) {
         <form action="#" method="POST" class="horizntal-form" id="order_form">
             <div class="row">
                 <div class="col-md-3">
-                    <span>Контрагент</span>
+                    <span>Поставщик</span>
                 </div>
                 <div class="col-md-2">
                         <span>Дата начала</span>

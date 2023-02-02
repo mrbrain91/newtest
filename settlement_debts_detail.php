@@ -87,7 +87,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
         <div class="container-fluid">
            <!-- <a href="#"> <button type="button" class="btn btn-success">Взаимозачет</button> </a> -->
            <input class="btn btn-primary" type="submit" form="order_form" name="submit" value="завершить" />
-           <a href="settlements_clients.php"> <button type="button" class="btn">закрыть</button> </a>
+           <a href="settlements_clients.php"> <button type="button" class="btn btn-custom">закрыть</button> </a>
             <input  type="text"  id="prepay"  value="<?php echo $prepayment;?> " readonly><span style="float: right; font-weight: 600; margin: 9px 10px 0px 0px;">Предоплата:</span>
         </div>
 </div>
@@ -96,7 +96,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
 <div class="all_table">
     <div class="container-fluid">
         <form action="#"  method="POST" class="horizntal-form" id="order_form">
-            <table class="table table-striped table-bordered">
+            <table class="table table-hover">
             <thead>
                 <tr>
                 <th scope="col">Н/З</th>
@@ -148,7 +148,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'завершить') {
                     <td class="custom_td"><?php echo $row['payment_type']?></td>
                     <td class="custom_td"><a style="color:#333333;" href="settlement_order_detail.php?order_id=<?php echo $row['order_id'];?>&&id=<?php echo $row['id_counterpartie'];?>&&prepayment=<?php echo $prepayment;?>"><?php echo number_format($balance, 0, '.', ' ');?></a></td>
                     <td><input onblur="changeInput(<?php echo $i;?>);"  required min="0" max="<?php echo $balance?>" id="<?php echo $i;?>" value='0' class="form-control custom_input" name="payment[]" form="order_form"></td>
-                    <td><button type="button"  onclick="change(<?php echo $balance?>,<?php echo $i;?>)"  class="btn btn-light"><i class="fa fa-check" aria-hidden="true"></i></button></td>
+                    <td><button type="button"  onclick="change(<?php echo $balance?>,<?php echo $i;?>)"  class="btn btn-custom"><i class="fa fa-check" aria-hidden="true"></i></button></td>
                 </tr>
    
                 <?php       

@@ -55,14 +55,14 @@ if (isset($_GET['id'])) {
 
 <div class="toolbar">
         <div class="container-fluid">
-           <a href="price.php"> <button type="button" class="btn btn-light">Закрыть</button> </a>
+           <a href="price.php"> <button type="button" class="btn btn-custom">Закрыть</button> </a>
         </div>
 </div>
 
 
 <div>
     <div class="container-fluid">
-        <table class="table table-hover table-bordered">
+        <table class="table table-hover">
         <thead>
             <tr>
             <th scope="col">Название</th>
@@ -74,7 +74,7 @@ if (isset($_GET['id'])) {
     while ($row = mysqli_fetch_array($rs_result)) {    
 ?> 
             <tr>
-                <td><?php echo $row["name"]; ?></td>
+                <td><?php $name = get_prod_name($connect, $row['name']); echo $name['name']; ?></td>
                 <td><?php echo number_format($row["cost"], 0, ',', ' '); ?></td>
             </tr>
 <?php       

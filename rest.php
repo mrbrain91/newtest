@@ -44,7 +44,7 @@ if (!isset($_SESSION['usersname'])) {
 
 <div class="all_table">
     <div class="container-fluid">
-        <table class="table table-striped table-bordered">
+        <table class="table table-hover">
         <thead>
             <tr>
                 <th scope="col">Продукция</th>

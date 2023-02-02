@@ -65,7 +65,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Добавить') {
 
 <div class="toolbar">
         <div class="container-fluid">
-           <a href="price.php"> <button type="button" class="btn btn-light">Закрыть</button> </a>
+           <a href="price.php"> <button type="button" class="btn btn-custom">Закрыть</button> </a>
         </div>
 </div>
 
@@ -89,7 +89,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Добавить') {
                         <?php     
                             while ($option = mysqli_fetch_array($product_list)) {    
                         ?> 
-                            <option value="<?php echo $option["name"];?>"><?php echo $option["name"];?></option>
+                            <option value="<?php echo $option["id"];?>"><?php echo $option["name"];?></option>
                         <?php       
                             };    
                         ?>
@@ -111,7 +111,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Добавить') {
 
 
         
-        <table class="table table-hover table-bordered">
+        <table class="table table-hover">
         <thead>
             <tr>
             <th scope="col">Название</th>
@@ -124,7 +124,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Добавить') {
     while ($row = mysqli_fetch_array($rs_result)) {    
 ?> 
             <tr>
-                <td><?php echo $row["name"]; ?></td>
+                <td><?php $name = get_prod_name($connect, $row['name']); echo $name['name']; ?></td>
                 <td><?php echo number_format($row["cost"], 0, ',', ' '); ?></td>
                 <td><a href="#" onclick="return confirm('Удалить?')" role="button">Удалить</a></td>
             </tr>

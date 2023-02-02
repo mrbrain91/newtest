@@ -104,7 +104,7 @@ if (upd_prod_item($connect, $torid, $tpi, $tp_name, $tc_name, $td_name, $tpr_nam
             <input class="btn btn-success" type="submit" form="order_form" name="submit" value="Сохранить" />
 
 
-            <a href="in_store.php"><button type="button" class="btn btn-light">Закрыть</button></a>
+            <a href="in_store.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
         </div>
 </div>
 
@@ -120,7 +120,7 @@ if (upd_prod_item($connect, $torid, $tpi, $tp_name, $tc_name, $td_name, $tpr_nam
 </div>
 
 <div class="container-fluid">
-    <table id="myTable" class="table table-striped table-bordered">
+    <table id="myTable" class="table table-hover">
     <thead>
         <tr class="w600">
             <td>Продукция  / Производитель </td>

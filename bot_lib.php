@@ -87,14 +87,6 @@ function get_last_id($connect){
 }
 
 
-function select_cron_mess_idd($connect){
-	$query = "SELECT idd FROM cron_message WHERE id=1";
-	$result = mysqli_query($connect, $query);
-	$rows = mysqli_fetch_row($result);
-	if(!$result)
-		die(mysqli_error($connect));
-		return $rows[0];
-}
 
 
 
@@ -228,6 +220,15 @@ function get_contractor($connect, $contractor_id){
 		die(mysqli_error($connect));
 	$contractor = mysqli_fetch_assoc($result);
 	return $contractor;
+}
+
+function get_prod_name($connect, $prod_id){
+	$query = "SELECT * FROM products_tbl WHERE id='$prod_id'";
+	$result = mysqli_query($connect, $query);
+	if(!$result)
+		die(mysqli_error($connect));
+	$prod_name = mysqli_fetch_assoc($result);
+	return $prod_name;
 }
 
 function get_supplier($connect, $supplier_id){
@@ -499,95 +500,6 @@ function add_test($connect, $test_name, $test_date, $test_start_time, $test_over
 
 
 
-function add_offline_test_result($connect, $user_id, $UserName, $offline_subject_id, $offline_subject_name, $correct, $wrong){
-
-// $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $answer . "***" . var_export($chat_id ,1)]);
-
-    $user_id = trim($user_id);
-    $username = trim($UserName);
-    $offline_subject_id = trim($offline_subject_id);
-    $offline_subject_name = trim($offline_subject_name);
-    $correct = trim($correct);
-    $wrong = trim($wrong);
-    
-    
-    
-    $t = "INSERT INTO OfflineResult (user_id, UserName, offline_subject_id, offline_subject_name, correct, wrong) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')";
-
-    $query = sprintf($t, mysqli_real_escape_string($connect, $user_id),
-						mysqli_real_escape_string($connect, $username),
-						mysqli_real_escape_string($connect, $offline_subject_id),
-						mysqli_real_escape_string($connect, $offline_subject_name),
-						mysqli_real_escape_string($connect, $correct),
-						mysqli_real_escape_string($connect, $wrong));
-    $result = mysqli_query($connect, $query);
-	if(!$result)
-		die(mysqli_error($connect));
-	return true;
-}
-
-
-/*
-Function INSERT result
-*/
-
-//bot
-function add_test_result($connect, $user_id, $username, $test_id, $score, $list){
-
-// $telegram->sendMessage(['chat_id' => $chat_id, 'text' => $answer . "***" . var_export($chat_id ,1)]);
-
-    $user_id = trim($user_id);
-    $username = trim($username);
-    $test_id = trim($test_id);
-    $score = trim($score);
-    $answers = trim($list);
-    
-    
-    
-    $t = "INSERT INTO result (user_id, username, test_id, score, answer) VALUES ('%s', '%s', '%s', '%s', '%s')";
-    $query = sprintf($t, mysqli_real_escape_string($connect, $user_id),
-						mysqli_real_escape_string($connect, $username),
-						mysqli_real_escape_string($connect, $test_id),
-						mysqli_real_escape_string($connect, $score),
-						mysqli_real_escape_string($connect, $answers));
-    $result = mysqli_query($connect, $query);
-	if(!$result)
-		die(mysqli_error($connect));
-	return true;
-}
-
-
-
-/*
-Function INSERT OFFLINE SUBJECT
-*/
-function offline_add_subject($connect, $offline_subject_name, $offline_filenames, $offline_subject_key){
-   
-    $offline_subject_name = trim($offline_subject_name);
-    $offline_filenames = trim($offline_filenames);
-    $offline_subject_key = trim($offline_subject_key);
-    
-    
-    
-    $t = "INSERT INTO offline_subjects (offline_subject_name, offline_filenames, offline_subject_key ) VALUES ('%s', '%s', '%s')";
-
-    $query = sprintf($t,mysqli_real_escape_string($connect, $offline_subject_name),
-						mysqli_real_escape_string($connect, $offline_filenames),
-						mysqli_real_escape_string($connect, $offline_subject_key));
-    $result = mysqli_query($connect, $query);
-	if(!$result)
-		die(mysqli_error($connect));
-	return true;
-}
-
-
-/*
-Function generate random string
-*/
-
-function genRanStr($length = 5) {
-    return substr(str_shuffle(str_repeat($x='0123456789', ceil($length/strlen($x)) )),1,$length);
-}
 
 
 /*
@@ -659,22 +571,9 @@ function add_each_pro($connect) {
 			$query = "UPDATE settlements SET debt = debt + '$debt' WHERE id_counterpartie='$contractor_id'";
 			mysqli_query($connect, $query);
 		}
-
-
-
-
-
-
-			
+	
 			
     }
-
-	
-	
-	
-
-
-
 
 }
 
@@ -891,6 +790,7 @@ function add_each_ord($connect) {
 		die(mysqli_error($connect));
 		$last_id = $rows[0];
 
+
 	
 	if(isset($_POST['submit']) && $_POST['submit'] == 'Принять'){
 
@@ -1103,20 +1003,6 @@ function add_street($connect, $name_of_street, $id_region, $id_quarter){
 	return true;
 }
 
-/*
- Function for get users from database
-*/
-
-// BOT FUNC
-// function get_user($connect, $chat_id){
-// 	$query = sprintf("SELECT * FROM users WHERE chat_id=%d", (int)$chat_id);
-// 	$result = mysqli_query($connect, $query);
-// 	if(!$result)
-// 		die(mysqli_error($connect));
-// 	$get_user = mysqli_fetch_assoc($result);
-// 	return $get_user;
-
-// }
 
 /*
  Function for add text entered by user
@@ -1140,19 +1026,7 @@ function textlog($connect, $chat_id, $text, $step, $vars = []) {
 Function to get all agents from the database
 */
 
-function agents_all($connect){
-	$query = "SELECT * FROM agents ORDER BY id DESC LIMIT 10";
-	$result = mysqli_query($connect, $query);
-	if(!$result)
-		die(mysqli_error($connect));
-	$n = mysqli_num_rows($result);
-	$agents_all = array();
-	for ($i = 0; $i <$n; $i++){
-		$row = mysqli_fetch_assoc($result);
-		$agents_all[] = $row;
-	}
-	return $agents_all;
-}
+
 
 function name_agent($connect, $id_agent){
 	$query = "SELECT userName FROM agents WHERE userId='$id_agent'";

@@ -7,13 +7,11 @@ $background-color_2: #2B3643;
 $background-color_3: #4e5e70;
 $border-bottom-color_1: #337ab7;
 
-
 /*start of login page style*/
 /* body {
     background-color: #3C3C3C;
 } */
 /*end of login page style*/
-
 
 * {
 	box-sizing: border-box;
@@ -22,13 +20,37 @@ $border-bottom-color_1: #337ab7;
     transition: all 0.01s;
 
 }
+
 body {
 	background-color: $background-color_1;
 	font-family: $font-family_1;
 	font-size: 12px;
 }
 
+a:hover{
+	text-decoration: none;
+}
 
+.btn:focus {
+	outline: none !important;
+}
+
+// .btn:focus {
+// 	box-shadow: none;
+// }
+
+
+
+.hiddenRow {
+    padding: 0 4px !important;
+    background-color: #eeeeee;
+    font-size: 13px;
+}
+
+// tbody td {
+// 	border-top: 0.5px dashed #2B3643;
+// 	border-right-width: 10px;
+// }
 
 .form {
 	display: block;
@@ -48,24 +70,29 @@ body {
 		margin-top: 13px;
 	}
 }
+
 .login_btn {
 	float: right;
 }
+
 input[type="date"] {
 	font-family: $font-family_1;
 	color: $color_1;
 	font-size: 13px;
 }
+
 input[type="time"] {
 	font-family: $font-family_1;
 	color: $color_1;
 	font-size: 13px;
 }
+
 input[type="text"] {
 	font-family: $font-family_1;
 	color: $color_1;
 	font-size: 13px;
 }
+
 input[type='radio']:checked:after {
 	width: 14px;
 	height: 14px;
@@ -78,14 +105,14 @@ input[type='radio']:checked:after {
 	border: 1px solid white;
 }
 
-
-
 .container {
 	width: 100%;
 }
+
 .r15 {
 	margin-right: -7px;
 }
+
 .navbar-inverse {
 	.navbar-nav {
 		>li {
@@ -96,6 +123,7 @@ input[type='radio']:checked:after {
 		}
 	}
 }
+
 .navbar-custom {
 	background-color: $background-color_2;
 	border: none;
@@ -103,6 +131,7 @@ input[type='radio']:checked:after {
 	border-bottom: solid 2px;
 	border-bottom-color: $border-bottom-color_1;
 }
+
 .header {
 	.page_header {
 		position: fixed;
@@ -133,6 +162,7 @@ input[type='radio']:checked:after {
 		}
 	}
 }
+
 .page_name {
 	width: 100%;
 	height: 37px;
@@ -142,9 +172,11 @@ input[type='radio']:checked:after {
 	color: $color_3;
 	font-size: 13px;
 }
+
 .right_cus {
 	margin-left: 7px;
 }
+
 .toolbar {
 	width: 100%;
 	height: 46px;
@@ -156,11 +188,14 @@ input[type='radio']:checked:after {
 		font-size: 12px;
 	}
 }
+
 .table {
+	border-collapse: collapse;
+    border: 1px solid #dddddd;
+	margin-bottom: 0px;
 	padding-top: 10px;
 
 }
-
 
 .card_head {
 	padding: 3px;
@@ -180,6 +215,7 @@ input[type='radio']:checked:after {
 		margin-top: 0px;
 	}
 }
+
 .add_pro_lab {
 	padding: 3px;
 	margin-top: 20px;
@@ -188,9 +224,11 @@ input[type='radio']:checked:after {
 	border-bottom: 1px solid #c2cad8;
 	color: $color_3;
 }
+
 .mt {
 	margin-top: 20px;
 }
+
 #myTable {
 	tbody {
 		i {
@@ -339,6 +377,7 @@ input[type='radio']:checked:after {
 // 	}
 // }
 
+
 .filter-container {
 	min-height: 35px;
 	display: grid;
@@ -373,8 +412,11 @@ input[type='radio']:checked:after {
 	display: none;
 }
 
-
-
-
-
+.btn-custom {
+	border: 1px solid #dddddd;
+    background-color: #fafafb;
+    font-size: 11px;
+	margin: 2px 0px;
+    color: #333333;
 	
+}

@@ -116,7 +116,7 @@ if (upd_main_ord_item($connect, $orid, $pi, $p_name, $c_name, $d_name, $pr_name,
 <div class="toolbar">
         <div class="container-fluid">
             <input class="btn btn-success" type="submit" form="order_form" name="submit" value="Сохранить" />
-            <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>"><button type="button" class="btn btn-light">Закрыть</button></a>
+            <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>"><button type="button" class="btn btn-custom">Закрыть</button></a>
         </div>
 </div>
 
@@ -129,7 +129,7 @@ if (upd_main_ord_item($connect, $orid, $pi, $p_name, $c_name, $d_name, $pr_name,
 </div>
 
 <div class="container-fluid">
-    <table id="myTable" class="table table-striped table-bordered">
+    <table id="myTable" class="table table-hover">
     <thead>
         <tr class="w600">
             <td>Продукция  / Производитель </td>

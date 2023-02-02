@@ -111,27 +111,27 @@ $rs_result = mysqli_query ($connect, $query);
         <div class="container-fluid">
             <div class="toolbar_wrapper">
                 <div class="toolbar_wrapper">
-                <div><a href="prepayment_add.php"> <button type="button" class="btn btn-success">Добавить</button> </a></div>
-                <div class="filter-container">
-                    <div style="background-color:<?php echo $bg_sts;?>" class="filter-container-item first" data-toggle="modal" data-target="#filter">
-                     <span class="glyphicon glyphicon-filter"></span>
-                    </div>
-                    <div style="display:<?php echo $display_sts;?>" class="filter-container-item">
-                        <span><span id="row_c"><?php echo $limit; ?></span> / <?php echo $all_count; ?></span>
-                    </div>
-                    <div style="display:<?php echo $display_sts_filer_on;?>"class="filter-container-item">
-                        <span><?php echo $all_count?> / <?php echo $all_count; ?></span>
-                    </div>
-                    <div style="display:<?php echo $display_sts;?>" class="filter-container-item">
-                        <div class="loadmore">
-                            
-                            <button class="btn btn-outline-info" type="button" id="loadBtn" value="+10"><span class="glyphicon glyphicon-arrow-down"></span></button>
-                            <button style="display:none;" class="btn btn-outline-info" type="button" id="endBtn" value="+10"><span class="glyphicon glyphicon-ok"></span></button>
-                            <input type="hidden" id="row" value="0">
-                            <input type="hidden" id="postCount" value="<?php echo $postCount; ?>">
+                    <div><a href="prepayment_add.php"> <button type="button" class="btn btn-success">Добавить</button> </a></div>
+                    <div class="filter-container">
+                        <div style="background-color:<?php echo $bg_sts;?>" class="filter-container-item first" data-toggle="modal" data-target="#filter">
+                        <span class="glyphicon glyphicon-filter"></span>
                         </div>
-                    </div>
-                </div>  
+                        <div style="display:<?php echo $display_sts;?>" class="filter-container-item">
+                            <span><span id="row_c"><?php echo $limit; ?></span> / <?php echo $all_count; ?></span>
+                        </div>
+                        <div style="display:<?php echo $display_sts_filer_on;?>"class="filter-container-item">
+                            <span><?php echo $all_count?> / <?php echo $all_count; ?></span>
+                        </div>
+                        <div style="display:<?php echo $display_sts;?>" class="filter-container-item">
+                            <div class="loadmore">
+                                
+                                <button class="btn btn-outline-info" type="button" id="loadBtn" value="+10"><span class="glyphicon glyphicon-arrow-down"></span></button>
+                                <button style="display:none;" class="btn btn-outline-info" type="button" id="endBtn" value="+10"><span class="glyphicon glyphicon-ok"></span></button>
+                                <input type="hidden" id="row" value="0">
+                                <input type="hidden" id="postCount" value="<?php echo $postCount; ?>">
+                            </div>
+                        </div>
+                    </div>  
             </div>
         </div>
 </div>
@@ -258,7 +258,7 @@ $rs_result = mysqli_query ($connect, $query);
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"></script>
 <script>
 
-$('.normalize').selectize();
+// $('.normalize').selectize();
 
 $(document).ready(function () {
     $(document).on('click', '#loadBtn', function () {

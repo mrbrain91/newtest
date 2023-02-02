@@ -62,14 +62,14 @@ $rs_result = mysqli_query ($connect, $query);
         <div class="container-fluid">
            <!-- <a href="#"> <button type="button" class="btn btn-success">Взаимозачет</button> </a> -->
            <!-- <a href="add_order.php"> <button type="button" class="btn btn-primary">должники</button> </a> -->
-           <a href="settlement_debts_detail.php?id=<?php echo $id;?>&&prepayment=<?php echo $prepayment?>"> <button type="button" class="btn">закрыть</button> </a>
+           <a href="settlement_debts_detail.php?id=<?php echo $id;?>&&prepayment=<?php echo $prepayment?>"> <button type="button" class="btn btn-custom">закрыть</button> </a>
         </div>
 </div>
 
 <div class="all_table">
     <div class="container-fluid">
         
-        <table class="table table-striped table-bordered" style="width:50%; margin: 0 auto; margin-top: 30px;">
+        <table class="table table-hover" style="width:50%; margin: 0 auto; margin-top: 30px;">
         <thead>
             <caption><span class="ordernum">Номер заказа: <?php echo $order_id?></span></caption>
             <tr>

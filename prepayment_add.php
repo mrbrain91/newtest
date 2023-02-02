@@ -61,7 +61,7 @@ $counterparties_tbl = mysqli_query ($connect, $sql);
         <!-- <button type="submit" form="order_form" name="save_add_pro" class="btn btn-success">Принять</button> -->
         <td><input class="btn btn-success" type="submit" form="user_form" name="submit" value="Сохранить" />
 
-        <a href="prepayment_list.php"><button type="button" class="btn btn-light">Закрыть</button></a>
+        <a href="prepayment_list.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
     </div>
 </div>

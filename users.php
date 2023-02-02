@@ -75,7 +75,7 @@ $rs_result = mysqli_query ($connect, $query);
 
 <div class="all_table">
     <div class="container-fluid">
-        <table class="table table-hover table-bordered">
+        <table class="table table-hover">
         <thead>
             <tr>
             <th scope="col">Название</th>
