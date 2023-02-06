@@ -57,7 +57,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap-grid.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css" /> 
+
+
     <link rel="stylesheet" href="css/style.css">
 
     <title>ortosavdo</title>
@@ -80,8 +82,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
         <div class="container-fluid">
             <!-- <button type="button" class="btn btn-primary">Сохранить</button> -->
             <!-- <button type="button" class="btn btn-success">Принять</button> -->
-            <td><input class="btn btn-success" type="submit" form="order_form" name="submit" value="Принять" />
+            <!-- <td><input class="btn btn-success" type="submit" form="order_form" name="submit" value="Принять" />
+            <a href="order.php"><button type="button" class="btn btn-custom">Закрыть</button></a>          -->
+            
+            <td><input data-toggle="modal" data-target="#exampleModal1" class="btn btn-success" type="submit" value="Принять" />
             <a href="order.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
+
+            
 
         </div>
 </div>
@@ -117,6 +124,9 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                 <div class="col-md-3">
                     <span>Контрагент</span>
                 </div>
+                <div class="col-md-3">
+                    <span>Баланс контрагента</span>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
@@ -132,7 +142,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <select required name="main_order_contractor" form="order_form" class="normalize">
+                    <select required name="main_order_contractor" form="order_form" class="normalize" onchange="showCustomerBalance(this.value)">
                         <option value="">--выберитe---</option>
                         <?php    
                             while ($option_contractor = mysqli_fetch_array($counterparties_tbl)) {    
@@ -143,6 +153,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                             };    
                         ?>
                     </select>
+                </div>
+                <div class="col-md-3">
+                    <div id="balance">
+                        <input disabled type="text" class="form-control" value="">
+                    </div>
                 </div>
             </div>      
         </form>
@@ -174,7 +189,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
     <tbody>
         <tr>
             <td class="col-sm-4">
-                <select required name="prod_name[]" form="order_form" class="form-control" id='prod_name_1' for='1' onchange="showCustomer(this.value,'1')">
+                <select required name="prod_name[]" form="order_form" class="normalize" id='prod_name_1' for='1' onchange="showCustomer(this.value,'1')">
                     <option value="">--выберитe продукцию---</option>
                     <?php     
                         while ($option = mysqli_fetch_array($product_list)) {    
@@ -242,14 +257,14 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
     </div>
 </div>
 
-
-
 <div class="container-fluid">
 
     <?php include 'partSite/modal.php'; ?>
     
 </div>
 
+
+<!-- JavaScript links -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -369,8 +384,30 @@ $(document).ready(function () {
         counter -= 1
     });
 
-
 });
+
+
+
+// -------------------------------------------- select bazadan olish-------------------------------------------------------
+
+function showCustomerBalance(str) {
+    // console.log(str);
+  var xhttp;    
+  if (str == "") {
+    document.getElementById("balance").innerHTML = "";
+    // document.getElementById("sample").innerHTML = 'hi';
+    return;
+  }
+  xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+    document.getElementById("balance").innerHTML = this.responseText;
+
+    }
+  };
+  xhttp.open("GET", "getcustomer.php?id_c="+str+"", true);
+  xhttp.send();
+}
 
 
 

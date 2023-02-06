@@ -46,12 +46,13 @@ if (isset($_GET['id_c'])) {
   $stmt->close();
   if ($pn>=0) {
    $color = 'green';
+   $plus = '+';
   }else {
     $color = 'red';
   }
   ?> 
   
-  <input readonly style="color: <?php echo $color; ?>; background-color:<?php echo "#fafafb"; ?>" type="text" class="form-control" value="<?php echo number_format($pn, 0, ',', ' ');?>">
+  <input readonly style="color: <?php echo $color; ?>; background-color:<?php echo "#fafafb"; ?>" type="text" class="form-control" value="<?php if(isset($plus)){echo $plus; };?> <?php echo number_format($pn, 0, ',', ' ');?>">
 
   
   <?php

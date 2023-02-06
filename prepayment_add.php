@@ -105,7 +105,7 @@ $counterparties_tbl = mysqli_query ($connect, $sql);
                 </div>
                 <div class="col-md-3">
                     <div id="balance">
-                        <input disabled type="text" class="form-control" value="">
+                        <input readonly type="text" class="form-control" value="">
                     </div>
                 </div>
             </div>
