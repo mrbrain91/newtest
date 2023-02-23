@@ -52,11 +52,15 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- bootstrap-select css2-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" />
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap-grid.min.css">
+    <!--selectize css-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css" /> 
 
 
@@ -189,12 +193,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
     <tbody>
         <tr>
             <td class="col-sm-4">
-                <select required name="prod_name[]" form="order_form" class="normalize" id='prod_name_1' for='1' onchange="showCustomer(this.value,'1')">
-                    <option value="">--выберитe продукцию---</option>
+                <select required name="prod_name[]" form="order_form" class="form-control" id='prod_name_1' for='1' onchange="showCustomer(this.value,'1')">
+                    <option value="" class="form-control" >--выберитe продукцию---</option>
                     <?php     
                         while ($option = mysqli_fetch_array($product_list)) {    
                     ?> 
-                        <option value="<?php echo $option["name"];?>"><?php $name = get_prod_name($connect, $option['name']); echo $name['name'];?></option>
+                        <option class="form-control" value="<?php echo $option["name"];?>"><?php $name = get_prod_name($connect, $option['name']); echo $name['name'];?></option>
 
                     <?php       
                         };    
@@ -202,7 +206,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                 </select>
             </td>
             <td class="col-sm-1">
-                <input required type="number" name="quantity[]"  class="form-control quantity" id='quantity_1' for='1' form="order_form"/>
+                <input required type="number" name="quantity[]" min="0"  class="form-control quantity" id='quantity_1' for='1' form="order_form"/>
             </td>
             <td class="col-sm-1">
                 <div id="txtHint_1">
@@ -240,6 +244,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
 </div>
 
 
+
 <div class="line line-dashed line-lg pull-in" style="clear: both;"></div>
         
 <div class="col-md-12 nopadding">
@@ -269,7 +274,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"></script>
-
+<!--bootstrap-select js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
 
 
 </body>
@@ -279,6 +285,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
 
 $('.normalize').selectize();
 
+
+//script selectpicker
+$(function() {
+  $('.selectpicker').selectpicker();
+});
 
 
 
@@ -362,7 +373,7 @@ $(document).ready(function () {
         var newRow = $("<tr>");
         var cols = "";                                                      
                 
-        cols += '<td><select required name="prod_name[]" form="order_form" class="form-control" id="prod_name_'+inc+'" for="'+inc+'" onchange="showCustomer(this.value,'+inc+')"><option value="">--выберите продукцию--</option><?php while ($option = mysqli_fetch_array($product_list)) { ?> <option value="<?php echo $option["name"];?>"><?php  $name = get_prod_name($connect, $option["name"]); echo $name["name"]; ?></option> <?php }; ?></select></td>';
+        cols += '<td><select required name="prod_name[]" form="order_form" class="form-control custom-select" id="prod_name_'+inc+'" for="'+inc+'" onchange="showCustomer(this.value,'+inc+')"><option value="">--выберите продукцию--</option><?php while ($option = mysqli_fetch_array($product_list)) { ?> <option value="<?php echo $option["name"];?>"><?php  $name = get_prod_name($connect, $option["name"]); echo $name["name"]; ?></option> <?php }; ?></select></td>';
 
         cols += '<td><input required type="number" name="quantity[]"  class="form-control quantity" id="quantity_'+inc+'" for="'+inc+'" form="order_form"/></td>';
         cols += '<td><div id="txtHint_'+inc+'"><input disabled data-type="product_price" type="number" name="product_price[]"  class="form-control product_price" id="product_price_'+inc+'" for="'+inc+'" form="order_form"/></div></td>';
@@ -411,17 +422,5 @@ function showCustomerBalance(str) {
 
 
 
-// function calculateRow(row) {
-//     var price = +row.find('input[name^="price"]').val();
-
-// }
-
-// function calculateGrandTotal() {
-//     var grandTotal = 0;
-//     $("table.order-list").find('input[name^="price"]').each(function () {
-//         grandTotal += +$(this).val();
-//     });
-//     $("#grandtotal").text(grandTotal.toFixed(2));
-// }
 </script>
 </html>

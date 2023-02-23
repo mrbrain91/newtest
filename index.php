@@ -16,9 +16,9 @@ if(login($connect)){
     <link rel="stylesheet" href="css/style.css">
     <title>ortopharm</title>
 </head>
-<body>
+<body style="background-color: #2B3643;">
     
-    <section class="form">
+    <section class="login-form">
         <span style="color:red;">
 		<?php
 		    if (isset($text)) {

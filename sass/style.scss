@@ -33,6 +33,20 @@ a:hover{
 	text-decoration: none;
 }
 
+@media print {
+	body * {
+	  visibility: hidden;
+	}
+	#section-to-print, #section-to-print * {
+	  visibility: visible;
+	}
+	#section-to-print {
+	  position: absolute;
+	  left: 0;
+	  top: 0;
+	}
+  }s
+
 
 // input:read-only {background-color: #fafafb!important;}
 
@@ -76,8 +90,31 @@ a:hover{
 	}
 }
 
+.login-form {
+	display: block;
+	margin: 0 auto;
+	margin-top: 180px;
+	padding: 32px;
+	width: 382px;
+	height: 257px;
+	background: #FFFFFF;
+	border-radius: 7px;
+	.img_logo {
+		display: block;
+		margin: 0 auto;
+		height: 39px;
+	}
+	form {
+		margin-top: 13px;
+		input {
+			font-size: 13px !important;
+		}
+	}
+}
+
 .login_btn {
 	float: right;
+	font-size: 13px !important;
 }
 
 input[type="date"] {
@@ -200,6 +237,12 @@ input[type='radio']:checked:after {
 	margin-bottom: 0px;
 	padding-top: 10px;
 
+}
+
+table > tbody > tr > td {
+	vertical-align: middle;
+border-left: 0.00001px dashed #d9d9d9;
+height: 80%;
 }
 
 .card_head {
@@ -424,4 +467,10 @@ input[type='radio']:checked:after {
 	margin: 2px 0px;
     color: #333333;
 	
+}
+
+.custom-select {
+	option {
+		background-color: white;
+	}
 }
