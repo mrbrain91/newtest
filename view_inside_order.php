@@ -70,109 +70,110 @@ $rs_result = mysqli_query ($connect, $query);
 </div>
 
 <div id="section-to-print">
-    <div class="card_head">
-        <div class="container-fluid">
-            <form action="" class="horizntal-form">
+    <!-- start card head information -->
+    <div class="container-fluid">
+        <div class="card_head">
+            <div class="card_head__wrapper">
                 <div class="row">
-                    <div class="col-md-3">
-                        <span>Дата сделки</span>
+                    <div class="col-sm-4">
+                    Контрагент
                     </div>
-                    <div class="col-md-3">
-                        <span>Условия оплаты</span>
+                    <div class="col-sm-8">
+                    <?php $contractor = get_contractor($connect, $contractor);?><?php echo $contractor["name"]; ?>
+
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3 dash">
-                    <?php echo $ord_date; ?>
+                    <div class="col-sm-4">
+                    Дата сделки
                     </div>
-                    <div class="col-md-3 dash">
+                    <div class="col-sm-8">
+                        <?php echo $ord_date = date("d.m.Y", strtotime($ord_date)); ?>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                    Условия оплаты
+                    </div>
+                    <div class="col-sm-8">
                     <?php echo $payment_type; ?>
                     </div>
                 </div>
-                <div class="row mt">
-                    <div class="col-md-3">
-                        <span>Торговый представитель</span>
-                    </div>
-                    <div class="col-md-3">
-                        <span>Контрагент</span>
-                    </div>
-                </div>
+
                 <div class="row">
-                    <div class="col-md-3 dash">
-                    <?php $user = get_user($connect, $sale_agent);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?>
+                    <div class="col-sm-4">
+                    Торговый представитель
                     </div>
-                    <div class="col-md-3 dash">
-                        <?php $user = get_contractor($connect, $contractor);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?>
+                    <div class="col-sm-8">
+                    <?php $user = get_user($connect, $sale_agent);?><?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?>
                     </div>
                 </div>
-            </form>
+
+            </div>
         </div>
     </div>
-
-    <div class="add_pro_lab">
+    <!-- End card head information -->
+    <!-- Start prod list -->
+    <div class="prod_list">
         <div class="container-fluid">
-            Продукции 
+            <table class="table table-hover">
+                <thead>
+                    <tr class="w600">
+                        <!-- <td> </td> -->
+                        <td>Название </td>
+                        <td>Количество</td>
+                        <td>Срок годности</td>
+                        <td>Цена</td>
+                        <td>Скидка</td>
+                        <td>Сумма</td>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php     
+                    while ($row = mysqli_fetch_array($rs_result)) {    
+                ?> 
+                    <tr>
+                        <td class="col-sm-4" >
+                            <span><?php $name = get_prod_name($connect, $row["prod_name"]); echo $name['name']; ?></span>
+                        </td>
+                        <td class="col-sm-1">
+                            <span><?php echo number_format($row['count_name'], 0, ',', ' '); ?></span>
+                        </td>
+                        <td class="col-sm-2">
+                            <span><?php echo $row["date_name"]; ?></span>
+                        </td>
+                        <td class="col-sm-1">
+                            <span><?php echo number_format($row['price_name'], 0, ',', ' '); ?></span>
+                            
+                        </td>
+                        <td class="col-sm-1">
+                            <span><?php echo $row["sale_name"]; ?>%</span>
+                        </td>
+                        <td class="col-sm-2">
+                            <span><?php echo number_format($row['total_name'], 0, ',', ' '); ?></span>
 
-        </div>
-        <!-- <button type="button" class="btn btn-primary" id="addrow" >добавить строку</button>a -->
+                        </td>
 
-    </div>
-
-    <div class="container-fluid">
-        <table id="myTable" class="table table-hover">
-        <thead>
-            <tr class="w600">
-                <td>Продукция  / Производитель </td>
-                <td>Количество</td>
-                <td>Срок годности</td>
-                <td>Цена</td>
-                <td>Скидка</td>
-                <td>Сумма</td>
-            </tr>
-        </thead>
-        <tbody>
-        <?php     
-            while ($row = mysqli_fetch_array($rs_result)) {    
-        ?> 
-            <tr>
-                <td class="col-sm-4" >
-                    <span><?php $name = get_prod_name($connect, $row["prod_name"]); echo $name['name']; ?></span>
-                </td>
-                <td class="col-sm-1">
-                    <span><?php echo $row["count_name"]; ?></span>
-                </td>
-                <td class="col-sm-2">
-                    <span><?php echo $row["date_name"]; ?></span>
-                </td>
-                <td class="col-sm-1">
-                    <span><?php echo number_format($row['price_name']); ?></span>
+                    </tr>
                     
-                </td>
-                <td class="col-sm-1">
-                    <span><?php echo $row["sale_name"]; ?></span>
-                </td>
-                <td class="col-sm-2">
-                    <span><?php echo number_format($row['total_name']); ?></span>
-                </td>
-
-            </tr>
-        <?php     
-            };    
-        ?>
-        </tbody>
-        <tfooter>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="w600">К-во: <?php echo $sum_count; ?></td>
-                <td class="w600">Сумма: <?php echo number_format($sum); ?></td>
-            </tr>
-        </tfooter>
-
-    </table>
+                <?php     
+                    };    
+                ?>
+                <tr>
+                        <td class="w600"><span style="float:left;">Итого</span></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="w600"><?php echo number_format($sum, 0, ',', ' '); ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+    <!-- end prod list -->
+    
    
 </div>
 

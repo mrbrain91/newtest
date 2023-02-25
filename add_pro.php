@@ -108,11 +108,6 @@ $product_list = mysqli_query ($connect, $sql);
                         ?>
                     </select>
                 </div>
-                
-                
-
-
-
                 <label class="col">
                     <span>Примечание</span>
                 </label>

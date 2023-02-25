@@ -1,6 +1,8 @@
 $color_1: #666666;
-$color_2: #9d9d9d;
+$color_2: black;
 $color_3: #8d8d8d;
+$color_4: #9d9d9d;
+
 $font-family_1: 'Open Sans', sans-serif;
 $background-color_1: #FAFAFB;
 $background-color_2: #2B3643;
@@ -33,6 +35,12 @@ a:hover{
 	text-decoration: none;
 }
 
+.all_table {
+	td button:hover{
+		background-color: #f7f7f7;
+	}
+}
+
 @media print {
 	body * {
 	  visibility: hidden;
@@ -45,8 +53,7 @@ a:hover{
 	  left: 0;
 	  top: 0;
 	}
-  }s
-
+  }
 
 // input:read-only {background-color: #fafafb!important;}
 
@@ -159,7 +166,7 @@ input[type='radio']:checked:after {
 	.navbar-nav {
 		>li {
 			>a {
-				color: $color_2;
+				color: $color_4;
 				font-size: 14px;
 			}
 		}
@@ -236,14 +243,24 @@ input[type='radio']:checked:after {
     border: 1px solid #dddddd;
 	margin-bottom: 0px;
 	padding-top: 10px;
+	// border-radius: 30px !important;
 
 }
+
+
 
 table > tbody > tr > td {
 	vertical-align: middle;
-border-left: 0.00001px dashed #d9d9d9;
-height: 80%;
+	border-left: 0.00001px dashed #d9d9d9;
+	height: 80%;
 }
+
+table > thead > tr > td {
+	vertical-align: middle;
+	border-left: 0.00001px dashed #d9d9d9;
+	height: 80%;
+}
+
 
 .card_head {
 	padding: 3px;
@@ -262,16 +279,34 @@ height: 80%;
 	&_mt0 {
 		margin-top: 0px;
 	}
+	&__wrapper {
+		width: 45%;
+		.row {
+			div {
+				min-height: 41px;
+				padding-top: 20px;
+			}
+			div:nth-child(1) {
+				text-align: right;
+				padding-right: 45px;
+				@media (orientation: portrait) {
+					text-align: left;	
+				}
+			}
+			div:nth-child(2) {
+				border-bottom: 1px dashed #939393;
+				color: #000;
+				padding-left: 0px;
+		  	}
+		}
+	}
 }
 
-.add_pro_lab {
-	padding: 3px;
-	margin-top: 20px;
-	font-size: 13px;
-	color: $color_3;
-	border-bottom: 1px solid #c2cad8;
-	color: $color_3;
+.prod_list {
+	margin-top: 30px;
 }
+
+
 
 .mt {
 	margin-top: 20px;
@@ -407,24 +442,6 @@ height: 80%;
 	align-items: center;
 }
 
-// .filter {
-// 	min-width: 10%;
-// 	display: flex;
-// 	align-items: center;
-// 	justify-content: space-between;
-// 	&_icon {
-// 		height: 31.14px;
-// 		width: 30px;
-// 		border: 1px solid green;
-// 	}
-// 	.loadmore {
-// 		input {
-// 			border: 1px solid green;
-// 			border-radius: 0%;
-// 		}
-// 	}
-// }
-
 
 .filter-container {
 	min-height: 35px;
@@ -451,6 +468,8 @@ height: 80%;
 		}
 	}
   }
+
+
 .table-bordered {
 	margin-bottom: 0!important;
 }
@@ -474,3 +493,8 @@ height: 80%;
 		background-color: white;
 	}
 }
+
+.subtotal {
+	color: black !important;
+}
+

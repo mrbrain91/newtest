@@ -84,11 +84,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
 
 <div class="toolbar">
         <div class="container-fluid">
-            <!-- <button type="button" class="btn btn-primary">Сохранить</button> -->
-            <!-- <button type="button" class="btn btn-success">Принять</button> -->
-            <!-- <td><input class="btn btn-success" type="submit" form="order_form" name="submit" value="Принять" />
-            <a href="order.php"><button type="button" class="btn btn-custom">Закрыть</button></a>          -->
-            
+        
             <td><input data-toggle="modal" data-target="#exampleModal1" class="btn btn-success" type="submit" value="Принять" />
             <a href="order.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
@@ -168,99 +164,80 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
     </div>
 </div>
 
-<div class="add_pro_lab">
+<div class="prod_list">
     <div class="container-fluid">
-        Продукции 
+        <table id="orders" class="table order-list">
+            <thead>
+                <tr>
+                    <td>Продукция  / Производитель </td>
+                    <td>Количество</td>
+                    <!-- <td>Срок годности</td> -->
+                    <td>Цена</td>
+                    <td>Скидка (%)</td>
+                    <td>Сумма</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="col-sm-4">
+                        <select required name="prod_name[]" form="order_form" class="form-control" id='prod_name_1' for='1' onchange="showCustomer(this.value,'1')">
+                            <option value="" class="form-control" >--выберитe продукцию---</option>
+                            <?php     
+                                while ($option = mysqli_fetch_array($product_list)) {    
+                            ?> 
+                                <option class="form-control" value="<?php echo $option["name"];?>"><?php $name = get_prod_name($connect, $option['name']); echo $name['name'];?></option>
 
-    </div>
-    <!-- <button type="button" class="btn btn-primary" id="addrow" >добавить строку</button>a -->
+                            <?php       
+                                };    
+                            ?>
+                        </select>
+                    </td>
+                    <td class="col-sm-1">
+                        <input required type="number" name="quantity[]" min="0"  class="form-control quantity" id='quantity_1' for='1' form="order_form"/>
+                    </td>
+                    <td class="col-sm-1">
+                        <div id="txtHint_1">
+                            <input disabled data-type="product_price" type="number" name="product_price[]" id='product_price_1'  class="form-control product_price" for="1" form="order_form"/">
+                        </div>
+                    </td>
+                    <td class="col-sm-1">
+                        <input required name="sale[]" type="number" placeholder="0" max="0" value="0" class="form-control sale" id='sale_1' for='1' form="order_form"/>        
+                    </td>
+                    <td class="col-sm-2">
+                        <input readonly type="text" name="total_cost[] "  class="form-control total_cost" id='total_cost_1' for='1' form="order_form"/>
+                    <td class="col-sm-1">
+                    <button type="button" name="addrow" id="addrow" class="btn btn-success circle">+</button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfooter>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <span style="line-height: 30px; float: right;"">
+                        Общая сумма:
+                        </span>
+                    </td>
+                    <td>
+                    <input class="form-control subtotal" type='text' id='subtotal' name='subtotal' readonly/></td>
 
+                    <td>
+                    </td>
+                </tr>
+            </tfooter>
+        </table>
+        <input class="form-control" type='hidden' data-type="product_id_1" id='product_id_1' name='product_id[]'/>
+    </div> 
 </div>
 
-<div class="container-fluid">
-<div class="row">
-    <table id="orders" class="table order-list">
-    <thead>
-        <tr>
-            <td>Продукция  / Производитель </td>
-            <td>Количество</td>
-            <!-- <td>Срок годности</td> -->
-            <td>Цена</td>
-            <td>Скидка</td>
-            <td>Сумма</td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="col-sm-4">
-                <select required name="prod_name[]" form="order_form" class="form-control" id='prod_name_1' for='1' onchange="showCustomer(this.value,'1')">
-                    <option value="" class="form-control" >--выберитe продукцию---</option>
-                    <?php     
-                        while ($option = mysqli_fetch_array($product_list)) {    
-                    ?> 
-                        <option class="form-control" value="<?php echo $option["name"];?>"><?php $name = get_prod_name($connect, $option['name']); echo $name['name'];?></option>
-
-                    <?php       
-                        };    
-                    ?>
-                </select>
-            </td>
-            <td class="col-sm-1">
-                <input required type="number" name="quantity[]" min="0"  class="form-control quantity" id='quantity_1' for='1' form="order_form"/>
-            </td>
-            <td class="col-sm-1">
-                <div id="txtHint_1">
-                    <input disabled data-type="product_price" type="number" name="product_price[]" id='product_price_1'  class="form-control product_price" for="1" form="order_form"/">
-                </div>
-            </td>
-            <td class="col-sm-1">
-                <input required type="number" name="sale[]"  class="form-control sale" id='sale_1' for='1' form="order_form"/>
-                
-            </td>
-            <td class="col-sm-2">
-                <input readonly type="text" name="total_cost[] "  class="form-control total_cost" id='total_cost_1' for='1' form="order_form"/>
-                
-            </td>
-             <td><button type="button" name="addrow" id="addrow" class="btn btn-success circle">+</button></td>
-
-            </td>
-        </tr>
-    </tbody>
-    <tfooter>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>Количество: 0</td>
-            <td>Сумма: 0</td>
-        </tr>
-    </tfooter>
-
-</table>
-<input class="form-control" type='hidden' data-type="product_id_1" id='product_id_1' name='product_id[]'/>            
-
-</div>
-</div>
 
 
 
 <div class="line line-dashed line-lg pull-in" style="clear: both;"></div>
         
-<div class="col-md-12 nopadding">
-    <div class="col-md-4 col-md-offset-4 pull-right nopadding">
-        <div class="col-md-8 pull-right nopadding">
-            <div class="form-group">
-                <td><input class="form-control subtotal" type='text' id='subtotal' name='subtotal' readonly/></td>
-            </div>
-        </div>
-        <div class="col-md-3 pull-right">
-            <div class="form-group">
-                <label>Subtotal</label>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <div class="container-fluid">
 
@@ -274,6 +251,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"></script>
+
 <!--bootstrap-select js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
 
@@ -347,6 +325,7 @@ function calculateSubTotal() {
   $('.total_cost').each(function() {
      subtotal += parseFloat($(this).val());
   });
+
   $('#subtotal').val(subtotal);
 }
 
@@ -377,7 +356,7 @@ $(document).ready(function () {
 
         cols += '<td><input required type="number" name="quantity[]"  class="form-control quantity" id="quantity_'+inc+'" for="'+inc+'" form="order_form"/></td>';
         cols += '<td><div id="txtHint_'+inc+'"><input disabled data-type="product_price" type="number" name="product_price[]"  class="form-control product_price" id="product_price_'+inc+'" for="'+inc+'" form="order_form"/></div></td>';
-        cols += '<td><input required type="number" name="sale[]" class="form-control sale" id="sale_'+inc+'" for="'+inc+'" form="order_form"/></td>';
+        cols += '<td><input required type="number" name="sale[]" value="0" class="form-control sale" id="sale_'+inc+'" for="'+inc+'" form="order_form"/></td>';
 
         
 
