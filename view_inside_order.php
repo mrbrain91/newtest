@@ -23,7 +23,10 @@ if (isset($_GET['id'])) {
 
 
 $query = "SELECT * FROM main_ord__item_tbl WHERE order_id='$id'";  
-$rs_result = mysqli_query ($connect, $query);  
+$rs_result = mysqli_query ($connect, $query);
+
+
+
 
 
 ?>
@@ -120,28 +123,44 @@ $rs_result = mysqli_query ($connect, $query);
             <table class="table table-hover">
                 <thead>
                     <tr class="w600">
-                        <!-- <td> </td> -->
-                        <td>Название </td>
+                        <td>№</td>
+                        <td>Наименование товаров</td>
                         <td>Количество</td>
-                        <td>Срок годности</td>
+                        <td>Ед. изм.</td>
                         <td>Цена</td>
                         <td>Скидка</td>
                         <td>Сумма</td>
                     </tr>
                 </thead>
                 <tbody>
-                <?php     
-                    while ($row = mysqli_fetch_array($rs_result)) {    
+                <?php 
+                    $n = 0;    
+                    while ($row = mysqli_fetch_array($rs_result)) {  
+                    $n++;  
+
+
+                    $name = get_prod_name($connect, $row["prod_name"]);
+
+                    $query = "SELECT * FROM products_tbl WHERE name='$name[name]'";  
+                    $unit_result = mysqli_query ($connect, $query);
+                        if(!$unit_result)
+                        die(mysqli_error($connect));
+                    $unit_name = mysqli_fetch_assoc($unit_result);
+                    $unit_name =  $unit_name[unit];
                 ?> 
                     <tr>
+                        <td class="col-sm-1">
+                            <span><?php echo $n; ?></span>
+                        </td>
                         <td class="col-sm-4" >
-                            <span><?php $name = get_prod_name($connect, $row["prod_name"]); echo $name['name']; ?></span>
+                            <span><?php echo $name['name']; ?></span>
                         </td>
                         <td class="col-sm-1">
                             <span><?php echo number_format($row['count_name'], 0, ',', ' '); ?></span>
                         </td>
-                        <td class="col-sm-2">
-                            <span><?php echo $row["date_name"]; ?></span>
+                        <td class="col-sm-1">
+                            <span><?php echo $unit_name; ?></span>
+                            <!-- <span>шт.</span> -->
                         </td>
                         <td class="col-sm-1">
                             <span><?php echo number_format($row['price_name'], 0, ',', ' '); ?></span>
@@ -162,6 +181,7 @@ $rs_result = mysqli_query ($connect, $query);
                 ?>
                 <tr>
                         <td class="w600"><span style="float:left;">Итого</span></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
