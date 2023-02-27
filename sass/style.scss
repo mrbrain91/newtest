@@ -260,14 +260,18 @@ table > thead > tr > td {
 	border-left: 0.00001px dashed #d9d9d9;
 	height: 80%;
 }
-table > thead {
-	background-color: whitesmoke;
-}
 
-table > tbody > tr:last-child{
-	background-color: whitesmoke;
-}
 
+
+
+.prod_list {
+	table > thead {
+		background-color: whitesmoke;
+	}	
+	table > tbody > tr:last-child{
+		background-color: whitesmoke;
+	}
+} 
 
 .card_head {
 	padding: 3px;
@@ -311,7 +315,6 @@ table > tbody > tr:last-child{
 
 .prod_list {
 	margin-top: 30px;
-	width: 95%;
 }
 
 

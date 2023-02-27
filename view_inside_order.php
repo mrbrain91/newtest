@@ -61,14 +61,14 @@ $rs_result = mysqli_query ($connect, $query);
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Просмотр заказ</span>
+        <span class="right_cus">Просмотр заказ № <?php echo $id; ?></span>
     </div>    
 </div>
 
 <div class="toolbar">
         <div class="container-fluid">
             <a href="order.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
-            <button class="btn btn-primary " onClick="window.print()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> печать</button>
+            <button class="btn btn-custom " onClick="window.print()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> печать</button>
         </div>
 </div>
 
