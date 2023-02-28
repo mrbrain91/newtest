@@ -172,7 +172,7 @@ function get_data_rest_tbl($connect){
 
 // orto
 
-function upd_main_ord_item($connect, $orid, $pi, $p_name, $c_name, $d_name, $pr__name, $s_name, $t_name){
+function upd_main_ord_item($connect, $orid, $pi, $p_name, $c_name, $pr__name, $s_name, $t_name){
 
 	
 	
@@ -180,7 +180,6 @@ function upd_main_ord_item($connect, $orid, $pi, $p_name, $c_name, $d_name, $pr_
 	SET 
 	prod_name = '$p_name', 
 	count_name = '$c_name',
-	date_name = '$d_name', 
 	price_name = '$pr__name',
 	sale_name = '$s_name',
 	total_name = '$t_name'

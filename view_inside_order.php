@@ -26,9 +26,6 @@ $query = "SELECT * FROM main_ord__item_tbl WHERE order_id='$id'";
 $rs_result = mysqli_query ($connect, $query);
 
 
-
-
-
 ?>
 
 
@@ -71,6 +68,7 @@ $rs_result = mysqli_query ($connect, $query);
             <button class="btn btn-custom " onClick="window.print()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> печать</button>
         </div>
 </div>
+
 
 <div id="section-to-print">
     <!-- start card head information -->
@@ -117,6 +115,7 @@ $rs_result = mysqli_query ($connect, $query);
         </div>
     </div>
     <!-- End card head information -->
+
     <!-- Start prod list -->
     <div class="prod_list">
         <div class="container-fluid">
@@ -137,7 +136,6 @@ $rs_result = mysqli_query ($connect, $query);
                     $n = 0;    
                     while ($row = mysqli_fetch_array($rs_result)) {  
                     $n++;  
-
 
                     $name = get_prod_name($connect, $row["prod_name"]);
 
@@ -160,7 +158,6 @@ $rs_result = mysqli_query ($connect, $query);
                         </td>
                         <td class="col-sm-1">
                             <span><?php echo $unit_name; ?></span>
-                            <!-- <span>шт.</span> -->
                         </td>
                         <td class="col-sm-1">
                             <span><?php echo number_format($row['price_name'], 0, ',', ' '); ?></span>
@@ -176,10 +173,10 @@ $rs_result = mysqli_query ($connect, $query);
 
                     </tr>
                     
-                <?php     
-                    };    
-                ?>
-                <tr>
+                    <?php     
+                        };    
+                    ?>
+                    <tr>
                         <td class="w600"><span style="float:left;">Итого</span></td>
                         <td></td>
                         <td></td>
