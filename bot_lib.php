@@ -165,7 +165,16 @@ function get_data_rest_tbl($connect){
 
 
 
+// orto
 
+function del_main_ord_item_tbl($connect, $pi){
+
+	$sql = "DELETE FROM main_ord__item_tbl WHERE id='$pi'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
 
 
 

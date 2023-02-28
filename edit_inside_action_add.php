@@ -7,9 +7,21 @@ if (!isset($_SESSION['usersname'])) {
   header("location: index.php");
 }
 
+ //get product from price 
+ $sql = "SELECT * FROM price_item_tbl WHERE price_id=(SELECT max(id) FROM price_tbl)";  
+ $product_list = mysqli_query ($connect, $sql);
+
+ //end get product
+
+
 // for delete order inside item 
 
 if (isset($_GET['del']) && $_GET['del'] == 'ok') {
+
+
+   
+
+
     $orid = $_GET['orid'];
     echo $pi = $_GET['pi'];
     $pn = $_GET['pn'];
@@ -75,6 +87,8 @@ if (isset($_GET['pn'])) {
 
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
+
+    echo 'ok';
 
     $orid=$_POST['orid'];
     $pi=$_POST['pi'];
@@ -246,85 +260,125 @@ $rs_result = mysqli_query ($connect, $query);
                     
                 ?>
                 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" class="horizntal-form" id="order_form">
-                    <tr>
-                        <td class="col-sm">
-                            <span><?php echo $n; ?></span>
-                        </td>
-                        <td class="col-sm-4" >
-                            <span><?php echo $name['name']; ?></span>
-                            <input type="hidden" name="prod_name"  class="form-control" form="order_form" value="<?php echo $pn;?>"/>                  
-                            <input type="hidden" name="price_name"  class="form-control" form="order_form" value="<?php echo $prn;?>"/>                  
+                <tr>
+                    <td class="col-sm">
+                        <span><?php echo $n; ?></span>
+                    </td>
+                    <td class="col-sm-4" >
+                        <span><?php echo $name['name']; ?></span>
+                        <input type="hidden" name="prod_name"  class="form-control" form="order_form" value="<?php echo $pn;?>"/>                  
+                        <input type="hidden" name="price_name"  class="form-control" form="order_form" value="<?php echo $prn;?>"/>                  
 
-                        </td>
-                        <td class="col-sm-1">
-                            <?php 
-                                if ($row["prod_name"] == $pn) {
-                            ?>
-                                <input required type="text" name="count_name"  class="form-control" form="order_form" value="<?php echo $cn;?>"/>
-                            <?php
-                                }else {
-                            ?>
-                                <span><?php echo number_format($row['count_name'], 0, ',', ' '); ?></span>
-                            <?php
-                                }
-                            ?> 
-                        </td>
-                        <td class="col-sm-1">
-                            <span><?php echo $unit_name; ?></span>
-                        </td>
-                        <td class="col-sm-1">
-                            <span><?php echo number_format($row['price_name'], 0, ',', ' '); ?></span>                        
-                        </td>
-                        <td class="col-sm-1">
-                            <?php 
-                                if ($row["prod_name"] == $pn) {
-                            ?>
-                                <input required type="text" name="sale_name"  class="form-control" form="order_form" value="<?php echo $sn;?>"/>
-                            <?php
-                                }else {
-                            ?>
-                                <span><?php echo $row["sale_name"]; ?>%</span>
-                            <?php
-                                }
-                            ?> 
-                            
-                            <input  type="hidden" name="orid"  form="order_form" value="<?php echo $orid;?>"/>
-                            <input  type="hidden" name="pi"  form="order_form" value="<?php echo $pi;?>"/>
-                            <input  type="hidden" name="payment_type"  form="order_form" value="<?php echo $payment_type;?>"/>
-                            <input  type="hidden" name="sale_agent"  form="order_form" value="<?php echo $sale_agent;?>"/>
-                            <input  type="hidden" name="contractor"  form="order_form" value="<?php echo $contractor;?>"/>
-                            <input  type="hidden" name="ord_date"  form="order_form" value="<?php echo $ord_date;?>"/>    
-                        </td>
-                        <td class="col-sm-2">
-                            <span><?php echo number_format($row['total_name'], 0, ',', ' '); ?></span>
-                        </td>
-                        <td class="col-sm">
-                            <?php 
-                                if ($row["prod_name"] == $pn) {
-                            ?>
-                            <button type="submit" form="order_form" name="submit" value="Сохранить">
-                                <span style="color:green;" class="glyphicon glyphicon-ok"></span>  
-                            </button>
-                            <!-- <input class="glyphicon glyphicon-edit" type="submit" form="order_form" name="submit" value="Сохранить" /> -->
-                            <?php
-                                }
-                            ?>
-                        </td>
-                        <td class="col-sm">
-                            <?php 
-                                if ($row["prod_name"] == $pn) {
-                            ?>
-                            <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>"><button type="button"><span class="glyphicon glyphicon-remove"></span></button></a>
-                            <!-- <input class="glyphicon glyphicon-edit" type="submit" form="order_form" name="submit" value="Сохранить" /> -->
-                            <?php
-                                }
-                            ?>
-                        </td>
-                    </tr>
+                    </td>
+                    <td class="col-sm-1">
+                        <?php 
+                            if ($row["prod_name"] == $pn) {
+                        ?>
+                            <input required type="text" name="count_name"  class="form-control" form="order_form" value="<?php echo $cn;?>"/>
+                        <?php
+                            }else {
+                        ?>
+                            <span><?php echo number_format($row['count_name'], 0, ',', ' '); ?></span>
+                        <?php
+                            }
+                        ?> 
+                    </td>
+                    <td class="col-sm-1">
+                        <span><?php echo $unit_name; ?></span>
+                    </td>
+                    <td class="col-sm-1">
+                        <span><?php echo number_format($row['price_name'], 0, ',', ' '); ?></span>                        
+                    </td>
+                    <td class="col-sm-1">
+                        <?php 
+                            if ($row["prod_name"] == $pn) {
+                        ?>
+                            <input required type="text" name="sale_name"  class="form-control" form="order_form" value="<?php echo $sn;?>"/>
+                        <?php
+                            }else {
+                        ?>
+                            <span><?php echo $row["sale_name"]; ?>%</span>
+                        <?php
+                            }
+                        ?> 
+                        
+                        <input  type="hidden" name="orid"  form="order_form" value="<?php echo $orid;?>"/>
+                        <input  type="hidden" name="pi"  form="order_form" value="<?php echo $pi;?>"/>
+                        <input  type="hidden" name="payment_type"  form="order_form" value="<?php echo $payment_type;?>"/>
+                        <input  type="hidden" name="sale_agent"  form="order_form" value="<?php echo $sale_agent;?>"/>
+                        <input  type="hidden" name="contractor"  form="order_form" value="<?php echo $contractor;?>"/>
+                        <input  type="hidden" name="ord_date"  form="order_form" value="<?php echo $ord_date;?>"/>    
+                    </td>
+                    <td class="col-sm-2">
+                        <span><?php echo number_format($row['total_name'], 0, ',', ' '); ?></span>
+                    </td>
+                    <td class="col-sm">
+                        <?php 
+                            if ($row["prod_name"] == $pn) {
+                        ?>
+                        <button type="submit" form="order_form" name="submit" value="Сохранить">
+                            <span style="color:green;" class="glyphicon glyphicon-ok"></span>  
+                        </button>
+                        <!-- <input class="glyphicon glyphicon-edit" type="submit" form="order_form" name="submit" value="Сохранить" /> -->
+                        <?php
+                            }
+                        ?>
+                    </td>
+                    <td class="col-sm">
+                        <?php 
+                            if ($row["prod_name"] == $pn) {
+                        ?>
+                        <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>"><button type="button"><span class="glyphicon glyphicon-remove"></span></button></a>
+                        <!-- <input class="glyphicon glyphicon-edit" type="submit" form="order_form" name="submit" value="Сохранить" /> -->
+                        <?php
+                            }
+                        ?>
+                    </td>
+                </tr>
                 </form>
                 <?php     
                     };    
                 ?>
+                <tr>
+                    <td><?php echo $n+1;?></td>
+                    <td>
+                    <select required name="prod_name" form="order_form" class="form-control" id='prod_name_1' for='1' onchange="showCustomer(this.value,'1')">
+                            <option value="" class="form-control" >--выберитe продукцию---</option>
+                            <?php     
+                                while ($option = mysqli_fetch_array($product_list)) {    
+                            ?> 
+                                <option class="form-control" value="<?php echo $option["name"];?>"><?php $name = get_prod_name($connect, $option['name']); echo $name['name'];?></option>
+
+                            <?php       
+                                };    
+                            ?>
+                        </select>
+                    </td>
+                    <td>
+                        <input required type="number" name="quantity" min="0"  class="form-control quantity" id='quantity_1' for='1' form="order_form"/>
+                    </td>
+                    <td></td>
+                    <td>
+                        <div id="txtHint_1">
+                            <input disabled data-type="product_price" type="number" name="product_price" id='product_price_1'  class="form-control product_price" for="1" form="order_form"/">
+                        </div>
+                    </td>
+                    
+                    <td>
+                        <input required name="sale[]" type="number" placeholder="0" max="0" value="0" class="form-control sale" id='sale_1' for='1' form="order_form"/>
+                    </td>
+                    <td>
+                        <input readonly type="text" name="total_cost[] "  class="form-control total_cost" id='total_cost_1' for='1' form="order_form"/>
+                    </td>
+                    <td>
+                        <button type="submit" form="order_form" name="submit" value="Сохранить">
+                            <span style="color:green;" class="glyphicon glyphicon-ok"></span>  
+                        </button>
+                    </td>
+                    <td>
+                        <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>"><button type="button"><span class="glyphicon glyphicon-remove"></span></button></a>
+                    </td>
+                </tr>
                 <tr>
                     <td class="w600"><span style="float:left;">Итого</span></td>
                     <td></td>
@@ -350,4 +404,26 @@ $rs_result = mysqli_query ($connect, $query);
 
 
 </body>
+
+<script>
+    
+// -------------------------------------------- select bazadan olish-------------------------------------------------------
+
+function showCustomer(str, inc) {
+  var xhttp;    
+  if (str == "") {
+    document.getElementById("txtHint_"+inc).innerHTML = "";
+    return;
+  }
+  xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("txtHint_"+inc).innerHTML = this.responseText;
+
+    }
+  };
+  xhttp.open("GET", "getcustomer.php?q="+str+"&&i="+inc+"", true);
+  xhttp.send();
+}
+</script>
 </html>
