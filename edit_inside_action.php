@@ -11,7 +11,7 @@ if (!isset($_SESSION['usersname'])) {
 
 if (isset($_GET['del']) && $_GET['del'] == 'ok') {
     $orid = $_GET['orid'];
-    echo $pi = $_GET['pi'];
+    $pi = $_GET['pi'];
     $pn = $_GET['pn'];
     $cn = $_GET['cn'];
     $prn = $_GET['prn'];
@@ -27,21 +27,24 @@ if (isset($_GET['del']) && $_GET['del'] == 'ok') {
 
 
     
-    $sum = get_sum_id_main($connect, $id);
+    // $sum = get_sum_id_main($connect, $orid);
     $sum_count = sum_count_main($connect, $id);
 
 
     if (del_main_ord_item_tbl($connect, $pi)) {
 
         $sum = get_sum_id_main($connect, $orid);
-        upd_main_order_sum($connect, $orid, $sum);
+        
 
+        if (upd_main_order_sum($connect, $orid, $sum)) {
+            header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$ord_date."");
+        }
+        
         // update sklad 
-        $upd_count_rest = $last_count - $c_name;
-        $query = "UPDATE rest_tbl SET bron = bron - '$upd_count_rest' WHERE prod_name='$p_name'";
-        mysqli_query($connect, $query);
+        // $upd_count_rest = $last_count - $c_name;
+        // $query = "UPDATE rest_tbl SET bron = bron - '$upd_count_rest' WHERE prod_name='$p_name'";
+        // mysqli_query($connect, $query);
 
-        header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$date."");
     }
 
 }

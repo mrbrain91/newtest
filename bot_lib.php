@@ -790,6 +790,18 @@ function add_supplier($connect) {
 }
 
 
+// edit page add prpduct function
+function edit_page_add($connect, $order_id, $prod_name, $count_name, $date_name, $price_name, $sale_name, $total_name) {
+
+	$sql = "INSERT INTO `main_ord__item_tbl` (`order_id`, `prod_name`, `count_name`, `date_name`, `price_name`, `sale_name`, `total_name`) VALUES ('".$order_id."','".$prod_name."','".$count_name."','".$date_name."','".$price_name."','".$sale_name."','".$total_name."');";	
+	$res = mysqli_query($connect, $sql);
+
+	if(!$res)
+		die(mysqli_error($connect));
+	return true;
+}
+
+
 function add_each_ord($connect) {
 	$query = "SELECT id FROM main_ord_tbl ORDER BY id DESC LIMIT 1";
 	$result = mysqli_query($connect, $query);
