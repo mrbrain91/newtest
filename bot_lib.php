@@ -672,6 +672,16 @@ function add_debt($connect, $archive_id, $contractor_id, $debt, $ord_date, $paym
 
 }
 
+function delete_debt($connect, $restore_id){
+	$sql = "DELETE FROM `debts` WHERE order_id IN ('$restore_id')";
+	if(mysqli_query($connect, $sql)) {
+		redirect("archive_order.php");
+	}
+	else {
+		die(mysqli_error($connect));
+	}
+}
+
 function cash_in_add($connect, $state_id,  $cash_sum, $cash_type, $cash_comment, $cash_date){
 
 	$sql = "INSERT INTO `cashbox` (`types_id`, `sum_in`, `type_payment`, `comment`, `date_cash`) VALUES ('".$state_id."','".$cash_sum."','".$cash_type."','".$cash_comment."','".$cash_date."');";

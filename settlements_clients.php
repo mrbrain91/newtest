@@ -95,7 +95,6 @@ $rs_result = mysqli_query ($connect, $query);
                     $i++;
                     
                   }
-                
             ?> 
 
             <tr class="rowDis" style="display:<?php echo $display; ?>;" data-toggle="collapse" data-target="#hidden_<?php echo $i;?>">
