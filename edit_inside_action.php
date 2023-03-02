@@ -263,7 +263,7 @@ $rs_result = mysqli_query ($connect, $query);
                             <?php 
                                 if ($row["prod_name"] == $pn) {
                             ?>
-                                <input required type="text" name="count_name"  class="form-control" form="order_form" value="<?php echo $cn;?>"/>
+                                <input  required type="number" min="1" name="count_name"  class="form-control" form="order_form" value="<?php echo $cn;?>"/>
                             <?php
                                 }else {
                             ?>
@@ -282,7 +282,7 @@ $rs_result = mysqli_query ($connect, $query);
                             <?php 
                                 if ($row["prod_name"] == $pn) {
                             ?>
-                                <input required type="text" name="sale_name"  class="form-control" form="order_form" value="<?php echo $sn;?>"/>
+                                <input required type="number" name="sale_name" max="0"  class="form-control" form="order_form" value="<?php echo $sn;?>"/>
                             <?php
                                 }else {
                             ?>
