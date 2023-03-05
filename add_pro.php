@@ -22,8 +22,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
     $summ_prod = get_sum($connect);
     $prepayment_sum = $summ_prod;
     $come_id = $last_id +1;
+
     //creditni prixod orqali dostavshikka qoshish
     add_credit_supplier($connect, $prepayment_sum, $come_id);
+
     //prixod list uchun chiqarish
     add_prod($connect, $summ_prod);
 }
@@ -79,25 +81,33 @@ $product_list = mysqli_query ($connect, $sql);
     <div class="container-fluid">
         <form action="" method="POST" class="horizntal-form" id="order_form">
             <div class="row">
-                <label class="col-sm-2">
+                <div class="col-md-3">
                     <span>Номер прихода</span>
-                </label>
-                <div class="col dash">
-                    <?php echo $last_id+1; ?>
                 </div>
-                <label class="col">
+                <div class="col-md-3">
                     <span>Дата</span>
-                </label>
-                <div class="col">
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <input disabled type="text" value="<?php echo $last_id+1; ?>"  class="form-control">
+                </div>
+                <div class="col-md-3">
                     <input required type="date" value="<?php echo date("Y-m-d"); ?>"  class="form-control" name="order_date" form="order_form">
                 </div>
-
-
-                <label class="col">
+            </div>
+            <div class="row mt">
+                <div class="col-md-3">
                     <span>Доставщик</span>
-                </label>
-                <div class="col-sm-2">
-                <select required name="order_supplier" form="order_form" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <span>Примечание</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <select required name="order_supplier" form="order_form" class="form-control">
                         <option value="">--выберитe---</option>
                         <?php    
                             while ($option_supplier = mysqli_fetch_array($supplier_tbl)) {    
@@ -108,84 +118,76 @@ $product_list = mysqli_query ($connect, $sql);
                         ?>
                     </select>
                 </div>
-                <label class="col">
-                    <span>Примечание</span>
-                </label>
-                <div class="col-3">
-                 <textarea required  form="order_form" name="order_note" class="form-control" id="exampleFormControlTextarea1" rows="1">Приход продукции на склад</textarea>
+                <div class="col-md-3">
+                    <textarea required  form="order_form" name="order_note" class="form-control" id="exampleFormControlTextarea1" rows="1">Приход продукции на склад</textarea>
                 </div>
             </div>
         </form>
     </div>
 </div>
 
-<div class="add_pro_lab">
+<div class="prod_list">
     <div class="container-fluid">
-        Продукции 
-
-    </div>
-</div>
-
-<div class="container-fluid">
-    <table id="myTable" class="table order-list">
-        <thead>
-            <tr>
-                <td>Продукция  / Производитель </td>
-                <td>Количество</td>
-                <td>Срок годности</td>
-                <td>Цена</td>
-                <td>Скидка</td>
-                <!-- <td>Сумма</td> -->
-            </tr>
-        </thead>
-        <tbody>
+        <table class="table order-list">
+            <thead>
+                <tr>
+                    <td>Продукция  / Производитель </td>
+                    <td>Количество</td>
+                    <td>Срок годности</td>
+                    <td>Цена</td>
+                    <td>Скидка</td>
+                    <!-- <td>Сумма</td> -->
+                </tr>
+            </thead>
+            <tbody>
 
 
-            
-            <tr>
-                <td class="col-sm-4">
-                        <select required class="form-control"  name="prod_name[]" form="order_form" >
-                            <option  value="">--выберитe продукцию---</option>
-                            <?php     
-                                while ($option = mysqli_fetch_array($product_list)) {    
-                            ?> 
-                                <option value="<?php echo $option["id"];?>"><?php echo $option["name"];?></option>
-                            <?php       
-                                };    
-                            ?>
-                        </select>
-                </td>
-                <td class="col-sm-1">
-                    <input required type="text" name="count_name[]"  class="form-control" form="order_form"/>
-                    
-                </td>
-                <td class="col-sm-2">
-                    <input required type="date" name="date_name[]"  class="form-control" form="order_form"/>
-                    
-                </td>
-                <td class="col-sm-1">
-                    <input required type="text" name="price_name[]"  class="form-control" form="order_form"/>
-                    
-                </td>
-                <td class="col-sm-1">
-                    <input required type="text" name="sale_name[]"  class="form-control" form="order_form"/>
-                    
-                </td>
-                <td class="col-sm-1">
-                    <i class="fa fa-plus"  id="addrow" style="cursor:pointer"></i>
-                </td>
                 
-                <td class="col-sm-1"><a class="deleteRow"></a>
+                <tr>
+                    <td class="col-sm-4">
+                            <select required class="form-control"  name="prod_name[]" form="order_form" >
+                                <option  value="">--выберитe продукцию---</option>
+                                <?php     
+                                    while ($option = mysqli_fetch_array($product_list)) {    
+                                ?> 
+                                    <option value="<?php echo $option["id"];?>"><?php echo $option["name"];?></option>
+                                <?php       
+                                    };    
+                                ?>
+                            </select>
+                    </td>
+                    <td class="col-sm-1">
+                        <input required type="text" name="count_name[]"  class="form-control" form="order_form"/>
+                        
+                    </td>
+                    <td class="col-sm-2">
+                        <input required type="date" name="date_name[]"  class="form-control" form="order_form"/>
+                        
+                    </td>
+                    <td class="col-sm-1">
+                        <input required type="text" name="price_name[]"  class="form-control" form="order_form"/>
+                        
+                    </td>
+                    <td class="col-sm-1">
+                        <input required type="text" name="sale_name[]"  class="form-control" form="order_form"/>
+                        
+                    </td>
+                    <td class="col-sm-1">
+                        <i class="fa fa-plus"  id="addrow" style="cursor:pointer"></i>
+                    </td>
+                    
+                    <td class="col-sm-1"><a class="deleteRow"></a>
 
-                </td>
-            </tr>
-            
-        </tbody>
-        <tfooter>
-            <tr>
-            </tr>
-        </tfooter>
-    </table>
+                    </td>
+                </tr>
+                
+            </tbody>
+            <tfooter>
+                <tr>
+                </tr>
+            </tfooter>
+        </table>
+    </div>
 </div>
 
 <div class="container-fluid">

@@ -1101,14 +1101,15 @@ function sum_count($connect, $id){
 
 // orto 
 function add_prod($connect, $summ_prod) {
-
+	$id_supplier = $_POST['order_supplier'];
 	$total_name = $summ_prod;
 	$order_date = $_POST['order_date'];
 	$order_note = $_POST['order_note'];
 	
-	$t = "INSERT INTO order_tbl (sum_order, date_order, order_note) VALUES ('%s', '%s', '%s')";
+	$t = "INSERT INTO order_tbl (supplier_id, sum_order, date_order, order_note) VALUES ('%s', '%s', '%s', '%s')";
 	
-	$query = sprintf($t, mysqli_real_escape_string($connect, $total_name),
+	$query = sprintf($t, mysqli_real_escape_string($connect, $id_supplier),
+						mysqli_real_escape_string($connect, $total_name),
 						mysqli_real_escape_string($connect, $order_date),
 						mysqli_real_escape_string($connect, $order_note));
     $result = mysqli_query($connect, $query);

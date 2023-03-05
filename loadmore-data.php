@@ -167,6 +167,50 @@ if (isset($_POST['roworder'])) {
     <?php }
   }
 }
+if (isset($_POST['rowstore'])) {
+  $start = $_POST['rowstore'];
+  $i = $_POST['i'];
+  $i = $start;
+  $limit = 15;
+  $query = "SELECT * FROM order_tbl ORDER BY id desc LIMIT ".$start.",".$limit;
+
+  $result = mysqli_query($connect,$query);
+
+  if ($result->num_rows > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+      $i++;
+      if ($row["status_order"] == 1) {
+        $status_order = 'Принят';
+        $status_btn = 'Черновик';
+        $color = '#5cb85c';
+        $dsp_toggle = 'none';
+
+    }elseif ($row["status_order"] == 0) {
+        $status_order = 'Черновик';
+        $status_btn = 'Принят';
+        $color = 'silver';
+        $dsp_toggle = 'true';
+    }
+      ?>
+        <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+            <td><?php echo $row["id"]; ?></td>
+            <td><?php $supplier = get_supplier($connect, $row["supplier_id"]);?>&nbsp;<?php echo $supplier["name"];?></td>
+            <td><?php echo number_format($row['sum_order'], 0, '.', ' '); ?></td>
+            <td><?php echo $date = date("d.m.Y", strtotime($row["date_order"])); ?></td>
+            <td><span style="border: 1px solid; background-color: <?php echo $color;?>; padding: 5px 10px; border-radius: 4px; color: white;"><?php echo $status_order; ?></span></td>
+        </tr>
+        <tr>
+            <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
+            <a href="view_prod.php?id=<?php echo $row["id"]; ?>&&date=<?php echo $row["date_order"]; ?>&&sum=<?php echo $row["sum_order"]; ?>&&note=<?php echo $row["order_note"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
+            <a href="edit_pro.php?id=<?php echo $row["id"]; ?>&&date=<?php echo $row["date_order"]; ?>&&sum=<?php echo $row["sum_order"]; ?>&&note=<?php echo $row["order_note"]; ?>"><button class="btn btn-custom">Редактировать</button> </a>
+            <a href="action.php?archive_id=<?=$row['id']?>&&contractor_id=<?=$row['contractor']?>&&debt=<?=$row['transaction_amount']?>&&ord_date=<?=$row['ord_date']?>&&payment_type=<?=$row['payment_type']?>"><button onclick="return confirm('<?php echo $status_btn; ?>')" class="btn btn-custom"><?php echo $status_btn; ?></button> </a>
+            <a style="display:<?php echo $dsp_toggle;?>;" href="action.php?delete_id=<?=$row['id']?>"><button onclick="return confirm('Отменить?')" class="btn btn-custom">Отменить</button> </a>
+            <a href="#" class="btn btn-custom">Счет-фактура</button> </a>
+            </div> </td>
+        </tr>
+    <?php }
+  }
+}
 
 if (isset($_POST['rowreturn'])) {
   $start = $_POST['rowreturn'];
