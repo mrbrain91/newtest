@@ -29,7 +29,7 @@ if (isset($_POST['row'])) {
 if (isset($_POST['rowpredo'])) {
   $start = $_POST['rowpredo'];
   $limit = 15;
-  $query = "SELECT * FROM debts WHERE main_prepayment != '0' ORDER BY id desc LIMIT ".$start.",".$limit;
+  $query = "SELECT * FROM debts WHERE main_prepayment != '0' AND sts='2' ORDER BY id desc LIMIT ".$start.",".$limit;
 
   $result = mysqli_query($connect,$query);
 
@@ -168,6 +168,39 @@ if (isset($_POST['roworder'])) {
   }
 }
 
+if (isset($_POST['rowreturn'])) {
+  $start = $_POST['rowreturn'];
+  $i = $_POST['i'];
+  $i = $start;
+  $limit = 15;
+  $query = "SELECT * FROM return_list WHERE return_status='0' ORDER BY id desc LIMIT ".$start.",".$limit;
+
+  $result = mysqli_query($connect,$query);
+
+  if ($result->num_rows > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+      $i++;
+      ?>
+       <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+            <td><?php echo $row["id"]; ?></td>
+            <td><?php $user = get_contractor($connect, $row["contractor"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
+            <td><?php $user = get_user($connect, $row["sale_agent"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
+            <td><?php echo $date = date("d.m.Y", strtotime($row["return_date"])); ?></td>
+            <td><?php echo $row["payment_type"]; ?></td>
+            <td><?php echo number_format($row['transaction_amount'], 0, '.', ' '); ?></td>
+        </tr>
+        <tr>
+            <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
+                <a href="view_inside_return.php?id=<?php echo $row["id"]; ?>&&payment_type=<?php echo $row["payment_type"]; ?>&&sale_agent=<?php echo $row["sale_agent"]; ?>&&contractor=<?php echo $row["contractor"]; ?>&&date=<?php echo $row["return_date"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
+                <a href="edit_inside_return.php?id=<?php echo $row["id"]; ?>&&payment_type=<?php echo $row["payment_type"]; ?>&&sale_agent=<?php echo $row["sale_agent"]; ?>&&contractor=<?php echo $row["contractor"]; ?>&&date=<?php echo $row["return_date"]; ?>"><button class="btn btn-custom">Редактировать</button> </a>
+                <a href="action.php?delete_id=<?=$row['id']?>"><button onclick="return confirm('Отменить?')" class="btn btn-custom">Удалить</button> </a>
+                <a href="#" class="btn btn-custom">Накладные</button> </a>
+            </div> </td>
+        </tr>
+    <?php }
+  }
+}
+
 if (isset($_POST['rowarchive'])) {
   $start = $_POST['rowarchive'];
   $i = $start;
@@ -192,6 +225,36 @@ if (isset($_POST['rowarchive'])) {
             <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
                 <a href="inside_archive_order.php?id=<?php echo $row["id"]; ?>&&payment_type=<?php echo $row["payment_type"]; ?>&&sale_agent=<?php echo $row["sale_agent"]; ?>&&contractor=<?php echo $row["contractor"]; ?>&&date=<?php echo $row["ord_date"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
                 <a href="action.php?restore_id=<?=$row['id']?>"><button onclick="return confirm('Восстановить?')" class="btn btn-custom">Восстановить</button> </a>
+            </div> </td>
+        </tr>
+    <?php }
+  }
+}
+
+
+if (isset($_POST['rowdel'])) {
+  $start = $_POST['rowdel'];
+  $i = $start;
+  $limit = 15;
+  $query = "SELECT * FROM main_ord_tbl WHERE order_status='2' ORDER BY id desc LIMIT ".$start.",".$limit;
+
+  $result = mysqli_query($connect,$query);
+
+  if ($result->num_rows > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+      $i++;
+      ?>
+         <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+            <td><?php echo $row["id"]; ?></td>
+            <td><?php $user = get_contractor($connect, $row["contractor"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
+            <td><?php $user = get_user($connect, $row["sale_agent"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
+            <td><?php echo $date = date("d.m.Y", strtotime($row["ord_date"])); ?></td>
+            <td><?php echo $row["payment_type"]; ?></td>
+            <td><?php echo number_format($row['transaction_amount'], 0, '.', ' '); ?></td>
+        </tr>
+        <tr >
+            <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
+                <a href="inside_deleted_order.php?id=<?php echo $row["id"]; ?>&&payment_type=<?php echo $row["payment_type"]; ?>&&sale_agent=<?php echo $row["sale_agent"]; ?>&&contractor=<?php echo $row["contractor"]; ?>&&date=<?php echo $row["ord_date"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
             </div> </td>
         </tr>
     <?php }

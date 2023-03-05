@@ -15,14 +15,13 @@ if (isset($_GET['id'])) {
     $sale_agent = $_GET['sale_agent'];
     $contractor = $_GET['contractor'];
     $ord_date = $_GET['date'];
-
-    $sum = get_sum_id_main($connect, $id)."<br>";
-    $sum_count = sum_count_main($connect, $id)."<br>";
+    $sum = get_sum_id_return($connect, $id);
+    // $sum_count = sum_count_main($connect, $id);
     
 }
 
 
-$query = "SELECT * FROM main_ord__item_tbl WHERE order_id='$id'";  
+$query = "SELECT * FROM return_item_tbl WHERE return_id='$id'";  
 $rs_result = mysqli_query ($connect, $query);
 
 
@@ -58,13 +57,13 @@ $rs_result = mysqli_query ($connect, $query);
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Просмотр oтмененные заказ № <?php echo $id; ?></span>
+        <span class="right_cus">Просмотр возврат № <?php echo $id; ?></span>
     </div>    
 </div>
 
 <div class="toolbar">
         <div class="container-fluid">
-            <a href="deleted_order.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
+            <a href="return_list.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
             <button class="btn btn-custom " onClick="window.print()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> печать</button>
         </div>
 </div>

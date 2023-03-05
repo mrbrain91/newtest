@@ -14,6 +14,7 @@ $btn_display = 'none';
 $sql = "SELECT * FROM counterparties_tbl";
 $counterparties_tbl = mysqli_query ($connect, $sql);
 //---
+
 if (isset($_POST['id_contractor'])) {
     $display = 'true';
     $btn_display = 'true';
@@ -164,7 +165,7 @@ if (isset($_POST['id_contractor'])) {
         <div class="table_wrap">
             <table id="tblData" class="table table-striped table-bordered act_td" style="width:70%; margin: 0 auto; margin-top: 30px;">
                     <tr>
-                        <td class="non_border head_txt" colspan="6">
+                        <td class="non_border head_txt" colspan="8">
                             <span>Акт сверки</span> <br> 
                         
                             взаимных расчетов за период: <?php echo $date = date("d.m.Y", strtotime($from_date)); ?> - <?php echo $date = date("d.m.Y", strtotime($to_date)); ?> <br>
@@ -173,17 +174,19 @@ if (isset($_POST['id_contractor'])) {
                         </td>
                     </tr>
                     <tr>
-                        <td class="non_border" colspan="6"> Мы, нижеподписавшиеся, ООО "ORTOPHARM", с одной стороны, и <?php echo $contractor["name"];?>, с другой стороны, составили настоящий акт сверки в том, что состояние взаимных расчетов по данным учета следующее:</td>
+                        <td class="non_border" colspan="8"> Мы, нижеподписавшиеся, ООО "ORTOPHARM", с одной стороны, и <?php echo $contractor["name"];?>, с другой стороны, составили настоящий акт сверки в том, что состояние взаимных расчетов по данным учета следующее:</td>
                     </tr>
                     <tr>
-                        <td colspan="3">По данным ООО "ORTOPHARM", сум.</td>
-                        <td colspan="3">По данным <?php echo $contractor["name"];?>, сум.</td>
+                        <td colspan="4">По данным ООО "ORTOPHARM", сум.</td>
+                        <td colspan="4">По данным <?php echo $contractor["name"];?>, сум.</td>
                     </tr>
                     <tr>
                         <th scope="col">Дата</th>
+                        <th scope="col">Документ</th>
                         <th scope="col">Дебет</th>
                         <th scope="col">Кредит</th>
                         <th scope="col">Дата</th>
+                        <th scope="col">Документ</th>
                         <th scope="col">Дебет</th>
                         <th scope="col">Кредит</th>
                     </tr>
@@ -192,9 +195,11 @@ if (isset($_POST['id_contractor'])) {
                     
                     <tr>
                         <td class="ordernum">Сальдо начальное</th>
+                        <td class="ordernum">-</th>
                         <td class="ordernum" scope="col"><?php echo number_format($sum_debt_saldo, 0, ',', ' ') ?></th>
                         <td class="ordernum" scope="col"><?php echo number_format($sum_main_prepayment_saldo, 0, ',', ' ') ?></th>
                         <td class="ordernum">Сальдо начальное</th>
+                        <td class="ordernum">-</th>
                         <td class="ordernum" scope="col"><?php echo number_format($sum_main_prepayment_saldo, 0, ',', ' ') ?></th>
                         <td class="ordernum" scope="col"><?php echo number_format($sum_debt_saldo, 0, ',', ' ') ?></th>
                     </tr>   
@@ -208,11 +213,19 @@ if (isset($_POST['id_contractor'])) {
                         $i++;
                         $sum_debt += $row["debt"];
                         $sum_prepayment += $row["main_prepayment"];
+                        if ($row["sts"] == 0) {
+                            $document = 'Продажа';
+                        }elseif ($row["sts"] == 2) {
+                            $document = 'Оплата';
+                        }elseif ($row["sts"] == 3) {
+                            $document = 'Возврат';
+                        }
                         
                     ?> 
 
                     <tr>
                         <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
+                        <td><?php echo $document; ?></td>
 
                         <td><?php 
                             if ($row["debt"] == "0") {
@@ -232,6 +245,7 @@ if (isset($_POST['id_contractor'])) {
                         </td>
 
                         <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
+                        <td><?php echo $document; ?></td>
 
                         <td><?php 
                             if ($row["main_prepayment"] == "0") {
@@ -291,14 +305,17 @@ if (isset($_POST['id_contractor'])) {
                     ?>
                     <tr>
                         <td class="ordernum">Обороты за период:</td>
+                        <td class="ordernum">-</td>
                         <td class="ordernum"><?php echo number_format($sum_debt_t, 0, ',', ' '); ?></td>
                         <td class="ordernum"><?php echo number_format($sum_prepayment_t, 0, ',', ' '); ?></td>
                         <td class="ordernum">Обороты за период:</td>
+                        <td class="ordernum">-</td>
                         <td class="ordernum"><?php echo number_format($sum_prepayment_t, 0, ',', ' '); ?></td>
                         <td class="ordernum"><?php echo number_format($sum_debt_t, 0, ',', ' '); ?></td>
                     </tr>
                     <tr style="border-bottom-style: 1px solid green">
                         <td class="ordernum">Сальдо конечное:</th>
+                        <td class="ordernum">-</th>
                         <td class="ordernum"><?php 
                         echo number_format($sum_last_debt, 0, ',', ' '); 
                         ?></td>
@@ -306,6 +323,7 @@ if (isset($_POST['id_contractor'])) {
                         echo number_format($sum_last_prepayment, 0, ',', ' '); 
                         ?></td>
                         <td class="ordernum">Сальдо конечное:</th>
+                        <td class="ordernum">-</th>
                         <td class="ordernum"><?php 
                         echo number_format($sum_last_prepayment, 0, ',', ' '); 
                         ?></td>
@@ -314,55 +332,55 @@ if (isset($_POST['id_contractor'])) {
                         ?></td>
                     </tr>  
                     <tr class="non_border_lr">
-                        <td colspan="6"> </td>
+                        <td colspan="8"> </td>
                     </tr>
                     <tr>
                     <tr class="non_border_all"  style="display: <?php echo $display_non_debt;?>">
-                        <td class="ordernum" colspan="6">на <?php echo $date = date("d.m.Y", strtotime($to_date)); ?> задолженность отсутствует. </td>
+                        <td class="ordernum" colspan="8">на <?php echo $date = date("d.m.Y", strtotime($to_date)); ?> задолженность отсутствует. </td>
                     </tr>
                     <tr class="non_border_all" style="display: <?php echo $display_debt_1;?>">
-                        <td class="ordernum" colspan="6">на <?php echo $date = date("d.m.Y", strtotime($to_date)); ?> задолженность в ползу ООО "ORTOPHARM" 
+                        <td class="ordernum" colspan="8">на <?php echo $date = date("d.m.Y", strtotime($to_date)); ?> задолженность в ползу ООО "ORTOPHARM" 
                         <?php echo number_format($sum_last_debt, 0, ',', ' '); ?> (<?php echo str_price($sum_last_debt)?>) сум.
                     </td>
                     </tr>
                     <tr class="non_border_all" style="display: <?php echo $display_debt_2;?>">
-                        <td class="ordernum" colspan="6">на <?php echo $date = date("d.m.Y", strtotime($to_date)); ?> задолженность в ползу <?php echo $contractor["name"];?>
+                        <td class="ordernum" colspan="8">на <?php echo $date = date("d.m.Y", strtotime($to_date)); ?> задолженность в ползу <?php echo $contractor["name"];?>
                         <?php echo number_format($sum_last_prepayment, 0, ',', ' '); ?> (<?php echo str_price($sum_last_prepayment)?>) сум.
                     </td>
                     </tr>
                     <tr class="non_border_all">
-                        <td colspan="6"> </td>
+                        <td colspan="8"> </td>
                     </tr>
                     <tr class="non_border_all">
-                        <td class="non_border_all"  colspan="3">от ООО "ORTOPHARM"</td>
-                        <td colspan="3">От <?php echo $contractor["name"];?></td>
+                        <td class="non_border_all"  colspan="4">от ООО "ORTOPHARM"</td>
+                        <td colspan="4">От <?php echo $contractor["name"];?></td>
                     </tr>
                     <tr class="non_border_all">
-                        <td colspan="6"> </td>
+                        <td colspan="8"> </td>
                     </tr>
                     <tr class="non_border_all">
-                        <td class="non_border_all" colspan="3">Директор</td>
-                        <td colspan="3">Директор</td>
+                        <td class="non_border_all" colspan="4">Директор</td>
+                        <td colspan="4">Директор</td>
                     </tr>
                     <tr class="non_border_all">
-                        <td colspan="6"> </td>
+                        <td colspan="8"> </td>
                     </tr>
                     <tr class="non_border_all">
-                        <td class="non_border_all" colspan="3">________________________________________________________</td>
-                        <td colspan="3">________________________________________________________</td>
+                        <td class="non_border_all" colspan="4">________________________________________________________</td>
+                        <td colspan="4">________________________________________________________</td>
                     </tr>
                     <tr class="non_border_all">
-                        <td colspan="6"> </td>
+                        <td colspan="8"> </td>
                     </tr>
                     <tr class="non_border_all">
-                        <td class="non_border_all" colspan="3">М.П.</td>
-                        <td colspan="3">М.П.</td>
+                        <td class="non_border_all" colspan="4">М.П.</td>
+                        <td colspan="4">М.П.</td>
                     </tr>
                     <tr class="non_border_all">
-                        <td colspan="6"> </td>
+                        <td colspan="8"> </td>
                     </tr>
                     <tr class="non_border_all">
-                        <td colspan="6"> </td>
+                        <td colspan="8"> </td>
                     </tr>
             </table>
         </div>

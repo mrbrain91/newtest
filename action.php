@@ -25,7 +25,8 @@ if (isset($_GET['archive_id'])) {
     if (upd_order_sts($connect, $archive_id)) {
        if (upd_order_itm_sts($connect, $archive_id)) {
             //--------------------debt yozish--------------------
-            add_debt($connect, $archive_id, $contractor, $debt, $ord_date, $payment_type);
+            $sts = 0;
+            add_debt($connect, $archive_id, $contractor, $debt, $ord_date, $payment_type, $sts);
         }
     }
 }
@@ -71,6 +72,29 @@ if (isset($_GET['restore_id']) && isset($_GET['sts'])) {
 }
 
 
+
+if (isset($_GET['delete_id'])) {
+    $delete_id = $_GET['delete_id'];
+
+        //-----------------------ostatka uchun-----------------
+        $sql = "SELECT * FROM main_ord__item_tbl WHERE order_id='$delete_id' AND order_itm_sts = 0";
+        $rs_result = mysqli_query ($connect, $sql);
+        while ($row = mysqli_fetch_assoc($rs_result)) {    
+            $prod_name = $row['prod_name'];
+            $count_name = $row['count_name'];
+            $query = "UPDATE rest_tbl SET bron = bron - '$count_name' WHERE prod_name='$prod_name'";
+            mysqli_query($connect, $query);
+        }
+    //--------------------------------------------------------
+
+
+    if (upd_order_sts_del($connect, $delete_id)) {
+       if (upd_order_itm_sts_del($connect, $delete_id)) {
+            header("Location: order.php"); 
+       }
+    }
+    
+}
 
 if (isset($_GET['delete_id'])) {
     $delete_id = $_GET['delete_id'];

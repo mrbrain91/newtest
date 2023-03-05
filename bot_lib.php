@@ -176,6 +176,18 @@ function del_main_ord_item_tbl($connect, $pi){
 	return true;
 }
 
+// orto
+
+function del_return_item_tbl($connect, $pi){
+
+	$sql = "DELETE FROM return_item_tbl WHERE id='$pi'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+
 
 
 
@@ -198,6 +210,26 @@ function upd_main_ord_item($connect, $orid, $pi, $p_name, $c_name, $pr__name, $s
 		die(mysqli_error($connect));
 	return true;
 }
+
+// orto
+
+function upd_return_item($connect, $orid, $pi, $p_name, $c_name, $pr__name, $s_name, $t_name){
+
+	$sql = "UPDATE return_item_tbl 
+	SET 
+	prod_name = '$p_name', 
+	count_name = '$c_name',
+	price_name = '$pr__name',
+	sale_name = '$s_name',
+	total_name = '$t_name'
+	WHERE id='$pi' AND return_id='$orid'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+
 
 //orto
 
@@ -382,6 +414,35 @@ function upd_main_order_sum($connect, $orid, $sum){
 	return true;
 }
 
+// orto
+
+function upd_return_sum($connect, $orid, $sum){
+	$sql = "UPDATE return_list
+	SET 
+	transaction_amount = '$sum'
+	WHERE id='$orid'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+// orto
+
+function upd_return_debt_sum($connect, $orid, $sum){
+	$sql = "UPDATE debts
+	SET 
+	main_prepayment = '$sum'
+	WHERE return_id='$orid'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+
+
+
 
 
 function update_msg_last_id($connect, $get_last_id){
@@ -524,6 +585,17 @@ function get_id_new_order($connect){
 	$last_data = mysqli_fetch_assoc($result);
 	return $last_data['id'];
 }
+
+//orto
+
+function get_id_new_return($connect){
+	$query = "SELECT id FROM return_list ORDER BY id DESC LIMIT 1";
+	$result = mysqli_query($connect, $query);
+	if(!$result) return false;
+	$last_data = mysqli_fetch_assoc($result);
+	return $last_data['id'];
+}
+
 
 //orto
 
@@ -701,12 +773,21 @@ function cash_out_add($connect, $state_id,  $cash_sum, $cash_type, $cash_comment
 
 }
 
-function add_main_prepayment($connect, $id_counterpartie, $prepayment_date, $prepayment_sum, $payment_type){
+function add_main_prepayment($connect, $id_counterpartie, $prepayment_date, $prepayment_sum, $payment_type, $sts){
 
-	$sql = "INSERT INTO `debts` (`id_counterpartie`, `order_date`, `main_prepayment`, `payment_type`) VALUES ('".$id_counterpartie."','".$prepayment_date."','".$prepayment_sum."','".$payment_type."');";
+
+	$sql = "INSERT INTO `debts` (`id_counterpartie`, `order_date`, `main_prepayment`, `payment_type`, `sts`) VALUES ('".$id_counterpartie."','".$prepayment_date."','".$prepayment_sum."','".$payment_type."','".$sts."');";
 	
 	if (mysqli_query($connect, $sql)) {
 		redirect("prepayment_list.php");
+	}
+}
+
+function add_main_prepayment_return($connect, $id_counterpartie, $return_id, $prepayment_date, $prepayment_sum, $payment_type, $sts){
+	$sql = "INSERT INTO `debts` (`id_counterpartie`, `return_id`, `order_date`, `main_prepayment`, `payment_type`, `sts`) VALUES ('".$id_counterpartie."','".$return_id."','".$prepayment_date."','".$prepayment_sum."','".$payment_type."','".$sts."');";
+	
+	if (mysqli_query($connect, $sql)) {
+		redirect("return_list.php");
 	}
 
 }
@@ -811,7 +892,18 @@ function edit_page_add($connect, $order_id, $prod_name, $count_name, $date_name,
 	return true;
 }
 
+// edit page return add product function
+function edit_page_add_ret($connect, $order_id, $prod_name, $count_name, $date_name, $price_name, $sale_name, $total_name) {
 
+	$sql = "INSERT INTO `return_item_tbl` (`return_id`, `prod_name`, `count_name`, `date_name`, `price_name`, `sale_name`, `total_name`) VALUES ('".$order_id."','".$prod_name."','".$count_name."','".$date_name."','".$price_name."','".$sale_name."','".$total_name."');";	
+	$res = mysqli_query($connect, $sql);
+
+	if(!$res)
+		die(mysqli_error($connect));
+	return true;
+}
+
+// add each order tbl
 function add_each_ord($connect) {
 	$query = "SELECT id FROM main_ord_tbl ORDER BY id DESC LIMIT 1";
 	$result = mysqli_query($connect, $query);
@@ -829,7 +921,7 @@ function add_each_ord($connect) {
                 $prod_name=$_POST['prod_name'][$row];
                 $count_name=$_POST['quantity'][$row];
                 $date_name=$_POST['main_order_date'];                   
-                $price_name=$_POST['product_price'][$row];
+                echo $price_name=$_POST['product_price'][$row];
                 $sale_name=$_POST['sale'][$row];
     			$total_name = ($count_name * $price_name) + ($count_name * $price_name * $sale_name) / 100;
 				$order_id = $last_id + 1;
@@ -857,6 +949,46 @@ function add_each_ord($connect) {
 
 }
 
+// add each return tbl
+function add_each_return($connect) {
+	$query = "SELECT id FROM return_list ORDER BY id DESC LIMIT 1";
+	$result = mysqli_query($connect, $query);
+	$rows = mysqli_fetch_row($result);
+	if(!$result)
+		die(mysqli_error($connect));
+		$last_id = $rows[0];
+		
+	
+	if(isset($_POST['submit']) && $_POST['submit'] == 'Принять'){
+
+		foreach($_POST['prod_name'] as $row => $value){
+
+				$prod_name=$_POST['prod_name'][$row];
+				$count_name=$_POST['quantity'][$row];
+				$date_name=$_POST['return_date'];                   
+				$price_name=$_POST['product_price'][$row];
+				$sale_name=$_POST['sale'][$row];
+				$total_name = ($count_name * $price_name) + ($count_name * $price_name * $sale_name) / 100;
+				$return_id = $last_id + 1;
+
+			$sql = "INSERT INTO `return_item_tbl` (`return_id`, `prod_name`, `count_name`, `date_name`, `price_name`, `sale_name`, `total_name`) VALUES ('".$return_id."','".$prod_name."','".$count_name."','".$date_name."','".$price_name."','".$sale_name."','".$total_name."');";
+			
+
+			if (mysqli_query($connect, $sql)) {
+				echo 'success';
+			}
+			else {
+				echo("Error description: " . $mysqli -> error);
+			}
+
+			//  add to bron 
+			// 	$query = "UPDATE rest_tbl SET bron = bron + '$count_name' WHERE prod_name='$prod_name'";
+			// 	mysqli_query($connect, $query);
+		}
+		redirect("return_list.php");
+	}
+}
+
 
 function get_sum_id($connect, $id){
 
@@ -873,6 +1005,17 @@ function get_sum_id($connect, $id){
 function get_sum_id_main($connect, $orid){
 
 	$query = "SELECT SUM(total_name) FROM main_ord__item_tbl WHERE order_id='$orid'";
+	$result = mysqli_query($connect, $query);
+	if(!$result) return false;
+	$sum_data = mysqli_fetch_assoc($result);
+	return $sum_data['SUM(total_name)'];
+	// return $last_id;
+}
+
+//return 
+function get_sum_id_return($connect, $orid){
+
+	$query = "SELECT SUM(total_name) FROM return_item_tbl WHERE return_id='$orid'";
 	$result = mysqli_query($connect, $query);
 	if(!$result) return false;
 	$sum_data = mysqli_fetch_assoc($result);
@@ -903,6 +1046,33 @@ function get_sum_main_ord($connect){
 	if(!$result) return false;
 	$sum_data = mysqli_fetch_assoc($result);
 	return $sum_data['SUM(total_name)'];
+	// return $last_id;
+}
+
+function get_sum_return($connect){
+
+	$last_id = get_id_new_return($connect);
+	$last_id = $last_id+1;
+	
+
+	$query = "SELECT SUM(total_name) FROM return_item_tbl WHERE return_id='$last_id'";
+	$result = mysqli_query($connect, $query);
+	if(!$result) return false;
+	$sum_data = mysqli_fetch_assoc($result);
+	return $sum_data['SUM(total_name)'];
+	// return $last_id;
+}
+
+
+//main_order
+
+function sum_count_return($connect, $id){
+
+	$query = "SELECT SUM(count_name) FROM return_item_tbl WHERE return_id='$id'";
+	$result = mysqli_query($connect, $query);
+	if(!$result) return false;
+	$sum_count = mysqli_fetch_assoc($result);
+	return $sum_count['SUM(count_name)'];
 	// return $last_id;
 }
 
@@ -970,6 +1140,35 @@ function add_main_ord($connect, $summ_prod) {
 	if(!$result)
 		die(mysqli_error($connect));
 	return true;
+}
+
+
+// orto 
+function add_return($connect, $summ_prod, $ret_id) {
+	$return_contractor = $_POST['return_contractor'];
+	$return_sale_agent = $_POST['return_sale_agent'];
+	$return_date = $_POST['return_date'];
+	$return_paymen_type = $_POST['return_paymen_type'];
+	$total_name = $summ_prod;
+	$return_id = $ret_id;
+
+
+	
+	$t = "INSERT INTO return_list (contractor, sale_agent, return_date, payment_type, transaction_amount) VALUES ('%s', '%s', '%s', '%s', '%s')";
+	
+	$query = sprintf($t, mysqli_real_escape_string($connect, $return_contractor),
+						mysqli_real_escape_string($connect, $return_sale_agent),
+						mysqli_real_escape_string($connect, $return_date),
+						mysqli_real_escape_string($connect, $return_paymen_type),
+						mysqli_real_escape_string($connect, $total_name));
+    $result = mysqli_query($connect, $query);
+	if($result){
+		$sts = 3;
+		add_main_prepayment_return($connect, $return_contractor, $return_id, $return_date, $total_name, $return_paymen_type, $sts);
+		return true;
+	}else{
+		die(mysqli_error($connect));
+	}
 }
 
 

@@ -8,7 +8,7 @@ if (!isset($_SESSION['usersname'])) {
 
 
 
-$query = "SELECT * FROM debts WHERE main_prepayment!='0' ORDER BY id DESC";
+$query = "SELECT * FROM debts WHERE main_prepayment!='0' AND sts='2' ORDER BY id DESC";
 $rs_result = mysqli_query ($connect, $query);   
 
 
@@ -19,7 +19,7 @@ $sql = "SELECT * FROM counterparties_tbl";
 $counterparties_tbl = mysqli_query ($connect, $sql);
 
 // for count
-$count_query = "SELECT count(*) as allcount FROM debts WHERE main_prepayment!='0' ORDER BY id DESC";
+$count_query = "SELECT count(*) as allcount FROM debts WHERE main_prepayment!='0' AND sts='2' ORDER BY id DESC";
 $count_result = mysqli_query($connect,$count_query);
 $count_fetch = mysqli_fetch_array($count_result);
 $postCount = $count_fetch['allcount'];
@@ -40,17 +40,17 @@ if (isset($_POST['id_contractor']) AND isset($_POST['from_date']) AND isset($_PO
    $display_sts_filer_on = 'true';
    
    
-    $query = "SELECT * FROM debts WHERE id_counterpartie = '$id_cont' AND main_prepayment!='0' AND order_date >= '$fr_date' AND order_date <= '$to_date' ORDER BY id DESC";
+    $query = "SELECT * FROM debts WHERE id_counterpartie = '$id_cont' AND main_prepayment!='0' AND sts='2' AND order_date >= '$fr_date' AND order_date <= '$to_date' ORDER BY id DESC";
 
-    $all_debt_query = "SELECT sum(main_prepayment) as all_debt, count(id) as allcount FROM debts WHERE id_counterpartie = '$id_cont' AND main_prepayment!='0' AND order_date >= '$fr_date' AND order_date <= '$to_date' ORDER BY id DESC";
+    $all_debt_query = "SELECT sum(main_prepayment) as all_debt, count(id) as allcount FROM debts WHERE id_counterpartie = '$id_cont' AND main_prepayment!='0' AND sts='2' AND order_date >= '$fr_date' AND order_date <= '$to_date' ORDER BY id DESC";
    
  
 
 }
 else {
     //list all
-    $query = "SELECT * FROM debts WHERE main_prepayment!='0' ORDER BY id desc LIMIT 0,".$limit;
-    $all_debt_query = "SELECT sum(main_prepayment) as all_debt, count(id) as allcount FROM debts WHERE main_prepayment!='0'";
+    $query = "SELECT * FROM debts WHERE main_prepayment!='0' AND sts='2' ORDER BY id desc LIMIT 0,".$limit;
+    $all_debt_query = "SELECT sum(main_prepayment) as all_debt, count(id) as allcount FROM debts WHERE main_prepayment!='0' AND sts='2'";
     
     $display_true = 'true';
     $display_none = 'none';

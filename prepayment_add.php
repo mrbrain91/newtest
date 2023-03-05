@@ -14,10 +14,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
 
         $id_counterpartie = $_POST['id_counterpartie'];
         $prepayment_date = $_POST['prepayment_date'];
-        echo $prepayment_sum = str_replace(' ', '', $_POST['prepayment_sum']);
+        $prepayment_sum = str_replace(' ', '', $_POST['prepayment_sum']);
         $payment_type = $_POST['payment_type'];
-    
-        add_main_prepayment($connect, $id_counterpartie, $prepayment_date, $prepayment_sum, $payment_type);
+        $sts = 2;
+        add_main_prepayment($connect, $id_counterpartie, $prepayment_date, $prepayment_sum, $payment_type, $sts);
+
 }
 
 //get counterparties

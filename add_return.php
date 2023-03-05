@@ -7,7 +7,7 @@ if (!isset($_SESSION['usersname'])) {
   header("location: index.php");
 }
 
-$last_id = get_id_new_ord($connect);
+$last_id = get_id_new_return($connect);
 
 
 //get  users
@@ -33,10 +33,19 @@ $product_list = mysqli_query ($connect, $sql);
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
 
-    add_each_ord($connect);
-    $summ_prod = get_sum_main_ord($connect);
-    add_main_ord($connect, $summ_prod);
-
+    $query = "SELECT id FROM return_list ORDER BY id DESC LIMIT 1";
+	$result = mysqli_query($connect, $query);
+	$rows = mysqli_fetch_row($result);
+	if(!$result)
+		die(mysqli_error($connect));
+		$last_id = $rows[0];
+        $ret_id = $last_id+1;
+        
+    add_each_return($connect);
+    $summ_prod = get_sum_return($connect);
+    add_return($connect, $summ_prod, $ret_id);
+ 
+   
 }
 
 
@@ -78,15 +87,15 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus"> Добавление сделки</span>
+        <span class="right_cus"> Добавление возврата</span>
     </div>    
 </div>
 
 <div class="toolbar">
         <div class="container-fluid">
         
-            <td><input data-toggle="modal" data-target="#exampleModal1" class="btn btn-success" type="submit" value="Принять" />
-            <a href="order.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
+            <td><input data-toggle="modal" data-target="#exampleModal2" class="btn btn-success" type="submit" value="Принять" />
+            <a href="return_list.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
             
 
@@ -95,22 +104,22 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
 
 <div class="card_head">
     <div class="container-fluid">
-        <form action="#"  method="POST" class="horizntal-form" id="order_form">
+        <form action="#"  method="POST" class="horizntal-form" id="return_form">
 
             <div class="row">
                 <div class="col-md-3">
-                    <span>Дата сделки</span>
+                    <span>Дата возврата</span>
                 </div>
                 <div class="col-md-3">
-                    <span>Условия оплаты</span>
+                    <span>Оплаты</span>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    <input type="date" value="<?php echo date("Y-m-d"); ?>"  class="form-control" name="main_order_date" form="order_form">
+                    <input type="date" value="<?php echo date("Y-m-d"); ?>"  class="form-control" name="return_date" form="return_form">
                 </div>
                 <div class="col-md-3">
-                    <select required name="main_order_paymen_type" form="order_form" class="normalize">
+                    <select required name="return_paymen_type" form="return_form" class="normalize">
                             <option value="">--выберите---</option>
                             <option value="<?php echo 'Перечисление';?>"><?php echo 'Перечисление';?></option>
                             <option value="<?php echo 'Наличные деньги';?>"><?php echo 'Наличные деньги';?></option>
@@ -130,7 +139,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    <select required name="main_order_sale_agent" form="order_form" class="normalize">
+                    <select required name="return_sale_agent" form="return_form" class="normalize">
                         <option value="">--выберитe---</option>
                         <?php    
                             while ($option = mysqli_fetch_array($users_tbl)) {    
@@ -142,7 +151,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <select required name="main_order_contractor" form="order_form" class="normalize" onchange="showCustomerBalance(this.value)">
+                    <select required name="return_contractor" form="return_form" class="normalize" onchange="showCustomerBalance(this.value)">
                         <option value="">--выберитe---</option>
                         <?php    
                             while ($option_contractor = mysqli_fetch_array($counterparties_tbl)) {    
@@ -166,7 +175,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
 
 <div class="prod_list">
     <div class="container-fluid">
-        <table id="orders" class="table order-list">
+        <table id="returns" class="table return-list">
             <thead>
                 <tr>
                     <td>Продукция  / Производитель </td>
@@ -175,13 +184,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                     <td>Цена</td>
                     <td>Скидка (%)</td>
                     <td>Сумма</td>
-                    <td></td>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td class="col-sm-4">
-                        <select required name="prod_name[]" form="order_form" class="form-control" id='prod_name_1' for='1' onchange="showCustomer(this.value,'1')">
+                        <select required name="prod_name[]" form="return_form" class="form-control" id='prod_name_1' for='1' onchange="showCustomer(this.value,'1')">
                             <option value="" class="form-control" >--выберитe продукцию---</option>
                             <?php     
                                 while ($option = mysqli_fetch_array($product_list)) {    
@@ -194,18 +202,18 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                         </select>
                     </td>
                     <td class="col-sm-1">
-                        <input required type="number" name="quantity[]" min="0"  class="form-control quantity" id='quantity_1' for='1' form="order_form"/>
+                        <input required type="number" name="quantity[]" min="0"  class="form-control quantity" id='quantity_1' for='1' form="return_form"/>
                     </td>
                     <td class="col-sm-1">
                         <div id="txtHint_1">
-                            <input disabled data-type="product_price" type="number" name="product_price[]" id='product_price_1'  class="form-control product_price" for="1" form="order_form"/">
+                            <input disabled data-type="product_price" type="number" name="product_price[]" id='product_price_1'  class="form-control product_price" for="1" form="return_form"/">
                         </div>
                     </td>
                     <td class="col-sm-1">
-                        <input required name="sale[]" type="number" placeholder="0" max="0" value="0" class="form-control sale" id='sale_1' for='1' form="order_form"/>        
+                        <input required name="sale[]" type="number" placeholder="0" max="0" value="0" class="form-control sale" id='sale_1' for='1' form="return_form"/>        
                     </td>
                     <td class="col-sm-2">
-                        <input readonly type="text" name="total_cost[] "  class="form-control total_cost" id='total_cost_1' for='1' form="order_form"/>
+                        <input readonly type="text" name="total_cost[] "  class="form-control total_cost" id='total_cost_1' for='1' form="return_form"/>
                     <td class="col-sm-1">
                     <button type="button" name="addrow" id="addrow" class="btn btn-success circle">+</button>
                     </td>
@@ -288,7 +296,7 @@ function showCustomer(str, inc) {
 
     }
   };
-  xhttp.open("GET", "getcustomer.php?q="+str+"&&i="+inc+"", true);
+  xhttp.open("GET", "getcustomer.php?q="+str+"&&i_r="+inc+"", true);
   xhttp.send();
 }
 
@@ -297,7 +305,7 @@ function showCustomer(str, inc) {
 
 
 // Add a generic event listener for any change on quantity or price classed inputs
-$("#orders").on('input', 'input.quantity,input.sale,input.product_price', function() {
+$("#returns").on('input', 'input.quantity,input.sale,input.product_price', function() {
   getTotalCost($(this).attr("for"));
 });
 
@@ -353,24 +361,24 @@ $(document).ready(function () {
         var newRow = $("<tr>");
         var cols = "";                                                      
                 
-        cols += '<td><select required name="prod_name[]" form="order_form" class="form-control custom-select" id="prod_name_'+inc+'" for="'+inc+'" onchange="showCustomer(this.value,'+inc+')"><option value="">--выберите продукцию--</option><?php while ($option = mysqli_fetch_array($product_list)) { ?> <option value="<?php echo $option["name"];?>"><?php  $name = get_prod_name($connect, $option["name"]); echo $name["name"]; ?></option> <?php }; ?></select></td>';
+        cols += '<td><select required name="prod_name[]" form="return_form" class="form-control custom-select" id="prod_name_'+inc+'" for="'+inc+'" onchange="showCustomer(this.value,'+inc+')"><option value="">--выберите продукцию--</option><?php while ($option = mysqli_fetch_array($product_list)) { ?> <option value="<?php echo $option["name"];?>"><?php  $name = get_prod_name($connect, $option["name"]); echo $name["name"]; ?></option> <?php }; ?></select></td>';
 
-        cols += '<td><input required type="number" name="quantity[]"  class="form-control quantity" id="quantity_'+inc+'" for="'+inc+'" form="order_form"/></td>';
-        cols += '<td><div id="txtHint_'+inc+'"><input disabled data-type="product_price" type="number" name="product_price[]"  class="form-control product_price" id="product_price_'+inc+'" for="'+inc+'" form="order_form"/></div></td>';
-        cols += '<td><input required type="number" name="sale[]" value="0" class="form-control sale" id="sale_'+inc+'" for="'+inc+'" form="order_form"/></td>';
+        cols += '<td><input required type="number" name="quantity[]"  class="form-control quantity" id="quantity_'+inc+'" for="'+inc+'" form="return_form"/></td>';
+        cols += '<td><div id="txtHint_'+inc+'"><input disabled data-type="product_price" type="number" name="product_price[]"  class="form-control product_price" id="product_price_'+inc+'" for="'+inc+'" form="return_form"/></div></td>';
+        cols += '<td><input required type="number" name="sale[]" value="0" class="form-control sale" id="sale_'+inc+'" for="'+inc+'" form="return_form"/></td>';
 
         
 
-        cols += '<td><input readonly="" type="text" name="total_cost[] " class="form-control total_cost" id="total_cost_'+inc+'" for="'+inc+'" form="order_form"/></td>';
+        cols += '<td><input readonly="" type="text" name="total_cost[] " class="form-control total_cost" id="total_cost_'+inc+'" for="'+inc+'" form="return_form"/></td>';
         cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="-"></td>';
         newRow.append(cols);
-        $("table.order-list").append(newRow);
+        $("table.return-list").append(newRow);
         counter++;
     });
 
 
 
-    $("table.order-list").on("click", ".ibtnDel", function (event) {
+    $("table.return-list").on("click", ".ibtnDel", function (event) {
         $(this).closest("tr").remove();       
         counter -= 1
     });
