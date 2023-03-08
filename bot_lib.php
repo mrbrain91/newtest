@@ -388,6 +388,19 @@ function upd_order_sts_res($connect, $restore_id){
 }
 
 // orto
+// prixod prinyat move to draft
+function upd_store_sts_res($connect, $draft_store_id){
+	$sql = "UPDATE order_tbl
+	SET 
+	status_order = '0'
+	WHERE id='$draft_store_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+// orto
 
 function upd_order_sts_del($connect, $delete_id){
 	$sql = "UPDATE main_ord_tbl
@@ -452,6 +465,18 @@ function upd_order_itm_sts_res($connect, $restore_id){
 	SET 
 	order_itm_sts = '0'
 	WHERE order_id='$restore_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+// prixod prinyat move to draft
+function upd_store_itm_sts_res($connect, $draft_store_id){
+	$sql = "UPDATE order_item_product
+	SET 
+	store_itm_sts = '0'
+	WHERE order_id='$draft_store_id'";
 	$result = mysqli_query($connect, $sql);
 	if(!$result)
 		die(mysqli_error($connect));
@@ -853,6 +878,16 @@ function delete_debt($connect, $restore_id){
 	$sql = "DELETE FROM `debts` WHERE order_id IN ('$restore_id')";
 	if(mysqli_query($connect, $sql)) {
 		redirect("archive_order.php");
+	}
+	else {
+		die(mysqli_error($connect));
+	}
+}
+
+function delete_credit_supplier($connect, $draft_store_id){
+	$sql = "DELETE FROM `supplier` WHERE come_id IN ('$draft_store_id')";
+	if(mysqli_query($connect, $sql)) {
+		redirect("in_store.php");
 	}
 	else {
 		die(mysqli_error($connect));

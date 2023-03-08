@@ -128,18 +128,30 @@ if (isset($_GET['store_id'])) {
 //end order move to archive
 
 
+
+// prixod prinyat move to draft
+if (isset($_GET['draft_store_id'])) {
+    $draft_store_id = $_GET['draft_store_id'];
+    //--------------------------------------++++------------------
+
+    if (upd_store_sts_res($connect, $draft_store_id)) {
+       if (upd_store_itm_sts_res($connect, $draft_store_id)) {
+            delete_credit_supplier($connect, $draft_store_id);
+       }
+    }
+    
+}
+
 // prixod chernovek move to otmenen
 if (isset($_GET['cencel_id_store'])) {
     $cencel_id_store = $_GET['cencel_id_store'];
     
     if (upd_store_sts_cencel($connect, $cencel_id_store)) {
        if (upd_store_itm_sts_cencel($connect, $cencel_id_store)) {
-            header("Location: order.php"); 
+            header("Location: in_store.php"); 
        }
     }
 }
-
-
 
 // end prixod sklad
     

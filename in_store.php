@@ -150,18 +150,15 @@ $rs_result = mysqli_query ($connect, $query);
     $i++;
     if ($row["status_order"] == 1) {
         $status_order = 'Принят';
-        $status_btn = 'Черновик';
         $color = '#28a745';
         $dsp_toggle = 'none';
 
     }elseif ($row["status_order"] == 0) {
         $status_order = 'Черновик';
-        $status_btn = 'Принят';
         $color = 'silver';
         $dsp_toggle = 'true';
     }elseif ($row["status_order"] == 2) {
         $status_order = 'Удален';
-        // $status_btn = 'отмененный';
         $color = '#dc3545';
         $dsp_toggle = 'none';
     }
@@ -183,7 +180,7 @@ $rs_result = mysqli_query ($connect, $query);
                     <a href="view_prod.php?id=<?php echo $row["id"]; ?>&&date=<?php echo $row["date_order"]; ?>&&sum=<?php echo $row["sum_order"]; ?>&&note=<?php echo $row["order_note"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
                     <a style="display:<?php if($row["status_order"] == 0){echo 'true';}else {echo 'none';}?>;" href="edit_pro.php?id=<?php echo $row["id"]; ?>&&date=<?php echo $row["date_order"]; ?>&&sum=<?php echo $row["sum_order"]; ?>&&note=<?php echo $row["order_note"]; ?>"><button class="btn btn-custom">Редактировать</button> </a>
                     <a style="display:<?php if($row["status_order"] == 0){echo 'true';}else {echo 'none';}?>;" href="action.php?store_id=<?=$row['id']?>&&supplier_id=<?=$row['supplier_id']?>&&credit=<?=$row['sum_order']?>&&ord_date=<?=$row['date_order']?>&&payment_type=<?=$row['payment_type']?>"><button onclick="return confirm('Принят?')" class="btn btn-custom">Принят</button> </a>
-                    <a style="display:<?php if($row["status_order"] == 1){echo 'true';}else {echo 'none';}?>;" href="action.php?store_id=<?=$row['id']?>&&supplier_id=<?=$row['supplier_id']?>&&credit=<?=$row['sum_order']?>&&ord_date=<?=$row['date_order']?>&&payment_type=<?=$row['payment_type']?>"><button onclick="return confirm('Черновик?')" class="btn btn-custom">Черновик</button> </a>
+                    <a style="display:<?php if($row["status_order"] == 1){echo 'true';}else {echo 'none';}?>;" href="action.php?draft_store_id=<?=$row['id']?>&&supplier_id=<?=$row['supplier_id']?>&&credit=<?=$row['sum_order']?>&&ord_date=<?=$row['date_order']?>&&payment_type=<?=$row['payment_type']?>"><button onclick="return confirm('Черновик?')" class="btn btn-custom">Черновик</button> </a>
                     <a style="display:<?php if($row["status_order"] == 0){echo 'true';}else {echo 'none';}?>;" href="action.php?cencel_id_store=<?=$row['id']?>"><button onclick="return confirm('Отменить?')" class="btn btn-custom">Отменить</button> </a>
                     <a style="display:<?php if($row["status_order"] == 0 OR $row["status_order"] == 1){echo 'true';}else {echo 'none';}?>;" href="#" class="btn btn-custom">Счет-фактура</button> </a>
                 </div> 
