@@ -53,107 +53,140 @@ $rs_result = mysqli_query ($connect, $query);
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Просмотр прихода продукции</span>
+        <span class="right_cus">Просмотр прихода №<?php echo $id; ?></span>
     </div>    
 </div>
 
 <div class="toolbar">
         <div class="container-fluid">
             <a href="in_store.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
-
+            <button class="btn btn-custom " onClick="window.print()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> печать</button>
         </div>
 </div>
 
-<div class="card_head">
+<div id="section-to-print">
+    <!-- start card head information -->
     <div class="container-fluid">
-        <form action="" class="horizntal-form">
-            <div class="row">
-                <label class="col-sm-2">
-                    <span>Номер прихода</span>
-                </label>
-                <div class="col-sm-1 dash">
-                    <?php echo $id; ?>
+        <div class="card_head">
+            <div class="card_head__wrapper">
+                <div class="row">
+                    <div class="col-sm-4">
+                        Номер прихода
+                    </div>
+                    <div class="col-sm-8">
+                        <?php echo $id; ?>
+                    </div>
                 </div>
-                <label class="col-sm-1">
-                    <span>Дата</span>
-                </label>
-                <div class="col-sm-2 dash">
-                    <?php echo $date; ?>
+                <div class="row">
+                    <div class="col-sm-4">
+                    Дата прихода
+                    </div>
+                    <div class="col-sm-8">
+                        <?php echo $ord_date = date("d.m.Y", strtotime($date)); ?>
+                    </div>
                 </div>
-                <label class="col-sm-2">
-                    <span>Примечание</span>
-                </label>
-                <div class="col-sm-4 dash">
-                    <?php echo $note; ?>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        Примечание
+                    </div>
+                    <div class="col-sm-8">
+                        <?php echo $note; ?>
+                    </div>
                 </div>
+
             </div>
-        </form>
+        </div>
     </div>
-</div>
+    <!-- End card head information -->
 
-<div class="add_pro_lab">
-    <div class="container-fluid">
-        Продукции 
 
+        <!-- Start prod list -->
+    <div class="prod_list">
+        <div class="container-fluid">
+            <table class="table table-hover">
+                <thead>
+                    <tr class="w600">
+                        <td>№</td>
+                        <td>Наименование товаров</td>
+                        <td>Количество</td>
+                        <td>Ед. изм.</td>
+                        <td>Срок годности</td>
+                        <td>Цена</td>
+                        <td>Сумма</td>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php 
+                    $n = 0;    
+                    while ($row = mysqli_fetch_array($rs_result)) {  
+                    $n++;  
+
+                    $name = get_prod_name($connect, $row["prod_name"]);
+
+                    $query = "SELECT * FROM products_tbl WHERE name='$name[name]'";  
+                    $unit_result = mysqli_query ($connect, $query);
+                        if(!$unit_result)
+                        die(mysqli_error($connect));
+                    $unit_name = mysqli_fetch_assoc($unit_result);
+                    $unit_name =  $unit_name[unit];
+                ?> 
+                    <tr>
+                        <td class="col-sm-1">
+                            <span><?php echo $n; ?></span>
+                        </td>
+                        <td class="col-sm-4" >
+                            <span><?php echo $name['name']; ?></span>
+                        </td>
+                        <td class="col-sm-1">
+                            <span><?php echo number_format($row['count_name'], 0, ',', ' '); ?></span>
+                        </td>
+                        <td class="col-sm-1">
+                            <span><?php echo $unit_name; ?></span>
+                        </td>
+                        <td class="col-sm-1">
+                            <span><?php echo $ord_date = date("d.m.Y", strtotime($row["date_name"])); ?></span>
+                        
+
+                        </td>
+                        <td class="col-sm-1">
+                            <span><?php echo number_format($row['price_name'], 0, ',', ' '); ?></span>
+                            
+                        </td>
+                        <td class="col-sm-2">
+                            <span><?php echo number_format($row['total_name'], 0, ',', ' '); ?></span>
+
+                        </td>
+
+                    </tr>
+                    
+                    <?php     
+                        };    
+                    ?>
+                    <tr>
+                        <td class="w600"><span style="float:left;">Итого</span></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="w600"><?php echo number_format($sum, 0, ',', ' '); ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <!-- <button type="button" class="btn btn-primary" id="addrow" >добавить строку</button>a -->
+    <!-- end prod list -->
+
+
+
 
 </div>
 
-<div class="container-fluid">
-    <table id="myTable" class="table table-hover">
-    <thead>
-        <tr class="w600">
-            <td>Продукция  / Производитель </td>
-            <td>Количество</td>
-            <td>Срок годности</td>
-            <td>Цена</td>
-            <td>Скидка</td>
-            <td>Сумма</td>
-        </tr>
-    </thead>
-    <tbody>
-    <?php     
-        while ($row = mysqli_fetch_array($rs_result)) {    
-    ?> 
-        <tr>
-            <td class="col-sm-4" >
-                <span><?php $name = get_prod_name($connect, $row["prod_name"]); echo $name['name']; ?></span>
-            </td>
-            <td class="col-sm-1">
-                <span><?php echo $row["count_name"]; ?></span>
-            </td>
-            <td class="col-sm-2">
-                <span><?php echo $row["date_name"]; ?></span>
-            </td>
-            <td class="col-sm-1">
-                <span><?php echo number_format($row['price_name']); ?></span>
-                
-            </td>
-            <td class="col-sm-1">
-                <span>-<?php echo $row["sale_name"]; ?></span>
-            </td>
-            <td class="col-sm-2">
-                <span><?php echo number_format($row['total_name']); ?></span>
-            </td>
-        </tr>
-    <?php     
-        };    
-    ?>
-    </tbody>
-    <tfooter>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="w600">Количество: <?php echo $sum_count; ?></td>
-            <td class="w600">Сумма: <?php echo number_format($sum); ?></td>
-        </tr>
-    </tfooter>
 
-</table>
 </div>
+
+
 
 
 

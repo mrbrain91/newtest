@@ -7,45 +7,13 @@ if (!isset($_SESSION['usersname'])) {
   header("location: index.php");
 }
 
-// for delete order inside item 
+ //get product from price 
+ $sql = "SELECT * FROM price_item_tbl WHERE price_id=(SELECT max(id) FROM price_tbl)";  
+ $product_list = mysqli_query ($connect, $sql);
 
-if (isset($_GET['del']) && $_GET['del'] == 'ok') {
-    $orid = $_GET['orid'];
-    $pi = $_GET['pi'];
-    $pn = $_GET['pn'];
-    $cn = $_GET['cn'];
-    $prn = $_GET['prn'];
-    $dn = $_GET['dn'];
+ //end get product
 
 
-     $id = $_GET['id'];
-     $note = $_GET['note'];
-     $ord_date = $_GET['date'];
-
-
-
-     $sum = get_sum_id_store($connect, $id);
-     $sum_count = sum_count_store($connect, $id);
-
-
-    if (del_store_item_tbl($connect, $pi)) {
-
-        $sum = get_sum_id_store($connect, $orid);
-
-        if (upd_store_sum($connect, $orid, $sum)) {
-            header("Location: edit_pro.php?id=".$orid."&&date=".$ord_date."&&date=".$date."&&note=".$note."");
-        }
-        
-        // update sklad 
-        // $upd_count_rest = $last_count - $c_name;
-        // $query = "UPDATE rest_tbl SET bron = bron - '$upd_count_rest' WHERE prod_name='$p_name'";
-        // mysqli_query($connect, $query);
-
-    }
-
-}
-
-// delete
 
 
 
@@ -71,49 +39,35 @@ if (isset($_GET['pn'])) {
 
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
-
-    $orid=$_POST['orid'];
-    $pi=$_POST['pi'];
-
-    // qaytarish uchu card information
-    $id = $_POST['id'];
-    $note = $_POST['note'];
-    $ord_date = $_POST['ord_date'];
     
+
+
+    $id = $_POST['orid'];
+    // qoshilgan sana
+    $ord_date = date("Y-m-d", strtotime($_POST['ord_date']));
+    $prod_name = $_POST['prod_name'];
+    
+    $count_name = $_POST['quantity'];
+    $date_name = $_POST['date_name'];
+    $price_name = $_POST['product_price'];
+    $total_name = $_POST['total_cost'];
+    
+
+    // for send back information
+    $orid=$_POST['orid'];
+    $note = $_POST['note'];
     $date = $_POST['ord_date'];
 
-    //maxsulot idsi
-    $p_name=$_POST['prod_name'];
-    
-
-    // maxsulot soni
-    $c_name=$_POST['count_name'];
-
-    //maxsulot srok godnosti
-    $d_name=$_POST['date_name'];        
-  
-
-    // maxsulot narxi
-    $pr_name=$_POST['price_name'];
-    
-
-    $t_name = ($c_name * $pr_name);
-
-    // $last_count = get_pi_last_count($connect, $pi);
-
-    if (upd_store_item($connect, $orid, $pi, $p_name, $c_name, $pr_name, $d_name, $t_name)) {
-
+    if(edit_page_add_store($connect, $id, $prod_name, $count_name, $date_name, $price_name, $total_name)){
         $sum = get_sum_id_store($connect, $orid);
-        if (upd_store_sum($connect, $orid, $sum)) {
-            header("Location: edit_pro.php?id=".$orid."&&date=".$ord_date."&&date=".$date."&&note=".$note."");
+        
+        if(upd_store_sum($connect, $orid, $sum)){
+            header("Location: edit_pro.php?id=".$orid."&&note=".$note."&&date=".$date."");
         }
-        // add to bron 
-        // $upd_count_rest = $last_count - $c_name;
-        // $query = "UPDATE rest_tbl SET bron = bron - '$upd_count_rest' WHERE prod_name='$p_name'";
-        // mysqli_query($connect, $query);
     }
-    
 }
+
+
 
 
 
@@ -147,7 +101,6 @@ $rs_result = mysqli_query ($connect, $query);
 <body>  
 
 <?php include 'partSite/nav.php'; ?>
-
 <div class="page_name">
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
@@ -202,10 +155,10 @@ $rs_result = mysqli_query ($connect, $query);
 <!-- Start prod list -->
 <div class="prod_list prod_list__edit">
     <div class="container-fluid">
-        <table class="table table-hover">
+        <table class="table table-hover" id="orders">
             <thead>
                 <tr class="w600">
-                    <td>№</td>
+                <td>№</td>
                     <td>Наименование товаров</td>
                     <td>Количество</td>
                     <td>Ед. изм.</td>
@@ -244,46 +197,17 @@ $rs_result = mysqli_query ($connect, $query);
 
                         </td>
                         <td class="col-sm-1">
-                            <?php 
-                                if ($row["prod_name"] == $pn) {
-                            ?>
-                                <input  required type="number" min="1" name="count_name"  class="form-control" form="order_form" value="<?php echo $cn;?>"/>
-                            <?php
-                                }else {
-                            ?>
                                 <span><?php echo number_format($row['count_name'], 0, ',', ' '); ?></span>
-                            <?php
-                                }
-                            ?> 
                         </td>
                         <td class="col-sm-1">
                             <span><?php echo $unit_name; ?></span>
                         </td>
                         <td class="col-sm-1">
-                            <?php 
-                                if ($row["prod_name"] == $pn) {
-                            ?>
-                                <input required type="date" name="date_name" class="form-control" form="order_form" value="<?php echo $dn;?>"/>
-                            <?php
-                                }else {
-                            ?>
-                                <?php echo $ord_date_n = date("d.m.Y", strtotime($row['date_name'])); ?>
-                            <?php
-                                }
-                            ?>                       
+                            <span> <?php echo $ord_date_n = date("d.m.Y", strtotime($row['date_name'])); ?></span>                        
                         </td>
                         <td class="col-sm-1">
-                            <?php 
-                                if ($row["prod_name"] == $pn) {
-                            ?>
-                                <input required type="number" name="price_name" class="form-control" form="order_form" value="<?php echo $prn;?>"/>
-                            <?php
-                                }else {
-                            ?>
-                                <span><?php echo number_format($row['price_name'], 0, ',', ' '); ?></span>
-                            <?php
-                                }
-                            ?> 
+                            <span><?php echo number_format($row['price_name'], 0, ',', ' '); ?></span>
+                            
                             <input  type="hidden" name="orid"  form="order_form" value="<?php echo $orid;?>"/>
                             <input  type="hidden" name="pi"  form="order_form" value="<?php echo $pi;?>"/>
                             <input  type="hidden" name="note"  form="order_form" value="<?php echo $note;?>"/>
@@ -293,42 +217,65 @@ $rs_result = mysqli_query ($connect, $query);
                             <span><?php echo number_format($row['total_name'], 0, ',', ' '); ?></span>
                         </td>
                         <td class="col-sm">
-                            <?php 
-                                if ($row["prod_name"] == $pn) {
-                            ?>
-                            <button type="submit" form="order_form" name="submit" value="Сохранить">
-                                <span style="color:green;" class="glyphicon glyphicon-ok"></span>  
-                            </button>
-                            <!-- <input class="glyphicon glyphicon-edit" type="submit" form="order_form" name="submit" value="Сохранить" /> -->
-                            <?php
-                                }
-                            ?>
                         </td>
                         <td class="col-sm">
-                            <?php 
-                                if ($row["prod_name"] == $pn) {
-                            ?>
-                            <a href="edit_pro.php?note=<?php echo $note; ?>&&id=<?php echo $id; ?>&&date=<?php echo $ord_date; ?>&&orid=<?php echo $id; ?>&&pi=<?php echo $row["id"]; ?>&&pn=<?php echo $row["prod_name"]; ?>&&cn=<?php echo $row["count_name"]; ?>&&dn=<?php echo $row["date_name"]; ?>&&prn=<?php echo $row["price_name"]; ?>&&sn=<?php echo $row["sale_name"]; ?>&&tn=<?php echo $row["total_name"]; ?>"><button type="button"><span class="glyphicon glyphicon-remove"></span></button></a>
-                            <?php
-                                }
-                            ?>
                         </td>
                     </tr>
-                </form>
                 <?php     
                     };    
                 ?>
-                <tr>
-                    <td class="w600"><span style="float:left;">Итого</span></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="w600"><?php echo number_format($sum, 0, ',', ' '); ?></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                    <tr>
+                        <td><?php echo $n+1;?></td>
+                        <td>
+                            <select required name="prod_name" form="order_form" class="form-control edit_add_select" id='prod_name_1' for='1'">
+                                <option value="" class="form-control" >--выберитe продукцию---</option>
+                                <?php     
+                                    while ($option = mysqli_fetch_array($product_list)) {    
+                                ?> 
+                                    <option class="form-control" value="<?php echo $option["name"];?>"><?php $name = get_prod_name($connect, $option['name']); echo $name['name'];?></option>
+
+                                <?php       
+                                    };    
+                                ?>
+                            </select>
+                        </td>
+                        <td>
+                            <input required type="number" name="quantity" min="0"  class="form-control quantity" id='quantity_1' for='1' form="order_form"/>
+                        </td>
+                        <td>
+                            <span>еи.</span>
+                        </td>
+                        <td>
+                            <input required type="date" name="date_name" class="form-control" form="order_form" value="<?php echo $dn;?>"/>
+                        </td>
+                        
+                        <td>
+                             <input required type="number" name="product_price" min="0" id="product_price_1" class="form-control product_price" for="1" form="order_form"/>
+                        </td>
+                        <td>
+                            <input readonly type="text" name="total_cost"  class="form-control total_cost" id='total_cost_1' for='1' form="order_form"/>
+                        </td>
+                        <td>
+                            <button type="submit" form="order_form" name="submit" value="Сохранить">
+                                <span style="color:green;" class="glyphicon glyphicon-ok"></span>  
+                            </button>
+                        </td>
+                        <td>
+                            <a href="edit_pro.php?note=<?php echo $note; ?>&&id=<?php echo $id; ?>&&date=<?php echo $ord_date; ?>&&orid=<?php echo $id; ?>&&pi=<?php echo $row["id"]; ?>&&pn=<?php echo $row["prod_name"]; ?>&&cn=<?php echo $row["count_name"]; ?>&&dn=<?php echo $row["date_name"]; ?>&&prn=<?php echo $row["price_name"]; ?>&&sn=<?php echo $row["sale_name"]; ?>&&tn=<?php echo $row["total_name"]; ?>"><button type="button"><span class="glyphicon glyphicon-remove"></span></button></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w600"><span style="float:left;">Итого</span></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="w600"><?php echo number_format($sum, 0, ',', ' '); ?></td>
+                        <td></td>
+                        <td></td>               
+                    </tr>
+                </form>
             </tbody>
         </table>
     </div>
@@ -343,4 +290,41 @@ $rs_result = mysqli_query ($connect, $query);
 
 
 </body>
+
+<script>
+
+// Add a generic event listener for any change on quantity or price classed inputs
+$("#orders").on('input', 'input.quantity,input.product_price', function() {
+  getTotalCost($(this).attr("for"));
+});
+
+function getTotalCost(ind) {
+  var qty = $('#quantity_'+ind).val();
+  var price = $('#product_price_'+ind).val();
+  var totNumber = (qty * price);
+
+
+  var tot = totNumber;
+  $('#total_cost_'+ind).val(tot);
+}
+    
+// -------------------------------------------- select bazadan olish-------------------------------------------------------
+
+function showCustomer(str, inc) {
+  var xhttp;    
+  if (str == "") {
+    document.getElementById("txtHint_"+inc).innerHTML = "";
+    return;
+  }
+  xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("txtHint_"+inc).innerHTML = this.responseText;
+
+    }
+  };
+  xhttp.open("GET", "getcustomer.php?q="+str+"&&i="+inc+"", true);
+  xhttp.send();
+}
+</script>
 </html>

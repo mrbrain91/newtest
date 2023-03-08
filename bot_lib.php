@@ -178,6 +178,18 @@ function del_main_ord_item_tbl($connect, $pi){
 
 // orto
 
+function del_store_item_tbl($connect, $pi){
+
+	$sql = "DELETE FROM order_item_product WHERE id='$pi'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+
+// orto
+
 function del_return_item_tbl($connect, $pi){
 
 	$sql = "DELETE FROM return_item_tbl WHERE id='$pi'";
@@ -210,6 +222,26 @@ function upd_main_ord_item($connect, $orid, $pi, $p_name, $c_name, $pr__name, $s
 		die(mysqli_error($connect));
 	return true;
 }
+
+// orto
+
+function upd_store_item($connect, $orid, $pi, $p_name, $c_name, $pr_name, $d_name, $t_name){
+	
+	$sql = "UPDATE order_item_product 
+	SET 
+	prod_name = '$p_name', 
+	count_name = '$c_name',
+	date_name = '$d_name',
+	price_name = '$pr_name',
+	total_name = '$t_name'
+	WHERE id='$pi' AND order_id='$orid'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+
 
 // orto
 
@@ -414,8 +446,20 @@ function upd_main_order_sum($connect, $orid, $sum){
 	return true;
 }
 
-// orto
 
+// orto
+function upd_store_sum($connect, $orid, $sum){
+	$sql = "UPDATE order_tbl
+	SET 
+	sum_order = '$sum'
+	WHERE id='$orid'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+// orto
 function upd_return_sum($connect, $orid, $sum){
 	$sql = "UPDATE return_list
 	SET 
@@ -629,11 +673,12 @@ function add_each_pro($connect) {
 			$count_name = $_POST['count_name'][$row];
 			$date_name = $_POST['date_name'][$row];                   
 			$price_name = $_POST['price_name'][$row];
-			$sale_name = $_POST['sale_name'][$row];
-			$total_name = ($count_name * $price_name) - ($count_name * $price_name * $sale_name) / 100;
+			// $sale_name = $_POST['sale_name'][$row];
+			// $total_name = ($count_name * $price_name) - ($count_name * $price_name * $sale_name) / 100;
+			$total_name = ($count_name * $price_name);
 			$order_id = $last_id + 1;
 
-			$sql = "INSERT INTO `order_item_product` (`order_id`, `prod_name`, `count_name`, `date_name`, `price_name`, `sale_name`, `total_name`) VALUES ('".$order_id."','".$prod_name."','".$count_name."','".$date_name."','".$price_name."','".$sale_name."','".$total_name."');";
+			$sql = "INSERT INTO `order_item_product` (`order_id`, `prod_name`, `count_name`, `date_name`, `price_name`, `total_name`) VALUES ('".$order_id."','".$prod_name."','".$count_name."','".$date_name."','".$price_name."','".$total_name."');";
 			mysqli_query($connect, $sql);
 		// add to ostatok
 
@@ -881,7 +926,7 @@ function add_supplier($connect) {
 }
 
 
-// edit page add prpduct function
+// edit page add product function
 function edit_page_add($connect, $order_id, $prod_name, $count_name, $date_name, $price_name, $sale_name, $total_name) {
 
 	$sql = "INSERT INTO `main_ord__item_tbl` (`order_id`, `prod_name`, `count_name`, `date_name`, `price_name`, `sale_name`, `total_name`) VALUES ('".$order_id."','".$prod_name."','".$count_name."','".$date_name."','".$price_name."','".$sale_name."','".$total_name."');";	
@@ -891,6 +936,19 @@ function edit_page_add($connect, $order_id, $prod_name, $count_name, $date_name,
 		die(mysqli_error($connect));
 	return true;
 }
+
+
+//store edit page  add product function
+function edit_page_add_store($connect, $id, $prod_name, $count_name, $date_name, $price_name, $total_name) {
+
+	$sql = "INSERT INTO `order_item_product` (`order_id`, `prod_name`, `count_name`, `date_name`, `price_name`, `total_name`) VALUES ('".$id."','".$prod_name."','".$count_name."','".$date_name."','".$price_name."','".$total_name."');";	
+	$res = mysqli_query($connect, $sql);
+
+	if(!$res)
+		die(mysqli_error($connect));
+	return true;
+}
+
 
 // edit page return add product function
 function edit_page_add_ret($connect, $order_id, $prod_name, $count_name, $date_name, $price_name, $sale_name, $total_name) {
@@ -1012,6 +1070,9 @@ function get_sum_id_main($connect, $orid){
 	// return $last_id;
 }
 
+
+
+
 //return 
 function get_sum_id_return($connect, $orid){
 
@@ -1022,6 +1083,18 @@ function get_sum_id_return($connect, $orid){
 	return $sum_data['SUM(total_name)'];
 	// return $last_id;
 }
+
+//store edit
+function get_sum_id_store($connect, $orid){
+
+	$query = "SELECT SUM(total_name) FROM order_item_product WHERE order_id='$orid'";
+	$result = mysqli_query($connect, $query);
+	if(!$result) return false;
+	$sum_data = mysqli_fetch_assoc($result);
+	return $sum_data['SUM(total_name)'];
+	// return $last_id;
+}
+
 
 function get_sum($connect){
 
@@ -1082,6 +1155,18 @@ function sum_count_return($connect, $id){
 function sum_count_main($connect, $id){
 
 	$query = "SELECT SUM(count_name) FROM main_ord__item_tbl WHERE order_id='$id'";
+	$result = mysqli_query($connect, $query);
+	if(!$result) return false;
+	$sum_count = mysqli_fetch_assoc($result);
+	return $sum_count['SUM(count_name)'];
+	// return $last_id;
+}
+
+//store
+
+function sum_count_store($connect, $id){
+
+	$query = "SELECT SUM(count_name) FROM order_item_product WHERE order_id='$id'";
 	$result = mysqli_query($connect, $query);
 	if(!$result) return false;
 	$sum_count = mysqli_fetch_assoc($result);

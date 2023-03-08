@@ -64,9 +64,6 @@ if ($all_count < $limit) {
 //for list 
 $rs_result = mysqli_query ($connect, $query);
 
-
-
-
 ?>
 
 

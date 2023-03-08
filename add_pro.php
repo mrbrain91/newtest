@@ -24,7 +24,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
     $come_id = $last_id +1;
 
     //creditni prixod orqali dostavshikka qoshish
-    add_credit_supplier($connect, $prepayment_sum, $come_id);
+    // add_credit_supplier($connect, $prepayment_sum, $come_id);
 
     //prixod list uchun chiqarish
     add_prod($connect, $summ_prod);
@@ -50,6 +50,10 @@ $product_list = mysqli_query ($connect, $sql);
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap-grid.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css" />
+
+    <!--selectize css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css" /> 
+
     <link rel="stylesheet" href="css/style.css">
     <title>ortosavdo</title>
 </head>
@@ -67,8 +71,6 @@ $product_list = mysqli_query ($connect, $sql);
 
 <div class="toolbar">
         <div class="container-fluid">
-            <!-- <button type="button" class="btn btn-primary">Сохранить</button> -->
-            <!-- <button type="submit" form="order_form" name="save_add_pro" class="btn btn-success">Принять</button> -->
             <td><input class="btn btn-success" type="submit" form="order_form" name="submit" value="Принять" />
 
 
@@ -107,7 +109,7 @@ $product_list = mysqli_query ($connect, $sql);
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    <select required name="order_supplier" form="order_form" class="form-control">
+                    <select required name="order_supplier" form="order_form" class="normalize">
                         <option value="">--выберитe---</option>
                         <?php    
                             while ($option_supplier = mysqli_fetch_array($supplier_tbl)) {    
@@ -135,8 +137,7 @@ $product_list = mysqli_query ($connect, $sql);
                     <td>Количество</td>
                     <td>Срок годности</td>
                     <td>Цена</td>
-                    <td>Скидка</td>
-                    <!-- <td>Сумма</td> -->
+                    <td></td>
                 </tr>
             </thead>
             <tbody>
@@ -169,15 +170,7 @@ $product_list = mysqli_query ($connect, $sql);
                         
                     </td>
                     <td class="col-sm-1">
-                        <input required type="text" name="sale_name[]"  class="form-control" form="order_form"/>
-                        
-                    </td>
-                    <td class="col-sm-1">
-                        <i class="fa fa-plus"  id="addrow" style="cursor:pointer"></i>
-                    </td>
-                    
-                    <td class="col-sm-1"><a class="deleteRow"></a>
-
+                        <button type="button" name="addrow" id="addrow" class="btn btn-success circle">+</button>
                     </td>
                 </tr>
                 
@@ -206,7 +199,7 @@ $product_list = mysqli_query ($connect, $sql);
 
 <script>
 
-$('#normalize').selectize();
+$('.normalize').selectize();
 
 <?php 
     $sql = "SELECT * FROM products_tbl";  
@@ -225,8 +218,8 @@ $(document).ready(function () {
         cols += '<td><input required type="text" name="count_name[]"  class="form-control" form="order_form"/></td>'; 
         cols += '<td><input required type="date" name="date_name[]"  class="form-control" form="order_form"/></td>';
         cols += '<td><input required type="text" name="price_name[]"  class="form-control" form="order_form"/></td>';
-        cols += '<td><input required type="text" name="sale_name[]"  class="form-control" form="order_form"/></td>';
-        cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="Delete"></td>';
+        cols += '<td><input type="button" class="ibtnDel btn btn-md btn-danger "  value="-"></td>';
+
         newRow.append(cols);
         $("table.order-list").append(newRow);
         counter++;
