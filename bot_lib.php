@@ -360,6 +360,20 @@ function upd_order_sts($connect, $archive_id){
 	return true;
 }
 
+
+// orto prixod prinyat qilganda, prixod statusini o'zgartirish
+
+function upd_store_sts($connect, $store_id){
+	$sql = "UPDATE order_tbl
+	SET 
+	status_order = '1'
+	WHERE id='$store_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
 // orto
 
 function upd_order_sts_res($connect, $restore_id){
@@ -387,6 +401,21 @@ function upd_order_sts_del($connect, $delete_id){
 }
 
 
+// orto
+// prixod chernovek move to otmenen
+function upd_store_sts_cencel($connect, $cencel_id_store){
+	$sql = "UPDATE order_tbl
+	SET 
+	status_order = '2'
+	WHERE id='$cencel_id_store'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+
+
 
 
 
@@ -397,6 +426,19 @@ function upd_order_itm_sts($connect, $archive_id){
 	SET 
 	order_itm_sts = '1'
 	WHERE order_id='$archive_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+// orto prixod item statuslarini printay qilish
+
+function upd_store_itm_sts($connect, $store_id){
+	$sql = "UPDATE order_item_product
+	SET 
+	store_itm_sts = '1'
+	WHERE order_id='$store_id'";
 	$result = mysqli_query($connect, $sql);
 	if(!$result)
 		die(mysqli_error($connect));
@@ -423,6 +465,19 @@ function upd_order_itm_sts_del($connect, $delete_id){
 	SET 
 	order_itm_sts = '2'
 	WHERE order_id='$delete_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+// orto
+// prixod chernovek move to otmenen
+function upd_store_itm_sts_cencel($connect, $cencel_id_store){
+	$sql = "UPDATE order_item_product
+	SET 
+	store_itm_sts = '2'
+	WHERE order_id='$cencel_id_store'";
 	$result = mysqli_query($connect, $sql);
 	if(!$result)
 		die(mysqli_error($connect));
@@ -736,14 +791,19 @@ function add_product_price($connect, $id, $product_price, $product_name){
 	}
 
 }
-// dostavshikka credit qoshish-prixod tovar orqali
-function add_credit_supplier($connect, $prepayment_sum, $come_id){
 
-	$prepayment_date = $_POST['order_date'];
-	$id_supplier = $_POST['order_supplier'];
-	$sql = "INSERT INTO `supplier` (`id_supplier`, `order_date`, `credit`, `come_id`) VALUES ('".$id_supplier."','".$prepayment_date."','".$prepayment_sum."','".$come_id."');";
-	mysqli_query($connect, $sql);
+// dostavshikka credit qoshish-prixod tovar orqali
+function add_credit_supplier($connect, $supplier_id, $ord_date, $credit, $store_id, $set_sts){
+	$sql = "INSERT INTO `supplier` (`id_supplier`, `order_date`, `credit`, `come_id`, `status`) VALUES ('".$supplier_id."','".$ord_date."','".$credit."','".$store_id."','".$set_sts."');";	
+	// $sql = "INSERT INTO `supplier` (`id_supplier`, `order_date`, `credit`, `come_id`, `status`) VALUES ('".$supplier_id."','".$ord_date."','".$credit."','".$store_id.",'".$sts."');";	
+
+	if (mysqli_query($connect, $sql)) {
+		redirect("in_store.php");
+	}else {
+		die(mysqli_error($connect));
+	}
 }
+//
 
 function add_credit($connect, $archive_id, $contractor_id, $debt, $ord_date, $payment_type){
 

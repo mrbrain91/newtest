@@ -203,7 +203,7 @@ if (isset($_POST['rowstore'])) {
             <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
             <a href="view_prod.php?id=<?php echo $row["id"]; ?>&&date=<?php echo $row["date_order"]; ?>&&sum=<?php echo $row["sum_order"]; ?>&&note=<?php echo $row["order_note"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
             <a href="edit_pro.php?id=<?php echo $row["id"]; ?>&&date=<?php echo $row["date_order"]; ?>&&sum=<?php echo $row["sum_order"]; ?>&&note=<?php echo $row["order_note"]; ?>"><button class="btn btn-custom">Редактировать</button> </a>
-            <a href="action.php?archive_id=<?=$row['id']?>&&contractor_id=<?=$row['contractor']?>&&debt=<?=$row['transaction_amount']?>&&ord_date=<?=$row['ord_date']?>&&payment_type=<?=$row['payment_type']?>"><button onclick="return confirm('<?php echo $status_btn; ?>')" class="btn btn-custom"><?php echo $status_btn; ?></button> </a>
+            <a href="action.php?store_id=<?=$row['id']?>&&contractor_id=<?=$row['contractor']?>&&debt=<?=$row['transaction_amount']?>&&ord_date=<?=$row['ord_date']?>&&payment_type=<?=$row['payment_type']?>"><button onclick="return confirm('<?php echo $status_btn; ?>')" class="btn btn-custom"><?php echo $status_btn; ?></button> </a>
             <a style="display:<?php echo $dsp_toggle;?>;" href="action.php?delete_id=<?=$row['id']?>"><button onclick="return confirm('Отменить?')" class="btn btn-custom">Отменить</button> </a>
             <a href="#" class="btn btn-custom">Счет-фактура</button> </a>
             </div> </td>
