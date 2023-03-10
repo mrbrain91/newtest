@@ -42,14 +42,6 @@ if (isset($_GET['del']) && $_GET['del'] == 'ok') {
             }
         }
 
-
-        
-        
-        // update sklad 
-        // $upd_count_rest = $last_count - $c_name;
-        // $query = "UPDATE rest_tbl SET bron = bron - '$upd_count_rest' WHERE prod_name='$p_name'";
-        // mysqli_query($connect, $query);
-
     }
 
 }
@@ -119,11 +111,6 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
                 header("Location: edit_inside_return.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$date."");   
             }
         }
-
-        // add to bron 
-        // $upd_count_rest = $last_count - $c_name;
-        // $query = "UPDATE rest_tbl SET bron = bron - '$upd_count_rest' WHERE prod_name='$p_name'";
-        // mysqli_query($connect, $query);
 
     }
     

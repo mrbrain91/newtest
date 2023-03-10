@@ -35,12 +35,6 @@ if (isset($_GET['del']) && $_GET['del'] == 'ok') {
         if (upd_store_sum($connect, $orid, $sum)) {
             header("Location: edit_pro.php?id=".$orid."&&date=".$ord_date."&&date=".$date."&&note=".$note."");
         }
-        
-        // update sklad 
-        // $upd_count_rest = $last_count - $c_name;
-        // $query = "UPDATE rest_tbl SET bron = bron - '$upd_count_rest' WHERE prod_name='$p_name'";
-        // mysqli_query($connect, $query);
-
     }
 
 }
@@ -107,10 +101,6 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
         if (upd_store_sum($connect, $orid, $sum)) {
             header("Location: edit_pro.php?id=".$orid."&&date=".$ord_date."&&date=".$date."&&note=".$note."");
         }
-        // add to bron 
-        // $upd_count_rest = $last_count - $c_name;
-        // $query = "UPDATE rest_tbl SET bron = bron - '$upd_count_rest' WHERE prod_name='$p_name'";
-        // mysqli_query($connect, $query);
     }
     
 }

@@ -7,6 +7,43 @@ if (!isset($_SESSION['usersname'])) {
   header("location: index.php");
 }
 
+
+
+
+// clear count rest table column
+$column_name = 'count_new_order';
+
+// count of new order items
+$get_new_order_item_count = get_new_order_item_count($connect);
+
+clear_count_rest($connect, $column_name);
+// set count new order to rest table
+while($row_store = mysqli_fetch_array($get_new_order_item_count)){
+    upd_rest_count_new($connect, $row_store['prod_name'], $row_store['order_count']);
+}
+
+
+
+// count of archived items
+$get_order_item_count = get_order_item_count($connect);
+// update rest table 
+while($row_store = mysqli_fetch_array($get_order_item_count)){
+    upd_rest_count_archived($connect, $row_store['prod_name'], $row_store['order_count']);
+}
+
+// count of store in
+$get_store_item_count = get_store_item_count($connect);
+// update rest table 
+while($row_store = mysqli_fetch_array($get_store_item_count)){
+    upd_rest_count_store($connect, $row_store['prod_name'], $row_store['store_count']);
+}
+
+
+// get fot list
+$query = "SELECT * FROM rest_tbl ORDER BY id desc";
+$rs_result = mysqli_query ($connect, $query);
+
+
 ?>
 
 
@@ -47,6 +84,7 @@ if (!isset($_SESSION['usersname'])) {
         <table class="table table-hover">
         <thead>
             <tr>
+                <th scope="col">№</th>
                 <th scope="col">Продукция</th>
                 <th scope="col">Остаток</th>
                 <th scope="col">Бронь</th>
@@ -54,22 +92,27 @@ if (!isset($_SESSION['usersname'])) {
             </tr>
         </thead>
         <tbody>
-<?php 
+            
+<?php     
 
-    //----------------------------------- get data from rest tbl ----------------------------------
-    $get_data_rest_tbl = get_data_rest_tbl($connect);
-    while ($row = mysqli_fetch_assoc($get_data_rest_tbl)) {  
-?>
+    $i = 0;
+    while ($row = mysqli_fetch_array($rs_result)) {
+    $i++;
+    $name = get_prod_name($connect, $row["prod_id"]);
+    
+
+       
+?> 
             <tr>
-
-            <td><?php echo $row['prod_name'];  ?></td>
-            <td><?php echo $row['rest'];  ?></td>
-            <td><?php echo $row['bron'];  ?></td>
-            <td><?php echo $row['rest'] - $row['bron'];  ?></td>
-
-
+                <td><?php echo $i; ?></td>
+                <td><?php echo $name['name']; ?></td>
+                <td><?php echo $ostatok = $row['count_store'] - $row['count_archived_order']; ?></td>
+                <td><?php echo $row['count_new_order']; ?></td>
+                <td><?php echo $dostupno = $ostatok - $row['count_new_order']; ?></td>
             </tr>
-<?php } ?>
+<?php 
+    };
+?>
         </tbody>
         </table>
     </div>

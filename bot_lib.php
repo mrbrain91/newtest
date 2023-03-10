@@ -86,17 +86,7 @@ function get_last_id($connect){
 
 }
 
-
-
-
-
-
-
-
 //orto 
-// ------------------get_data_rest_tbl-----------------------------------------
-
-
 
 function get_status_in($connect, $id){
 	$query = "SELECT * FROM state_in WHERE id='$id'";
@@ -153,15 +143,38 @@ function str_price($value)
 
 
 
-function get_data_rest_tbl($connect){
-	$query = "SELECT * FROM rest_tbl WHERE rest != 0";
+//get store item count count for rest 
+function get_store_item_count($connect){
+	$query = "SELECT prod_name, SUM(count_name) AS store_count FROM order_item_product WHERE store_itm_sts='1' GROUP BY prod_name ORDER BY prod_name asc";
 	$rs_result = mysqli_query ($connect, $query);
 	return $rs_result;
 }
 
 
+//get_ortder_item count for rest 
+function get_order_item_count($connect){
+	$query = "SELECT prod_name, SUM(count_name) AS order_count FROM main_ord__item_tbl WHERE order_itm_sts='1' GROUP BY prod_name ORDER BY order_count DESC";
+	$rs_result = mysqli_query ($connect, $query);
+	return $rs_result;
+}
 
+// clear count rest table column
+function clear_count_rest($connect, $column_name) {
+	$sql1 = "SELECT prod_id FROM rest_tbl";
+	$res1 = mysqli_query($connect, $sql1);
+	while($row1 = mysqli_fetch_array($res1)) {
+		$prod_id = $row1['prod_id'];
+		$sql = "UPDATE rest_tbl SET $column_name = '0' WHERE prod_id='$prod_id'";
+		mysqli_query($connect, $sql);
+	}
+}
 
+//get_ortder_item count for rest new bron order
+function get_new_order_item_count($connect){
+	$query = "SELECT prod_name, SUM(count_name) AS order_count FROM main_ord__item_tbl WHERE order_itm_sts='0' GROUP BY prod_name ORDER BY order_count DESC";
+	$rs_result = mysqli_query ($connect, $query);
+	return $rs_result;
+}
 
 
 
@@ -240,6 +253,42 @@ function upd_store_item($connect, $orid, $pi, $p_name, $c_name, $pr_name, $d_nam
 		die(mysqli_error($connect));
 	return true;
 }
+
+
+function upd_rest_count_store($connect, $prod_id, $count_store){
+	$sql = "UPDATE rest_tbl 
+	SET 
+	count_store = '$count_store'
+	WHERE prod_id='$prod_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+function upd_rest_count_archived($connect, $prod_id, $count_archive){
+	$sql = "UPDATE rest_tbl 
+	SET 
+	count_archived_order = '$count_archive'
+	WHERE prod_id='$prod_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+function upd_rest_count_new($connect, $prod_id, $count_new){
+	$sql = "UPDATE rest_tbl 
+	SET 
+	count_new_order = '$count_new'
+	WHERE prod_id='$prod_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+
 
 
 
@@ -760,24 +809,6 @@ function add_each_pro($connect) {
 
 			$sql = "INSERT INTO `order_item_product` (`order_id`, `prod_name`, `count_name`, `date_name`, `price_name`, `total_name`) VALUES ('".$order_id."','".$prod_name."','".$count_name."','".$date_name."','".$price_name."','".$total_name."');";
 			mysqli_query($connect, $sql);
-		// add to ostatok
-
-
-
-
-		$query = "SELECT  * FROM rest_tbl WHERE prod_name='$prod_name'";
-		$rs = mysqli_query($connect, $query);
-		if(mysqli_num_rows($rs)<=0){
-			$sql = "INSERT INTO `rest_tbl` (`prod_name`, `rest`) VALUES ('".$prod_name."','".$count_name."');";
-			if (mysqli_query($connect, $sql)) {
-				redirect("in_store.php");
-			}
-		}else {
-			$query = "UPDATE settlements SET debt = debt + '$debt' WHERE id_counterpartie='$contractor_id'";
-			mysqli_query($connect, $query);
-		}
-	
-			
     }
 
 }
@@ -972,17 +1003,24 @@ function add_prepayment($connect, $id_counterpartie, $prepayment_date, $prepayme
 
 
 
-function add_product($connect) {
-	$name=$_POST['name'];
-	$unit=$_POST['unit'];
-
+function add_product($connect, $name, $unit) {
 	$sql = "INSERT INTO `products_tbl` (`name`, `unit`) VALUES ('".$name."','".$unit."');";
 	if(mysqli_query($connect, $sql)) {
-		redirect("products.php");
+		//get last product id
+		$query = "SELECT id FROM products_tbl ORDER BY id DESC LIMIT 1";
+		$result = mysqli_query($connect, $query);
+		$rows = mysqli_fetch_row($result);
+		$last_id = $rows[0];
+		//
+		// set to rest table
+		$sql_last = "INSERT INTO `rest_tbl` (`prod_id`) VALUES ('".$last_id."');";
+			if (mysqli_query($connect, $sql_last)) {
+				redirect("products.php");
+			}	
+	
 	}
-	
-	
-}
+}	
+
 
 function add_counterparties($connect) {
 	$name=$_POST['name'];
@@ -1088,10 +1126,6 @@ function add_each_ord($connect) {
 			else {
 				echo("Error description: " . $mysqli -> error);
 			}
-
-		// add to bron 
-			$query = "UPDATE rest_tbl SET bron = bron + '$count_name' WHERE prod_name='$prod_name'";
-			mysqli_query($connect, $query);
     }
 	
 	
@@ -1133,10 +1167,6 @@ function add_each_return($connect) {
 			else {
 				echo("Error description: " . $mysqli -> error);
 			}
-
-			//  add to bron 
-			// 	$query = "UPDATE rest_tbl SET bron = bron + '$count_name' WHERE prod_name='$prod_name'";
-			// 	mysqli_query($connect, $query);
 		}
 		redirect("return_list.php");
 	}

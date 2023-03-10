@@ -39,12 +39,6 @@ if (isset($_GET['del']) && $_GET['del'] == 'ok') {
         if (upd_main_order_sum($connect, $orid, $sum)) {
             header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$ord_date."");
         }
-        
-        // update sklad 
-        // $upd_count_rest = $last_count - $c_name;
-        // $query = "UPDATE rest_tbl SET bron = bron - '$upd_count_rest' WHERE prod_name='$p_name'";
-        // mysqli_query($connect, $query);
-
     }
 
 }
@@ -110,11 +104,6 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
 
         $sum = get_sum_id_main($connect, $orid);
         upd_main_order_sum($connect, $orid, $sum);
-
-        // add to bron 
-        $upd_count_rest = $last_count - $c_name;
-        $query = "UPDATE rest_tbl SET bron = bron - '$upd_count_rest' WHERE prod_name='$p_name'";
-        mysqli_query($connect, $query);
 
         header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$date."");
     }

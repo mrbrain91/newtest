@@ -11,7 +11,10 @@ $last_id = get_id_new_order($connect);
 
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
-    add_product($connect);
+    $name=$_POST['name'];
+	$unit=$_POST['unit'];
+    // add to product list and add to rest table
+    add_product($connect, $name, $unit);
 }
 
 
