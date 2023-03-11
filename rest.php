@@ -39,6 +39,14 @@ while($row_store = mysqli_fetch_array($get_store_item_count)){
 }
 
 
+// count of returned items
+$get_returned_item_count = get_returned_item_count($connect);
+// update rest table 
+while($row_returned = mysqli_fetch_array($get_returned_item_count)){
+    upd_rest_count_return($connect, $row_returned['prod_name'], $row_returned['returned_count']);
+}
+
+
 // get fot list
 $query = "SELECT * FROM rest_tbl ORDER BY id desc";
 $rs_result = mysqli_query ($connect, $query);
@@ -74,7 +82,7 @@ $rs_result = mysqli_query ($connect, $query);
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus"> Остатки</span>
+        <span class="right_cus"> Остатки на: <?php echo date("d.m.Y"); ?> </span>
     </div>    
 </div>
 
@@ -106,7 +114,7 @@ $rs_result = mysqli_query ($connect, $query);
             <tr>
                 <td><?php echo $i; ?></td>
                 <td><?php echo $name['name']; ?></td>
-                <td><?php echo $ostatok = $row['count_store'] - $row['count_archived_order']; ?></td>
+                <td><?php echo $ostatok = $row['count_store'] - $row['count_archived_order'] + $row['count_returned_order']; ?></td>
                 <td><?php echo $row['count_new_order']; ?></td>
                 <td><?php echo $dostupno = $ostatok - $row['count_new_order']; ?></td>
             </tr>

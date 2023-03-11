@@ -22,7 +22,6 @@ if (isset($_GET['archive_id'])) {
 //end order move to archive
 
 
-
 // archive order move order.php
 if (isset($_GET['restore_id'])) {
     $restore_id = $_GET['restore_id'];
@@ -55,9 +54,10 @@ if (isset($_GET['delete_id'])) {
     
 }
 
+
 // prixod sklad
 
-// prixod chernovek move to prinyat
+// prixod draft move to prinyat
 if (isset($_GET['store_id'])) {
 
     $store_id = $_GET['store_id'];
@@ -77,7 +77,6 @@ if (isset($_GET['store_id'])) {
 //end order move to archive
 
 
-
 // prixod prinyat move to draft
 if (isset($_GET['draft_store_id'])) {
     $draft_store_id = $_GET['draft_store_id'];
@@ -91,7 +90,7 @@ if (isset($_GET['draft_store_id'])) {
     
 }
 
-// prixod chernovek move to otmenen
+    // prixod draft move to otmenen
 if (isset($_GET['cencel_id_store'])) {
     $cencel_id_store = $_GET['cencel_id_store'];
     
@@ -103,9 +102,24 @@ if (isset($_GET['cencel_id_store'])) {
 }
 
 // end prixod sklad
+
+
+
+// vozvrat tovara
+
+if (isset($_GET['return_delete_id'])) {
+    $return_delete_id = $_GET['return_delete_id'];
+
+    if (upd_return_sts_del($connect, $return_delete_id)) {
+       if (upd_return_itm_sts_del($connect, $return_delete_id)) {
+            delete_debt_return($connect, $return_delete_id);
+       }
+    }
     
+}
 
-
+// end vozvrat tovara
+    
 
 //yangi prays yaratish
 if (isset($_GET['create_new_price'])) {

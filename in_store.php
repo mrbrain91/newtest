@@ -156,11 +156,9 @@ $rs_result = mysqli_query ($connect, $query);
     }elseif ($row["status_order"] == 0) {
         $status_order = 'Черновик';
         $color = 'silver';
-        $dsp_toggle = 'true';
     }elseif ($row["status_order"] == 2) {
         $status_order = 'Удален';
         $color = '#dc3545';
-        $dsp_toggle = 'none';
     }
 
 

@@ -150,6 +150,13 @@ function get_store_item_count($connect){
 	return $rs_result;
 }
 
+//get returned item count for rest 
+function get_returned_item_count($connect){
+	$query = "SELECT prod_name, SUM(count_name) AS returned_count FROM return_item_tbl WHERE return_itm_sts='0' GROUP BY prod_name ORDER BY prod_name asc";
+	$rs_result = mysqli_query ($connect, $query);
+	return $rs_result;
+}
+
 
 //get_ortder_item count for rest 
 function get_order_item_count($connect){
@@ -259,6 +266,17 @@ function upd_rest_count_store($connect, $prod_id, $count_store){
 	$sql = "UPDATE rest_tbl 
 	SET 
 	count_store = '$count_store'
+	WHERE prod_id='$prod_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+function upd_rest_count_return($connect, $prod_id, $count_return){
+	$sql = "UPDATE rest_tbl 
+	SET 
+	count_returned_order = '$count_return'
 	WHERE prod_id='$prod_id'";
 	$result = mysqli_query($connect, $sql);
 	if(!$result)
@@ -462,6 +480,17 @@ function upd_order_sts_del($connect, $delete_id){
 	return true;
 }
 
+function upd_return_sts_del($connect, $return_delete_id){
+	$sql = "UPDATE return_list
+	SET 
+	return_status = '1'
+	WHERE id='$return_delete_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
 
 // orto
 // prixod chernovek move to otmenen
@@ -539,6 +568,18 @@ function upd_order_itm_sts_del($connect, $delete_id){
 	SET 
 	order_itm_sts = '2'
 	WHERE order_id='$delete_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+
+function upd_return_itm_sts_del($connect, $return_delete_id){
+	$sql = "UPDATE return_item_tbl
+	SET 
+	return_itm_sts = '1'
+	WHERE return_id='$return_delete_id'";
 	$result = mysqli_query($connect, $sql);
 	if(!$result)
 		die(mysqli_error($connect));
@@ -909,6 +950,16 @@ function delete_debt($connect, $restore_id){
 	$sql = "DELETE FROM `debts` WHERE order_id IN ('$restore_id')";
 	if(mysqli_query($connect, $sql)) {
 		redirect("archive_order.php");
+	}
+	else {
+		die(mysqli_error($connect));
+	}
+}
+
+function delete_debt_return($connect, $return_delete_id){
+	$sql = "DELETE FROM `debts` WHERE return_id IN ('$return_delete_id')";
+	if(mysqli_query($connect, $sql)) {
+		redirect("return_list.php");
 	}
 	else {
 		die(mysqli_error($connect));
