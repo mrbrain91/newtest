@@ -11,7 +11,15 @@ $last_id = get_id_new_order($connect);
 
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
-    add_user($connect);
+    $name = $_POST['name'];
+    $surname = $_POST['surname'];
+    $fathername = $_POST['fathername'];
+    $login = $_POST['login'];
+    $pass = $_POST['pass'];
+    $role = $_POST['role'];
+    $status = $_POST['status'];
+    
+    add_user($connect, $name, $surname, $fathername, $login, $pass, $role, $status);
 }
 
 

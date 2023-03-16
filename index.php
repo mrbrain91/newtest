@@ -4,6 +4,11 @@ include('bot_lib.php');
 if(login($connect)){
 	$text = login($connect);
 }
+
+
+
+
+
 ?>
 
 <!DOCTYPE html>

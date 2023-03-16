@@ -2,8 +2,6 @@
 include('settings.php');
 include('bot_lib.php');
 
-// https://stackoverflow.com/questions/18796221/creating-a-select-box-with-a-search-option/57809086#57809086p
-
 
 if (!isset($_SESSION['usersname'])) {
   header("location: index.php");
@@ -19,15 +17,16 @@ $supplier_tbl = mysqli_query ($connect, $sql);
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
     add_each_pro($connect);
-    $summ_prod = get_sum($connect);
     $prepayment_sum = $summ_prod;
     $come_id = $last_id +1;
 
-    //creditni prixod orqali dostavshikka qoshish
-    // add_credit_supplier($connect, $prepayment_sum, $come_id);
+    $id_supplier = $_POST['order_supplier'];
+	$total_name = get_sum($connect);
+	$order_date = $_POST['order_date'];
+	$order_note = $_POST['order_note'];
 
     //prixod list uchun chiqarish
-    add_prod($connect, $summ_prod);
+    add_prod($connect, $id_supplier, $total_name, $order_date, $order_note);
 }
 
 $sql = "SELECT * FROM products_tbl";  

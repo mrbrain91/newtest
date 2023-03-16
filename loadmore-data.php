@@ -105,9 +105,6 @@ if (isset($_POST['rowcashin'])) {
   }
 }
 
-
-
-
 if (isset($_POST['rowcashout'])) {
   $start = $_POST['rowcashout'];
   $limit = 15;
@@ -285,7 +282,6 @@ if (isset($_POST['rowarchive'])) {
     <?php }
   }
 }
-
 
 if (isset($_POST['rowdel'])) {
   $start = $_POST['rowdel'];

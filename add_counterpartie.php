@@ -11,7 +11,17 @@ $last_id = get_id_new_order($connect);
 
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
-    add_counterparties($connect);
+    $name = $_POST['name'];
+	$alternative_name = $_POST['alternative_name'];
+	$inn = $_POST['inn'];        
+	$nds = $_POST['nds'];
+	$raschetny_schet = $_POST['raschetny_schet'];
+	$mfo = $_POST['mfo'];
+	$address = $_POST['address'];
+	$contact = $_POST['contact'];
+	$director = $_POST['director'];
+	$accountant = $_POST['accountant'];
+    add_counterparties($connect, $name, $alternative_name, $inn, $nds, $raschetny_schet, $mfo, $address, $contact, $director, $accountant);
 }
 
 

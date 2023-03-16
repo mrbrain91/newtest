@@ -34,8 +34,16 @@ $product_list = mysqli_query ($connect, $sql);
 if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
 
     add_each_ord($connect);
-    $summ_prod = get_sum_main_ord($connect);
-    add_main_ord($connect, $summ_prod);
+
+    $main_order_contractor = $_POST['main_order_contractor'];
+	$main_order_sale_agent = $_POST['main_order_sale_agent'];
+	$main_order_date = $_POST['main_order_date'];
+	$main_order_paymen_type = $_POST['main_order_paymen_type'];
+	$total_name = get_sum_main_ord($connect);
+
+
+
+    add_main_ord($connect, $main_order_contractor, $main_order_sale_agent, $main_order_date, $main_order_paymen_type, $total_name);
 
 }
 

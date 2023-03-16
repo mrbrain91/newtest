@@ -43,7 +43,18 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
         
     add_each_return($connect);
     $summ_prod = get_sum_return($connect);
-    add_return($connect, $summ_prod, $ret_id);
+
+    $return_contractor = $_POST['return_contractor'];
+	$return_sale_agent = $_POST['return_sale_agent'];
+	$return_date = $_POST['return_date'];
+	$return_paymen_type = $_POST['return_paymen_type'];
+	$total_name = $summ_prod;
+	$return_id = $ret_id;
+
+
+
+
+    add_return($connect, $return_contractor, $return_sale_agent, $return_date, $return_paymen_type, $total_name, $return_id);
  
    
 }
