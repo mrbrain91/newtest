@@ -11,16 +11,61 @@ $last_id = get_id_new_order($connect);
 
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
-    $name = $_POST['name'];
-	$alternative_name = $_POST['alternative_name'];
-	$inn = $_POST['inn'];        
-	$nds = $_POST['nds'];
-	$raschetny_schet = $_POST['raschetny_schet'];
-	$mfo = $_POST['mfo'];
-	$address = $_POST['address'];
-	$contact = $_POST['contact'];
-	$director = $_POST['director'];
-	$accountant = $_POST['accountant'];
+    $name = $_POST['name'];	
+
+    if (!empty($_POST['alternative_name'])) {
+        $alternative_name = $_POST['alternative_name'];
+    }else {
+        $alternative_name = "-";
+    }
+
+    if (!empty($_POST['inn'])) {
+        $inn = $_POST['inn'];
+    }else {
+        $inn = "-";
+    }
+
+    if (!empty($_POST['nds'])) {
+        $nds = $_POST['nds'];
+    }else {
+        $nds = "-";
+    }
+
+    if (!empty($_POST['raschetny_schet'])) {
+        $raschetny_schet = $_POST['raschetny_schet'];
+    }else {
+        $raschetny_schet = "-";
+    }
+
+    if (!empty($_POST['mfo'])) {
+        $mfo = $_POST['mfo'];
+    }else {
+        $mfo = "-";
+    }
+
+    if (!empty($_POST['address'])) {
+        $address = $_POST['address'];
+    }else {
+        $address = "-";
+    }
+
+    if (!empty($_POST['contact'])) {
+        $contact = $_POST['contact'];
+    }else {
+        $contact = "-";
+    }
+
+    if (!empty($_POST['director'])) {
+        $director = $_POST['director'];
+    }else {
+        $director = "-";
+    }
+
+    if (!empty($_POST['accountant'])) {
+        $accountant = $_POST['accountant'];
+    }else {
+        $accountant = "-";
+    }
     add_counterparties($connect, $name, $alternative_name, $inn, $nds, $raschetny_schet, $mfo, $address, $contact, $director, $accountant);
 }
 
@@ -58,7 +103,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
     <div class="container-fluid">
         <!-- <button type="button" class="btn btn-primary">Сохранить</button> -->
         <!-- <button type="submit" form="order_form" name="save_add_pro" class="btn btn-success">Принять</button> -->
-        <td><input class="btn btn-success" type="submit" form="counterpartie_form" name="submit" value="Сохранить" />
+        <!-- <td><input class="btn btn-success" type="submit" form="counterpartie_form" name="submit" value="Сохранить" /> -->
+        <td><input data-toggle="modal" data-target="#exampleModal3" class="btn btn-success" type="submit" value="Сохранить" />
 
         <a href="counterparties.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
@@ -70,13 +116,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
         <form action="" method="POST" class="horizntal-form" id="counterpartie_form">
             <div class="row">
                 <div class="col-md-3">
-                    <span>Название</span>
+                    <span>Название <span style="color:red;">*</span></span>
                 </div>
                 
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="name" form="counterpartie_form" >
+                    <input  required type="text" class="form-control" name="name" form="counterpartie_form" >
                 </div>
                 
             </div>
@@ -94,13 +140,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
             </div>
             <div class="row">
                 <div class="col-md-3"> 
-                    <input required type="text" class="form-control" name="alternative_name" form="counterpartie_form">
+                    <input type="text" class="form-control" name="alternative_name" form="counterpartie_form">
                 </div>
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="inn" form="counterpartie_form">
+                    <input  type="text" class="form-control" name="inn" form="counterpartie_form">
                 </div>
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="nds" form="counterpartie_form">
+                    <input  type="text" class="form-control" name="nds" form="counterpartie_form">
                 </div>
             </div>
             <div class="row mt">
@@ -116,13 +162,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="address" form="counterpartie_form">
+                    <input  type="text" class="form-control" name="address" form="counterpartie_form">
                 </div>
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="raschetny_schet" form="counterpartie_form">
+                    <input  type="text" class="form-control" name="raschetny_schet" form="counterpartie_form">
                 </div>
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="mfo" form="counterpartie_form">
+                    <input  type="text" class="form-control" name="mfo" form="counterpartie_form">
                 </div>
             </div>
             <div class="row mt">
@@ -138,13 +184,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
             </div>
             <div class="row">
             <div class="col-md-3">
-                    <input required type="text" class="form-control" name="contact" form="counterpartie_form">
+                    <input  type="text" class="form-control" name="contact" form="counterpartie_form">
                 </div>
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="director" form="counterpartie_form">
+                    <input  type="text" class="form-control" name="director" form="counterpartie_form">
                 </div>
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="accountant" form="counterpartie_form">
+                    <input  type="text" class="form-control" name="accountant" form="counterpartie_form">
                 </div>
             </div>
         </form>

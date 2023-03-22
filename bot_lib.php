@@ -812,6 +812,26 @@ function add_counterparties($connect, $name, $alternative_name, $inn, $nds, $ras
 	}	
 }
 
+function edit_counterpartie($connect, $name, $alternative_name, $inn, $nds, $raschetny_schet, $mfo, $address, $contact, $director, $accountant, $id) {
+	
+	$sql = "UPDATE `counterparties_tbl` 
+			SET
+				name = '$name',
+				alternative_name = '$alternative_name',
+				inn = '$inn',
+				nds = '$nds',
+				raschetny_schet = '$raschetny_schet',
+				mfo = '$mfo',
+				address = '$address',
+				contact = '$contact',
+				director = '$director',
+				accountant = '$accountant' 
+			WHERE id = '$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("counterparties.php");
+	}	
+}
+
 function add_supplier($connect, $name, $alternative_name, $inn, $nds, $raschetny_schet, $mfo, $address, $contact, $director, $accountant) {
 
 	$sql = "INSERT INTO `supplier_tbl` (`name`, `alternative_name`, `inn`, `nds`, `raschetny_schet`, `mfo`, `address`, `contact`, `director`, `accountant`) VALUES ('".$name."','".$alternative_name."','".$inn."','".$nds."','".$raschetny_schet."','".$mfo."','".$address."','".$contact."','".$director."','".$accountant."');";

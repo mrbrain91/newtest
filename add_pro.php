@@ -33,7 +33,6 @@ $sql = "SELECT * FROM products_tbl";
 $product_list = mysqli_query ($connect, $sql);
 
 
-
 ?>
 
 <!DOCTYPE html>

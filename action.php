@@ -132,6 +132,16 @@ if (isset($_GET['create_new_price'])) {
 }
 
 
+//change status counterpartie
+if (isset($_GET['change_sts_counterpartie_id'])) {
+    $id = $_GET['change_sts_counterpartie_id'];
+    $sql = "UPDATE counterparties_tbl SET sts = !sts WHERE id='$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("counterparties.php");
+	}
+}
+
+
 
 
 
