@@ -832,6 +832,18 @@ function edit_counterpartie($connect, $name, $alternative_name, $inn, $nds, $ras
 	}	
 }
 
+function edit_product($connect, $name, $unit, $id) {
+	
+	$sql = "UPDATE `products_tbl` 
+			SET
+				name = '$name',
+				unit = '$unit'
+			WHERE id = '$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("products.php");
+	}	
+}
+
 function edit_supplier($connect, $name, $alternative_name, $inn, $nds, $raschetny_schet, $mfo, $address, $contact, $director, $accountant, $id) {
 	
 	$sql = "UPDATE `supplier_tbl` 

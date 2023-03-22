@@ -10,13 +10,12 @@ if (!isset($_SESSION['usersname'])) {
 $last_id = get_id_new_order($connect);
 
 
-if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
-    $name=$_POST['name'];
-	$unit=$_POST['unit'];
-    // add to product list and add to rest table
-    add_product($connect, $name, $unit);
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $query = "SELECT * FROM products_tbl WHERE id='$id'";  
+    $rs_result = mysqli_query ($connect, $query);  
+    $res = mysqli_fetch_assoc($rs_result);
 }
-
 
 ?>
 
@@ -43,16 +42,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Добавление продукта</span>
+        <span class="right_cus">Просмотр продукта №<?php echo $id; ?></span>
     </div>    
 </div>
 
 <div class="toolbar">
     <div class="container-fluid">
-        <!-- <button type="button" class="btn btn-primary">Сохранить</button> -->
-        <!-- <button type="submit" form="order_form" name="save_add_pro" class="btn btn-success">Принять</button> -->
-        <!-- <td><input class="btn btn-success" type="submit" form="input_form" name="submit" value="Сохранить" /> -->
-        <td><input data-toggle="modal" data-target="#exampleModalAll" class="btn btn-success" type="submit" value="Сохранить" />
 
         <a href="products.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
@@ -61,7 +56,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
 
 <section class="card_head">
     <div class="container-fluid">
-        <form action="" method="POST" class="horizntal-form" id="input_form">
+        <form action="" method="POST" class="horizntal-form" id="product_form">
             <div class="row">
                 <div class="col-md-3">
                     <span>Название</span>
@@ -73,10 +68,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="name" form="input_form" >
+                    <input disabled value='<?php  echo $res['name'];?>' type="text" class="form-control" name="name" form="product_form" >
                 </div>
                 <div class="col-md-2">
-                    <input required type="text" class="form-control" name="unit" form="input_form" >
+                    <input disabled value='<?php  echo $res['unit'];?>' type="text" class="form-control" name="unit" form="product_form" >
                 </div>
             </div>
 
