@@ -141,6 +141,15 @@ if (isset($_GET['change_sts_counterpartie_id'])) {
 	}
 }
 
+//change status supplier
+if (isset($_GET['change_sts_supplier_id'])) {
+    $id = $_GET['change_sts_supplier_id'];
+    $sql = "UPDATE supplier_tbl SET sts = !sts WHERE id='$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("supplier.php");
+	}
+}
+
 
 
 

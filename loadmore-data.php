@@ -350,6 +350,43 @@ if (isset($_POST['rowcounterpartie'])) {
   }
 }
 
+if (isset($_POST['rowsupplier'])) {
+  $start = $_POST['rowsupplier'];
+  $i = $start;
+  $limit = 15;
+  $query = "SELECT * FROM supplier_tbl ORDER BY id desc LIMIT ".$start.",".$limit;
+
+  $result = mysqli_query($connect,$query);
+
+  if ($result->num_rows > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+      $i++;
+      if ($row['sts'] == 1) {
+        $sts = "Активный";
+        $sts_color = "green";
+     }else {
+         $sts = "Не активный";
+        $sts_color = "black";
+     }
+      ?>
+        <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+            
+            <td><?php echo $row["id"]; ?></td>
+            <td><?php echo $row["name"]; ?></td>
+            <td><?php echo $row["alternative_name"]; ?></td>
+            <td><?php echo $row["inn"]; ?></td>
+            <td style="color: <?php echo $sts_color; ?>"><?php echo $sts; ?></td>
+        </tr>
+        <tr>
+            <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
+                <a href="supplier_view.php?id=<?php echo $row["id"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
+                <a href="supplier_edit.php?id=<?php echo $row["id"]; ?>"><button class="btn btn-custom">Редактировать</button> </a>
+                <a href="action.php?change_sts_supplier_id=<?=$row['id']?>"><button class="btn btn-custom" onclick="return confirm('Изменить?')">Изменить стутус</button> </a>
+            </td>
+        </tr>
+    <?php }
+  }
+}
 
 
 
