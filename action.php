@@ -159,6 +159,16 @@ if (isset($_GET['change_sts_product_id'])) {
 	}
 }
 
+//change status product
+if (isset($_GET['change_sts_user_id'])) {
+    $id = $_GET['change_sts_user_id'];
+    $sql = "UPDATE users_tbl SET sts = !sts WHERE id='$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("users.php");
+	}
+}
+
+
 
 
 

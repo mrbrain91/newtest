@@ -628,9 +628,9 @@ function add_each_pro($connect) {
 
 
 
-function add_user($connect, $name, $surname, $fathername, $login, $pass, $role, $status) {
+function add_user($connect, $name, $surname, $fathername, $login, $pass, $role) {
 
-	$sql = "INSERT INTO `users_tbl` (`name`, `surname`, `fathername`, `login`, `pass`, `role`, `status`) VALUES ('".$name."','".$surname."','".$fathername."','".$login."','".$pass."','".$role."','".$status."');";
+	$sql = "INSERT INTO `users_tbl` (`name`, `surname`, `fathername`, `login`, `pass`, `role`) VALUES ('".$name."','".$surname."','".$fathername."','".$login."','".$pass."','".$role."');";
 	if(mysqli_query($connect, $sql)) {
 		redirect("users.php");
 	}
@@ -841,6 +841,22 @@ function edit_product($connect, $name, $unit, $id) {
 			WHERE id = '$id'";
 	if(mysqli_query($connect, $sql)) {
 		redirect("products.php");
+	}	
+}
+
+function edit_user($connect, $name, $surname, $fathername, $login, $pass, $role, $id) {
+	
+	$sql = "UPDATE `users_tbl` 
+			SET
+				name = '$name',
+				surname = '$surname',
+				fathername = '$fathername',
+				login = '$login',
+				pass = '$pass',
+				role = '$role'
+			WHERE id = '$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("users.php");
 	}	
 }
 

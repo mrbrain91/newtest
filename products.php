@@ -136,10 +136,10 @@ if (isset($_POST['id_product'])) {
         <table class="table table-hover">
         <thead>
             <tr>
-            <th scope="col">Ид</th>
-            <th scope="col">Название</th>
-            <th scope="col">Единица измерения </th>
-            <th scope="col">Статус</th>
+                <th scope="col">Ид</th>
+                <th scope="col">Название</th>
+                <th scope="col">Единица измерения </th>
+                <th scope="col">Статус</th>
             </tr>
         </thead>
         <tbody class="postList">
@@ -155,8 +155,7 @@ if (isset($_POST['id_product'])) {
        $sts_color = "black";
     }
 ?> 
-           <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
-            
+        <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">    
             <td><?php echo $row["id"]; ?></td>
             <td><?php echo $row["name"]; ?></td>
             <td><?php echo $row["unit"]; ?></td>

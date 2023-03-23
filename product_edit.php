@@ -51,7 +51,7 @@ if (isset($_GET['id'])) {
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Просмотр продукта №<?php echo $id; ?></span>
+        <span class="right_cus">Редактировать продукта №<?php echo $id; ?></span>
     </div>    
 </div>
 

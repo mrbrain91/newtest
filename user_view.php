@@ -9,17 +9,25 @@ if (!isset($_SESSION['usersname'])) {
 
 $last_id = get_id_new_order($connect);
 
-
-if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
-    $name = $_POST['name'];
-    $surname = $_POST['surname'];
-    $fathername = $_POST['fathername'];
-    $login = $_POST['login'];
-    $pass = $_POST['pass'];
-    $role = $_POST['role'];
-    
-    add_user($connect, $name, $surname, $fathername, $login, $pass, $role);
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $query = "SELECT * FROM users_tbl WHERE id='$id'";  
+    $rs_result = mysqli_query ($connect, $query);  
+    $res = mysqli_fetch_assoc($rs_result);
 }
+
+
+// if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
+//     $name = $_POST['name'];
+//     $surname = $_POST['surname'];
+//     $fathername = $_POST['fathername'];
+//     $login = $_POST['login'];
+//     $pass = $_POST['pass'];
+//     $role = $_POST['role'];
+//     $status = $_POST['status'];
+    
+//     add_user($connect, $name, $surname, $fathername, $login, $pass, $role, $status);
+// }
 
 
 ?>
@@ -47,14 +55,15 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Добавление пользователя</span>
+        <span class="right_cus">Просмотр пользовател №<?php echo $id; ?></span>
     </div>    
 </div>
 
 <div class="toolbar">
     <div class="container-fluid">
-        <td><input data-toggle="modal" data-target="#exampleModalAll" class="btn btn-success" type="submit" value="Сохранить" />
-
+        <!-- <button type="button" class="btn btn-primary">Сохранить</button> -->
+        <!-- <button type="submit" form="order_form" name="save_add_pro" class="btn btn-success">Принять</button> -->
+        <!-- <td><input class="btn btn-success" type="submit" form="user_form" name="submit" value="Сохранить" /> -->
 
         <a href="users.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
@@ -63,7 +72,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
 
 <section class="card_head">
     <div class="container-fluid">
-        <form action="" method="POST" class="horizntal-form" id="input_form">
+        <form action="" method="POST" class="horizntal-form" id="user_form">
 
             <div class="row ">
                 <div class="col-md-3">
@@ -78,13 +87,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
             </div>
             <div class="row">
                 <div class="col-md-3"> 
-                    <input required type="text" class="form-control" name="name" form="input_form">
+                    <input disabled value='<?php  echo $res['name'];?>' type="text" class="form-control" name="name" form="user_form">
                 </div>
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="surname" form="input_form">
+                    <input disabled value='<?php  echo $res['surname'];?>' type="text" class="form-control" name="surname" form="user_form">
                 </div>
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="fathername" form="input_form">
+                    <input disabled value='<?php  echo $res['fathername'];?>' type="text" class="form-control" name="fathername" form="user_form">
                 </div>
             </div>
             <div class="row mt">
@@ -100,19 +109,24 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="login" form="input_form">
+                    <input disabled value='<?php  echo $res['login'];?>' type="text" class="form-control" name="login" form="user_form">
                 </div>
                 <div class="col-md-3">
-                    <input required type="password" class="form-control" name="pass" form="input_form">
+                    <input disabled value='<?php  echo $res['pass'];?>' type="password" class="form-control" name="pass" form="user_form">
                 </div>
                 <div class="col-md-3">
-                    <select required name="role" form="input_form" class="form-control"">
-                        <option value=""></option>
-                        <option value="administrator">Администратор</option>
-                        <option value="sale">Торговый представитель</option>
-                        <option value="operator">Оператор</option>
-                        <option value="storekeeper">Складовик</option>
-                    </select>
+                    <input disabled value='<?php 
+                    if ($res["role"]=='administrator') {
+                        echo "Администратор";
+                     }elseif ($res["role"]=='operator') {
+                        echo "Оператор";
+                     }elseif ($res["role"]=='sale') {
+                         echo "Торговый представитель";
+                      }elseif ($res["role"]=='storekeeper') {
+                         echo "Складовик";
+                      }
+                     
+                     ?>' type="text" class="form-control" name="pass" form="user_form">
                 </div>
             </div>
         </form>

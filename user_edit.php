@@ -9,16 +9,23 @@ if (!isset($_SESSION['usersname'])) {
 
 $last_id = get_id_new_order($connect);
 
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $query = "SELECT * FROM users_tbl WHERE id='$id'";  
+    $rs_result = mysqli_query ($connect, $query);  
+    $res = mysqli_fetch_assoc($rs_result);
+}
+
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
-    $name = $_POST['name'];
+     $name = $_POST['name'];
+
     $surname = $_POST['surname'];
     $fathername = $_POST['fathername'];
     $login = $_POST['login'];
     $pass = $_POST['pass'];
     $role = $_POST['role'];
-    
-    add_user($connect, $name, $surname, $fathername, $login, $pass, $role);
+    edit_user($connect, $name, $surname, $fathername, $login, $pass, $role, $id);
 }
 
 
@@ -47,15 +54,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Добавление пользователя</span>
+        <span class="right_cus">Редактировать пользовател №<?php echo $id; ?></span>
     </div>    
 </div>
 
 <div class="toolbar">
     <div class="container-fluid">
         <td><input data-toggle="modal" data-target="#exampleModalAll" class="btn btn-success" type="submit" value="Сохранить" />
-
-
         <a href="users.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
     </div>
@@ -78,13 +83,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
             </div>
             <div class="row">
                 <div class="col-md-3"> 
-                    <input required type="text" class="form-control" name="name" form="input_form">
+                    <input required value='<?php  echo $res['name'];?>' type="text" class="form-control" name="name" form="input_form">
                 </div>
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="surname" form="input_form">
+                    <input required value='<?php  echo $res['surname'];?>' type="text" class="form-control" name="surname" form="input_form">
                 </div>
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="fathername" form="input_form">
+                    <input required value='<?php  echo $res['fathername'];?>' type="text" class="form-control" name="fathername" form="input_form">
                 </div>
             </div>
             <div class="row mt">
@@ -100,14 +105,26 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    <input required type="text" class="form-control" name="login" form="input_form">
+                    <input required value='<?php  echo $res['login'];?>' type="text" class="form-control" name="login" form="input_form">
                 </div>
                 <div class="col-md-3">
-                    <input required type="password" class="form-control" name="pass" form="input_form">
+                    <input required value='<?php  echo $res['pass'];?>' type="password" class="form-control" name="pass" form="input_form">
                 </div>
                 <div class="col-md-3">
                     <select required name="role" form="input_form" class="form-control"">
-                        <option value=""></option>
+                        <option value="<?php echo $res['role']?>">
+                        <?php 
+                            if ($res["role"]=='administrator') {
+                                echo "Администратор";
+                             }elseif ($res["role"]=='operator') {
+                                echo "Оператор";
+                             }elseif ($res["role"]=='sale') {
+                                 echo "Торговый представитель";
+                              }elseif ($res["role"]=='storekeeper') {
+                                 echo "Складовик";
+                              }
+                        ?>
+                        </option>
                         <option value="administrator">Администратор</option>
                         <option value="sale">Торговый представитель</option>
                         <option value="operator">Оператор</option>
