@@ -159,7 +159,7 @@ if (isset($_GET['change_sts_product_id'])) {
 	}
 }
 
-//change status product
+//change status user
 if (isset($_GET['change_sts_user_id'])) {
     $id = $_GET['change_sts_user_id'];
     $sql = "UPDATE users_tbl SET sts = !sts WHERE id='$id'";
@@ -168,6 +168,23 @@ if (isset($_GET['change_sts_user_id'])) {
 	}
 }
 
+//change status type_cash_in
+if (isset($_GET['change_sts_tci_id'])) {
+    $id = $_GET['change_sts_tci_id'];
+    $sql = "UPDATE state_in SET sts = !sts WHERE id='$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("type_cash_in.php");
+	}
+}
+
+//change status type_cash_out
+if (isset($_GET['change_sts_tco_id'])) {
+    $id = $_GET['change_sts_tco_id'];
+    $sql = "UPDATE state_out SET sts = !sts WHERE id='$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("type_cash_out.php");
+	}
+}
 
 
 

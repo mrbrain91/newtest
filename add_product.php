@@ -49,9 +49,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
 
 <div class="toolbar">
     <div class="container-fluid">
-        <!-- <button type="button" class="btn btn-primary">Сохранить</button> -->
-        <!-- <button type="submit" form="order_form" name="save_add_pro" class="btn btn-success">Принять</button> -->
-        <!-- <td><input class="btn btn-success" type="submit" form="input_form" name="submit" value="Сохранить" /> -->
+        
         <td><input data-toggle="modal" data-target="#exampleModalAll" class="btn btn-success" type="submit" value="Сохранить" />
 
         <a href="products.php"><button type="button" class="btn btn-custom">Закрыть</button></a>

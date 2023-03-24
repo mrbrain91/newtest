@@ -79,17 +79,17 @@ function get_status_out($connect, $id){
 	return $state;
 }
 
-function add_state_in($connect, $name, $status) {
+function add_state_in($connect, $name) {
 
-	$sql = "INSERT INTO `state_in` (`name`, `status_id`) VALUES ('".$name."','".$status."');";
+	$sql = "INSERT INTO `state_in` (`name`) VALUES ('".$name."');";
 	if(mysqli_query($connect, $sql)) {
 		redirect("type_cash_in.php");
 	}
 }
 
-function add_state_out($connect, $name, $status) {
+function add_state_out($connect, $name) {
 
-	$sql = "INSERT INTO `state_out` (`name`, `status_id`) VALUES ('".$name."','".$status."');";
+	$sql = "INSERT INTO `state_out` (`name`) VALUES ('".$name."');";
 	if(mysqli_query($connect, $sql)) {
 		redirect("type_cash_out.php");
 	}
@@ -841,6 +841,27 @@ function edit_product($connect, $name, $unit, $id) {
 			WHERE id = '$id'";
 	if(mysqli_query($connect, $sql)) {
 		redirect("products.php");
+	}	
+}
+
+function edit_state_in($connect, $name, $id) {
+	
+	$sql = "UPDATE `state_in` 
+			SET
+				name = '$name'
+			WHERE id = '$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("type_cash_in.php");
+	}	
+}
+function edit_state_out($connect, $name, $id) {
+	
+	$sql = "UPDATE `state_out` 
+			SET
+				name = '$name'
+			WHERE id = '$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("type_cash_out.php");
 	}	
 }
 

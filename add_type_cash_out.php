@@ -14,9 +14,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
 
 
 	 $name = $_POST['name'];
-     $status = $_POST['status'];
 
-    add_state_out($connect, $name, $status);
+    add_state_out($connect, $name);
 }
 
 
@@ -53,8 +52,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
     <div class="container-fluid">
         <!-- <button type="button" class="btn btn-primary">Сохранить</button> -->
         <!-- <button type="submit" form="order_form" name="save_add_pro" class="btn btn-success">Принять</button> -->
-        <td><input class="btn btn-success" type="submit" form="state_in_form" name="submit" value="Сохранить" />
-
+        <td><input data-toggle="modal" data-target="#exampleModalAll" class="btn btn-success" type="submit" value="Сохранить" />
         <a href="type_cash_out.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
     </div>
@@ -62,7 +60,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
 
 <section class="card_head">
     <div class="container-fluid">
-        <form action="" method="POST" class="horizntal-form" id="state_in_form">
+        <form action="" method="POST" class="horizntal-form" id="input_form">
 
             <div class="row ">
                 <div class="col-md-3">
@@ -71,20 +69,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
             </div>
             <div class="row">
                 <div class="col-md-3"> 
-                    <input required type="text" class="form-control" name="name" form="state_in_form">
-                </div>
-            </div>
-            <div class="row mt">
-                <div class="col-md-3">
-                    <span>Статус</span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                     <input checked type="radio" id="active" name="status" form="state_in_form" value="1">
-                     <label for="active">Активный</label><br>
-                     <input type="radio" id="noactive" name="status" form="state_in_form" value="0">
-                     <label for="noactive">Неактивный</label><br>
+                    <input required type="text" class="form-control" name="name" form="input_form">
                 </div>
             </div>
         </form>
