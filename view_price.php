@@ -65,15 +65,19 @@ if (isset($_GET['id'])) {
         <table class="table table-hover">
         <thead>
             <tr>
+            <th scope="col">№</th>
             <th scope="col">Название</th>
             <th scope="col">Цена</th>
             </tr>
         </thead>
         <tbody>
 <?php     
+    $i = 0; 
     while ($row = mysqli_fetch_array($rs_result)) {    
+    $i++;  
 ?> 
             <tr>
+                <td><?php echo $i; ?></td>
                 <td><?php $name = get_prod_name($connect, $row['name']); echo $name['name']; ?></td>
                 <td><?php echo number_format($row["cost"], 0, ',', ' '); ?></td>
             </tr>

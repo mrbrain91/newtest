@@ -643,6 +643,7 @@ function add_product_price($connect, $id, $product_price, $product_name){
 	$sql = "INSERT INTO `price_item_tbl` (`price_id`, `name`, `cost`) VALUES ('".$id."','".$product_name."','".$product_price."');";
 	if(mysqli_query($connect, $sql)) {
 		redirect("edit_price.php?id=$id");
+		return true;
 	}
 	else {
 		die(mysqli_error($connect));
@@ -719,6 +720,17 @@ function delete_debt_return($connect, $return_delete_id){
 	$sql = "DELETE FROM `debts` WHERE return_id IN ('$return_delete_id')";
 	if(mysqli_query($connect, $sql)) {
 		redirect("return_list.php");
+	}
+	else {
+		die(mysqli_error($connect));
+	}
+}
+
+function delete_price_item($connect, $del_pr_id, $pr_id){
+	$sql = "DELETE FROM `price_item_tbl` WHERE price_id = '$pr_id' AND id = '$del_pr_id'";
+
+	if(mysqli_query($connect, $sql)) {
+		redirect("edit_price.php?id=$pr_id");
 	}
 	else {
 		die(mysqli_error($connect));

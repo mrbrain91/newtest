@@ -90,7 +90,7 @@ if (isset($_GET['draft_store_id'])) {
     
 }
 
-    // prixod draft move to otmenen
+// prixod draft move to otmenen
 if (isset($_GET['cencel_id_store'])) {
     $cencel_id_store = $_GET['cencel_id_store'];
     
@@ -116,6 +116,12 @@ if (isset($_GET['return_delete_id'])) {
        }
     }
     
+}
+
+if (isset($_GET['del_pr_id'])) {
+     $del_pr_id = $_GET['del_pr_id'];
+    $pr_id = $_GET['pr_id'];
+    delete_price_item($connect, $del_pr_id, $pr_id);
 }
 
 // end vozvrat tovara

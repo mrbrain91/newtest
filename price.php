@@ -8,18 +8,15 @@ if (!isset($_SESSION['usersname'])) {
 }
 
 $query = "SELECT * FROM price_tbl ORDER by id DESC LIMIT 1";  
-$rs_result = mysqli_query ($connect, $query);   
-
-
+$rs_result = mysqli_query ($connect, $query);
 
 ?>
 
 
 <!DOCTYPE html>
+
 <html lang="en">
-<head>
-  
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -49,31 +46,8 @@ $rs_result = mysqli_query ($connect, $query);
 <div class="toolbar">
         <div class="container-fluid">
            <a href="action.php?create_new_price='new'"><button onclick="return confirm('Создать?')" type="button" class="btn btn-success">Создать новый</button> </a>
-            <!-- <a href="add_order.php"> <button type="button" class="btn btn-primary">Создать из последних</button> </a> -->
         </div>
 </div>
-
-
-
-<!-- <table class="table table-hover">
-    <thead>
-        <th></th><th></th><th></th>
-    </thead>
-    
-    <tbody>
-        <tr data-toggle="collapse" data-target="#accordion" class="clickable">
-            <td>Some Stuff</td>
-            <td>Some more stuff</td>
-            <td>And some more</td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                <div id="accordion" class="collapse">Hidden by default</div>
-            </td>
-        </tr>
-    </tbody>
-</table> -->
-
 
 
 <div class="all_table">
@@ -81,35 +55,29 @@ $rs_result = mysqli_query ($connect, $query);
         <table class="table table-hover">
         <thead>
             <tr>
-            <!-- <th scope="col">Номер заказа</th> -->
-            <th scope="col">Ид</th>
-            <th scope="col">Дата</th>
-            <th scope="col">Статус</th>
-            <th scope="col">Просмотр</th>
-            <th scope="col">Редактировать</th>
-            <th scope="col">Удалить</th>
+                <th scope="col">Ид</th>
+                <th scope="col">Дата создания</th>
+                <th scope="col">Статус</th>
             </tr>
         </thead>
         <tbody>
 <?php     
+    
     while ($row = mysqli_fetch_array($rs_result)) {    
+
 ?> 
-            <tr>
+        
+            <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">    
             
-                <td><?php echo $row["id"]; ?></td>
-                <td><?php echo $row["date"]; ?></td>
-                <td><?php 
-                        if ($row["status"] == 1) { 
-                                echo 'Активный';
-                            }
-                        else{ 
-                            echo 'не активный';
-                        }
-                    ?>
+                <td>Прайс № <?php echo $row["id"]; ?></td>
+                <td><?php echo $date = date("d.m.Y", strtotime($row["date"])); ?></td>
+                <td>Активный</td>
+            </tr>
+            <tr>
+                <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
+                    <a href="view_price.php?id=<?php echo $row["id"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
+                    <a href="edit_price.php?id=<?php echo $row["id"]; ?>"><button class="btn btn-custom">Редактировать</button> </a>
                 </td>
-                <td><a href="view_price.php?id=<?php echo $row["id"]; ?>">Просмотр</a></td>
-                <td><a href="edit_price.php?id=<?php echo $row["id"]; ?>">Редактировать</a></td>
-                <td><a href="action.php?delete_price_id=<?=$row['id']?>" onclick="return confirm('Удалить?')" role="button">Удалить</a></td>
             </tr>
 <?php       
     };    

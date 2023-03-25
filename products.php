@@ -55,7 +55,7 @@ if (isset($_POST['id_product'])) {
  
  if ($all_count < $limit) {
      $limit  = $all_count;
-   }
+}
 
 
  //for list 

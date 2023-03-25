@@ -87,6 +87,16 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  $(document).on("keypress", function(e) {
+    if (e.key === "Enter") {
+      e.preventDefault(); // prevent default behavior of enter key
+    }
+  });
+});
+</script>
 </body>
 </html>
 
