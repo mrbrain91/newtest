@@ -54,15 +54,15 @@ $rs_result = mysqli_query ($connect, $query);
 
 <div class="all_table">
     <div class="container-fluid">
-        <table class="table table-hover" style="margin-bottom:0;">
+        <table class="table table-hover" style="margin-bottom:0; border-collapse:collapse;">
         <thead>
             <tr>
-            <th scope="col">Контрагент</th>
-            <th scope="col">ИНН</th>
-            <th scope="col">Долг</th>
-            <th scope="col">Предоплата</th>
-            <th scope="col">Итог</th>
-            <th scope="col">Перерасчёт</th>
+                <th scope="col">Контрагент</th>
+                <th scope="col">ИНН</th>
+                <th scope="col">Долг</th>
+                <th scope="col">Предоплата</th>
+                <th scope="col">Итог</th>
+                <th scope="col">Перерасчёт</th>
             </tr>
         </thead>
         <tbody>
