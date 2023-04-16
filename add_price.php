@@ -17,6 +17,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
 
 }
 
+
+
 $a = 'Пластырь One Aid PVC 19x72 №500';
 $b = 'Пластырь One Aid PVC 19x72 №100';
 $c = 'Пластырь One Aid PVC 19x72 №8';
