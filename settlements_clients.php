@@ -46,8 +46,6 @@ $rs_result = mysqli_query ($connect, $query);
 
 <div class="toolbar">
         <div class="container-fluid">
-           <!-- <a href="#"> <button type="button" class="btn btn-success">Взаимозачет</button> </a> -->
-           <!-- <a href="add_order.php"> <button type="button" class="btn btn-primary">должники</button> </a> -->
            <a href="booked_payment_list.php"> <button type="button" class="btn btn-primary">история взаимарасчетов</button> </a>
         </div>
 </div>
@@ -57,12 +55,12 @@ $rs_result = mysqli_query ($connect, $query);
         <table class="table table-hover" style="margin-bottom:0; border-collapse:collapse;">
         <thead>
             <tr>
+                <th scope="col">№</th>
                 <th scope="col">Контрагент</th>
                 <th scope="col">ИНН</th>
                 <th scope="col">Долг</th>
                 <th scope="col">Предоплата</th>
                 <th scope="col">Итог</th>
-                <th scope="col">Перерасчёт</th>
             </tr>
         </thead>
         <tbody>
@@ -90,20 +88,25 @@ $rs_result = mysqli_query ($connect, $query);
                 
                 if ($last_debt == 0 AND $last_tot == 0 ) {
                     $display = 'none';
+                    $i++;
                   }else {
                     $display = 'true';
                     $i++;
-                    
                   }
             ?> 
 
-            <tr class="rowDis" style="display:<?php echo $display; ?>;" data-toggle="collapse" data-target="#hidden_<?php echo $i;?>">
+            <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+                <td><?php echo $i; ?></td>
                 <td  style="background-color:<?php echo $bg_clr;?>"><?php $user = get_contractor($connect, $row["id_counterpartie"]); echo $user["name"];?></td>
                 <td><?php echo $user['inn']?></td>
                 <td><?php echo number_format($last_debt, 0, ',', ' '); ?></td>
                 <td><?php echo number_format($last_tot, 0, ',', ' '); ?></td>
                 <td><?php echo number_format($sum, 0, ',', ' '); ?></td>
-                <td><a href="settlement_debts_detail.php?id=<?php echo $row["id_counterpartie"]?>&&prepayment=<?php echo $last_tot;?>">Перерасчёт</a></td>
+            </tr>
+            <tr>
+                <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
+                    <a href="settlement_debts_detail.php?id=<?php echo $row["id_counterpartie"]?>&&prepayment=<?php echo $last_tot;?>"><button class="btn btn-custom">Перерасчёт</button> </a>
+                </td>
             </tr>
 
             <?php       
