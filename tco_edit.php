@@ -56,7 +56,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
 
 <div class="toolbar">
     <div class="container-fluid">
-        <td><input data-toggle="modal" data-target="#exampleModalAll" class="btn btn-success" type="submit" value="Сохранить" />
+        <input data-toggle="modal" data-target="#exampleModalAll" class="btn btn-success" type="submit" value="Сохранить" />
         <a href="type_cash_out.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
     </div>

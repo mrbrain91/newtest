@@ -769,7 +769,6 @@ function cash_out_add($connect, $state_id,  $cash_sum, $cash_type, $cash_comment
 
 function add_main_prepayment($connect, $id_counterpartie, $prepayment_date, $prepayment_sum, $payment_type, $sts){
 
-
 	$sql = "INSERT INTO `debts` (`id_counterpartie`, `order_date`, `main_prepayment`, `payment_type`, `sts`) VALUES ('".$id_counterpartie."','".$prepayment_date."','".$prepayment_sum."','".$payment_type."','".$sts."');";
 	
 	if (mysqli_query($connect, $sql)) {
@@ -874,6 +873,19 @@ function edit_state_out($connect, $name, $id) {
 			WHERE id = '$id'";
 	if(mysqli_query($connect, $sql)) {
 		redirect("type_cash_out.php");
+	}	
+}
+
+function edit_main_prepayment($connect, $id, $prepayment_date, $prepayment_sum, $payment_type) {
+	
+	$sql = "UPDATE `debts` 
+			SET
+			order_date = '$prepayment_date',
+			main_prepayment = '$prepayment_sum',
+			payment_type = '$payment_type'
+			WHERE id = '$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("prepayment_list.php");
 	}	
 }
 

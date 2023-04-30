@@ -154,11 +154,13 @@ $rs_result = mysqli_query ($connect, $query);
         <table class="table table-hover" style="border-collapse:collapse;">
         <thead>
             <tr>
+                <th scope="col">Ид</th>
                 <th scope="col">Контрагент</th>
                 <!-- <th scope="col">Торговый представитель</th> -->
                 <th scope="col">Дата оплата</th>
                 <th scope="col">Тип оплаты</th>
                 <th scope="col">Сумма оплата</th>
+
             </tr>
         </thead>
         <tbody class="postList">
@@ -176,6 +178,8 @@ $rs_result = mysqli_query ($connect, $query);
                 }
         ?> 
             <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+
+                <td><?php echo $row['id']; ?></td>
                 <td><?php $user = get_contractor($connect, $row["id_counterpartie"]); echo $user["name"];?></td>
                 <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
 
@@ -185,7 +189,7 @@ $rs_result = mysqli_query ($connect, $query);
             <tr>
                 <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
                     <!-- <a href="counterpartie_view.php?id=<?php echo $row["id"]; ?>"><button class="btn btn-custom">Просмотр</button> </a> -->
-                    <a href="counterpartie_edit.php?id=<?php echo $row["id"]; ?>"><button class="btn btn-custom">Редактировать</button> </a>
+                    <a href="prepayment_edit.php?id=<?php echo $row["id"]; ?>"><button class="btn btn-custom">Редактировать</button> </a>
                     <a href="action.php?change_sts_counterpartie_id=<?=$row['id']?>"><button class="btn btn-custom" onclick="return confirm('Изменить?')">Изменить стутус</button> </a>
                 </td>   
             </tr>
