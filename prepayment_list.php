@@ -160,6 +160,8 @@ $rs_result = mysqli_query ($connect, $query);
                 <th scope="col">Дата оплата</th>
                 <th scope="col">Тип оплаты</th>
                 <th scope="col">Сумма оплата</th>
+               <th scope="col">Статус</th>
+
 
             </tr>
         </thead>
@@ -169,12 +171,14 @@ $rs_result = mysqli_query ($connect, $query);
             $i = 0;
             while ($row = mysqli_fetch_array($rs_result)) {
                 $i++;
-                if ($row['sts'] == 1) {
-                    $sts = "Активный";
+                if ($row['del'] == 0) {
+                    $sts = "Принят";
                     $sts_color = "green";
+                    $sts_display = "inline-block";
                 }else {
-                    $sts = "Не активный";
-                    $sts_color = "black";
+                    $sts = "Отменень";
+                    $sts_color = "red";
+                    $sts_display = "none";
                 }
         ?> 
             <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
@@ -185,12 +189,14 @@ $rs_result = mysqli_query ($connect, $query);
 
                 <td><?php echo $row['payment_type']; ?></td>
                 <td><?php echo number_format($row['main_prepayment'], 0, ',', ' '); ?></td>
+                <td style="color: <?php echo $sts_color; ?>"><?php echo $sts; ?></td>
+
             </tr>
             <tr>
-                <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
-                    <!-- <a href="counterpartie_view.php?id=<?php echo $row["id"]; ?>"><button class="btn btn-custom">Просмотр</button> </a> -->
-                    <a href="prepayment_edit.php?id=<?php echo $row["id"]; ?>"><button class="btn btn-custom">Редактировать</button> </a>
-                    <a href="action.php?change_sts_counterpartie_id=<?=$row['id']?>"><button class="btn btn-custom" onclick="return confirm('Изменить?')">Изменить стутус</button> </a>
+                <td colspan="12" style="border:0px; background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
+                    <a href="prepayment_view.php?id=<?php echo $row["id"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
+                    <a href="prepayment_edit.php?id=<?php echo $row["id"]; ?>"><button style="display: <?php echo $sts_display; ?>" class="btn btn-custom">Редактировать</button> </a>
+                    <a href="action.php?change_del_prepayment_id=<?=$row['id']?>"><button style="display: <?php echo $sts_display; ?>" class="btn btn-custom" onclick="return confirm('Отменить?')">Отменить</button> </a>
                 </td>   
             </tr>
         <?php       
@@ -300,7 +306,7 @@ $(document).ready(function () {
       var row = Number($('#row').val());
       var count = Number($('#postCount').val());
       var limit = 15;
-
+      var i = <?php echo $i;?>;  
       row = row + limit;
     
       $('#row').val(row);
@@ -309,7 +315,8 @@ $(document).ready(function () {
       $.ajax({
         type: 'POST',
         url: 'loadmore-data.php?otkont=1',
-        data: 'rowpredo=' + row,
+        data: 'rowpredo=' + row +  '&i=' + i,
+
         success: function (data) {
           var rowCount = row + limit;
           $("#row_c").text(rowCount);

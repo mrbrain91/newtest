@@ -260,6 +260,7 @@ $(document).ready(function () {
       var row = Number($('#row').val());
       var count = Number($('#postCount').val());
       var limit = 15;
+      var i = <?php echo $i;?>;
       row = row + limit;
     
       $('#row').val(row);

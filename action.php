@@ -192,6 +192,17 @@ if (isset($_GET['change_sts_tco_id'])) {
 	}
 }
 
+//change status type_cash_out
+if (isset($_GET['change_del_prepayment_id'])) {
+    $id = $_GET['change_del_prepayment_id'];
+    $sql = "UPDATE debts SET del = !del WHERE id='$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("prepayment_list.php");
+	}
+}
+
+
+
 
 
 
