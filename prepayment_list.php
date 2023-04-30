@@ -85,7 +85,6 @@ $rs_result = mysqli_query ($connect, $query);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -99,7 +98,6 @@ $rs_result = mysqli_query ($connect, $query);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css" />
     <link rel="stylesheet" href="css/style.css">
     <title>ortosavdo</title>
-    
 </head>
 <body>   
 
@@ -112,9 +110,6 @@ $rs_result = mysqli_query ($connect, $query);
         <span class="right_cus">Оплаты от контрагентов</span>
     </div>    
 </div>
-
-
-
 <!-- Toolbar-->
 <div class="toolbar">
         <div class="container-fluid">
@@ -156,13 +151,10 @@ $rs_result = mysqli_query ($connect, $query);
             <tr>
                 <th scope="col">Ид</th>
                 <th scope="col">Контрагент</th>
-                <!-- <th scope="col">Торговый представитель</th> -->
                 <th scope="col">Дата оплата</th>
                 <th scope="col">Тип оплаты</th>
                 <th scope="col">Сумма оплата</th>
-               <th scope="col">Статус</th>
-
-
+                <th scope="col">Статус</th>
             </tr>
         </thead>
         <tbody class="postList">
@@ -182,15 +174,12 @@ $rs_result = mysqli_query ($connect, $query);
                 }
         ?> 
             <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
-
                 <td><?php echo $row['id']; ?></td>
                 <td><?php $user = get_contractor($connect, $row["id_counterpartie"]); echo $user["name"];?></td>
                 <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
-
                 <td><?php echo $row['payment_type']; ?></td>
                 <td><?php echo number_format($row['main_prepayment'], 0, ',', ' '); ?></td>
                 <td style="color: <?php echo $sts_color; ?>"><?php echo $sts; ?></td>
-
             </tr>
             <tr>
                 <td colspan="12" style="border:0px; background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 

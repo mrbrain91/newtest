@@ -70,24 +70,40 @@ if (isset($_POST['rowpredo'])) {
 
 if (isset($_POST['rowopsup'])) {
   $start = $_POST['rowopsup'];
+  $i = $start;
   $limit = 15;
-  $query = "SELECT * FROM supplier ORDER BY id desc LIMIT ".$start.",".$limit;
+  $query = "SELECT * FROM supplier WHERE debt!='0' ORDER BY id desc LIMIT ".$start.",".$limit;
 
   $result = mysqli_query($connect,$query);
 
   if ($result->num_rows > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
+      $i++;
+      if ($row['del'] == 0) {
+        $sts = "Принят";
+        $sts_color = "green";
+        $sts_display = "inline-block";
+    }else {
+        $sts = "Отменень";
+        $sts_color = "red";
+        $sts_display = "none";
+    }
       ?>
-        <tr>
-            <td><?php $user = get_supplier($connect, $row["id_supplier"]); echo $user["name"];?></td>
-            <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
-
-            <td><?php echo $row['payment_type']; ?></td>
-            <td><?php echo number_format($row['debt'], 0, ',', ' '); ?></td>
-            <td><a href="#">Просмотр</a></td>
-            <td><a href="#">Редактировать</a></td>
-
-        </tr>
+        <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+                <td><?php echo $row['id']; ?></td>
+                <td><?php $user = get_supplier($connect, $row["id_supplier"]); echo $user["name"];?></td>
+                <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
+                <td><?php echo $row['payment_type']; ?></td>
+                <td><?php echo number_format($row['debt'], 0, ',', ' '); ?></td>
+                <td style="color: <?php echo $sts_color; ?>"><?php echo $sts; ?></td>
+            </tr>
+            <tr>
+                <td colspan="12" style="border:0px; background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
+                    <a href="supplier_pay_view.php?id=<?php echo $row["id"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
+                    <a href="supplier_pay_edit.php?id=<?php echo $row["id"]; ?>"><button style="display: <?php echo $sts_display; ?>" class="btn btn-custom">Редактировать</button> </a>
+                    <a href="action.php?change_del_supplier_id=<?=$row['id']?>"><button style="display: <?php echo $sts_display; ?>" class="btn btn-custom" onclick="return confirm('Отменить?')">Отменить</button> </a>
+                </td>   
+            </tr>
 
     <?php }
   }

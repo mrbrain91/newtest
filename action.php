@@ -202,6 +202,17 @@ if (isset($_GET['change_del_prepayment_id'])) {
 }
 
 
+//change status type_cash_out
+if (isset($_GET['change_del_supplier_id'])) {
+    $id = $_GET['change_del_supplier_id'];
+    $sql = "UPDATE supplier SET del = !del WHERE id='$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("supplier_list.php");
+	}
+}
+
+
+
 
 
 

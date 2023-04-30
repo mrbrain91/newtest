@@ -7,22 +7,26 @@ if (!isset($_SESSION['usersname'])) {
   header("location: index.php");
 }
 
-$last_id = get_id_new_order($connect);
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $query = "SELECT * FROM supplier WHERE id='$id'";  
+    $rs_result = mysqli_query ($connect, $query);  
+    $res = mysqli_fetch_assoc($rs_result);
+    $date = date('Y-m-d', strtotime($res['order_date']));
 
-
-if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
-
-        $id_counterpartie = $_POST['id_counterpartie'];
-        $prepayment_date = $_POST['prepayment_date'];
-        echo $prepayment_sum = str_replace(' ', '', $_POST['prepayment_sum']);
-        $payment_type = $_POST['payment_type'];
-    
-        add_debt_supplier($connect, $id_counterpartie, $prepayment_date, $prepayment_sum, $payment_type);
 }
 
-//get supplier
-$sql = "SELECT * FROM supplier_tbl";
-$supplier_tbl = mysqli_query ($connect, $sql);
+if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
+        echo $id;
+        echo $prepayment_date = $_POST['prepayment_date'];
+        echo $prepayment_sum = str_replace(' ', '', $_POST['prepayment_sum']);
+        echo $payment_type = $_POST['payment_type'];
+        edit_main_prepayment($connect, $id, $prepayment_date, $prepayment_sum, $payment_type);
+}
+
+//get counterparties
+$sql = "SELECT * FROM counterparties_tbl";
+$counterparties_tbl = mysqli_query ($connect, $sql);
 
 
 ?>
@@ -51,15 +55,14 @@ $supplier_tbl = mysqli_query ($connect, $sql);
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Добавление оплата</span>
+        <span class="right_cus">Просмотр оплата поставщикам №<?php echo $id; ?></span>
+
     </div>    
 </div>
 
 <div class="toolbar">
     <div class="container-fluid">
-        <!-- <button type="button" class="btn btn-primary">Сохранить</button> -->
-        <!-- <button type="submit" form="order_form" name="save_add_pro" class="btn btn-success">Принять</button> -->
-        <input data-toggle="modal" data-target="#exampleModalAll" class="btn btn-success" type="submit" value="Сохранить" />
+        <!-- <input data-toggle="modal" data-target="#exampleModalAll" class="btn btn-success" type="submit" value="Сохранить" /> -->
         <a href="supplier_list.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
     </div>
@@ -68,7 +71,6 @@ $supplier_tbl = mysqli_query ($connect, $sql);
 <section class="card_head">
     <div class="container-fluid">
         <form action="" method="POST" class="horizntal-form" id="input_form">
-
             
             <div class="row">
                 <div class="col-md-3">
@@ -78,34 +80,17 @@ $supplier_tbl = mysqli_query ($connect, $sql);
             <div class="row">
                
             <div class="col-md-3">
-                    <input required type="date" value="<?php echo date("Y-m-d"); ?>" class="form-control" name="prepayment_date">
+                    <input disabled type="date" value="<?php echo $date; ?>" class="form-control" name="prepayment_date" form="input_form">
                 </div>
             </div>
             <div class="row mt">
                 <div class="col-md-3">
-                    <span>Доставщик</span>
-                </div>
-                <div class="col-md-3">
-                    <span>Баланс доставщика</span>
+                    <span>Контрагент</span>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3"> 
-                <select required class="normalize" name="id_counterpartie" onchange="showCustomer(this.value)">
-                        <option value=""></option>
-                        <?php    
-                            while ($option_contractor = mysqli_fetch_array($supplier_tbl)) {    
-                        ?>
-                            <option value="<?php echo $option_contractor["id"];?>"><?php echo $option_contractor["name"]?></option>
-                        <?php
-                            };    
-                        ?>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <div id="balance">
-                        <input disabled type="text" class="form-control" value="">
-                    </div>
+                    <input disabled type="text" value='<?php $user = get_supplier($connect, $res["id_supplier"]); echo $user["name"]; ?>' class="form-control">
                 </div>
             </div>
             <div class="row mt">
@@ -117,17 +102,12 @@ $supplier_tbl = mysqli_query ($connect, $sql);
                 </div>
             </div>
             <div class="row">
-            <div class="col-md-3">
-                    <select required name="payment_type" class="normalize"">
-                        <option value=""></option>
-                        <option value="Перечисление">Перечисление</option>
-                        <option value="Наличные деньги">Наличные деньги</option>
-                    </select>
-                </div>
                 <div class="col-md-3">
-                    <input required  class="form-control autonumeric" name="prepayment_sum">
+                    <input disabled type="text" value="<?php echo $res['payment_type']?>" class="form-control">
                 </div>
-                
+            <div class="col-md-3">
+                <input disabled required value='<?php echo number_format($res['debt'], 0, ',', ' '); ?>' class="form-control autonumeric" name="prepayment_sum" form="input_form">
+                </div>                
             </div>
         </form>
     </div>
@@ -189,7 +169,7 @@ function showCustomer(str) {
 
     }
   };
-  xhttp.open("GET", "getcustomer.php?id_s="+str+"", true);
+  xhttp.open("GET", "getcustomer.php?id_c="+str+"", true);
   xhttp.send();
 }
 

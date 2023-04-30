@@ -8,8 +8,8 @@ if (!isset($_SESSION['usersname'])) {
 
 
 
-$query = "SELECT * FROM supplier WHERE debt!='0' ORDER BY id DESC";
-$rs_result = mysqli_query ($connect, $query);   
+// $query = "SELECT * FROM supplier WHERE debt!='0' ORDER BY id DESC";
+// $rs_result = mysqli_query ($connect, $query);   
 
 
 
@@ -83,11 +83,11 @@ $rs_result = mysqli_query ($connect, $query);
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,7 +96,6 @@ $rs_result = mysqli_query ($connect, $query);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css" />
     <link rel="stylesheet" href="css/style.css">
     <title>ortosavdo</title>
-    
 </head>
 <body>  
 
@@ -109,14 +108,17 @@ $rs_result = mysqli_query ($connect, $query);
         <span class="right_cus">Оплаты поставщикам</span>
     </div>    
 </div>
+
+<!-- Toolbar-->
 <div class="toolbar">
         <div class="container-fluid">
             <div class="toolbar_wrapper">
-                <div class="toolbar_wrapper">
-                <div><a href="supplier_add.php"> <button type="button" class="btn btn-success">Добавить</button> </a></div>
+                <div>
+                    <a href="supplier_add.php"> <button type="button" class="btn btn-success">Добавить</button> </a>
+                </div>
                 <div class="filter-container">
                     <div style="background-color:<?php echo $bg_sts;?>" class="filter-container-item first" data-toggle="modal" data-target="#filter">
-                     <span class="glyphicon glyphicon-filter"></span>
+                    <span class="glyphicon glyphicon-filter"></span>
                     </div>
                     <div style="display:<?php echo $display_sts;?>" class="filter-container-item">
                         <span><span id="row_c"><?php echo $limit; ?></span> / <?php echo $all_count; ?></span>
@@ -135,23 +137,23 @@ $rs_result = mysqli_query ($connect, $query);
                     </div>
                 </div>  
             </div>
+
         </div>
 </div>
+<!--  -->
 
+<!-- Supplier list -->
 <div class="all_table" style="margin-top:5px;">
     <div class="container-fluid">
         <table class="table table-hover">
         <thead>
             <tr>
-            <th scope="col">Доставщик</th>
-            <!-- <th scope="col">Торговый представитель</th> -->
-            <th scope="col">Дата оплата</th>
-            <th scope="col">Тип оплаты</th>
-            <th scope="col">Сумма оплата</th>
-            <th scope="col">Просмотр</th>
-            <th scope="col">Редактировать</th>
-            
-
+                <th scope="col">Ид</th>
+                <th scope="col">Доставщик</th>
+                <th scope="col">Дата оплата</th>
+                <th scope="col">Тип оплаты</th>
+                <th scope="col">Сумма оплата</th>
+                <th scope="col">Статус</th>
             </tr>
         </thead>
         <tbody class="postList">
@@ -159,17 +161,31 @@ $rs_result = mysqli_query ($connect, $query);
         <?php     
             $i = 0;
             while ($row = mysqli_fetch_array($rs_result)) {
-            $i++;
+                $i++;
+                if ($row['del'] == 0) {
+                    $sts = "Принят";
+                    $sts_color = "green";
+                    $sts_display = "inline-block";
+                }else {
+                    $sts = "Отменень";
+                    $sts_color = "red";
+                    $sts_display = "none";
+                }
         ?> 
+            <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+                <td><?php echo $row['id']; ?></td>
+                <td><?php $user = get_supplier($connect, $row["id_supplier"]); echo $user["name"];?></td>
+                <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
+                <td><?php echo $row['payment_type']; ?></td>
+                <td><?php echo number_format($row['debt'], 0, ',', ' '); ?></td>
+                <td style="color: <?php echo $sts_color; ?>"><?php echo $sts; ?></td>
+            </tr>
             <tr>
-            <td><?php $user = get_supplier($connect, $row["id_supplier"]); echo $user["name"];?></td>
-            <td><?php echo $date = date("d.m.Y", strtotime($row["order_date"])); ?></td>
-
-            <td><?php echo $row['payment_type']; ?></td>
-            <td><?php echo number_format($row['debt'], 0, ',', ' '); ?></td>
-            <td><a href="#">Просмотр</a></td>
-            <td><a href="#">Редактировать</a></td>
-
+                <td colspan="12" style="border:0px; background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
+                    <a href="supplier_pay_view.php?id=<?php echo $row["id"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
+                    <a href="supplier_pay_edit.php?id=<?php echo $row["id"]; ?>"><button style="display: <?php echo $sts_display; ?>" class="btn btn-custom">Редактировать</button> </a>
+                    <a href="action.php?change_del_supplier_id=<?=$row['id']?>"><button style="display: <?php echo $sts_display; ?>" class="btn btn-custom" onclick="return confirm('Отменить?')">Отменить</button> </a>
+                </td>   
             </tr>
         <?php       
             };     
@@ -184,7 +200,7 @@ $rs_result = mysqli_query ($connect, $query);
         </table>
     </div>
 </div>
-
+<!--  -->
 
 
 
@@ -255,19 +271,26 @@ $rs_result = mysqli_query ($connect, $query);
 <!-- END MODAL -->
 
 
+<!-- Connect outsite js scripts -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"></script>
+
 <script>
 
+// set class from selectize library
 $('.normalize').selectize();
+// 
 
+// load btn script
 $(document).ready(function () {
     $(document).on('click', '#loadBtn', function () {
         
       var row = Number($('#row').val());
       var count = Number($('#postCount').val());
       var limit = 15;
+
+      var i = <?php echo $i;?>;  
 
       row = row + limit;
     
@@ -277,7 +300,7 @@ $(document).ready(function () {
       $.ajax({
         type: 'POST',
         url: 'loadmore-data.php',
-        data: 'rowopsup=' + row,
+        data: 'rowopsup=' + row +  '&i=' + i,
         success: function (data) {
           var rowCount = row + limit;
           $("#row_c").text(rowCount);

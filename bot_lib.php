@@ -889,6 +889,19 @@ function edit_main_prepayment($connect, $id, $prepayment_date, $prepayment_sum, 
 	}	
 }
 
+function edit_supplier_debt($connect, $id, $prepayment_date, $prepayment_sum, $payment_type) {
+	
+	$sql = "UPDATE `supplier` 
+			SET
+			order_date = '$prepayment_date',
+			debt = '$prepayment_sum',
+			payment_type = '$payment_type'
+			WHERE id = '$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("supplier_list.php");
+	}	
+}
+
 function edit_user($connect, $name, $surname, $fathername, $login, $pass, $role, $id) {
 	
 	$sql = "UPDATE `users_tbl` 
