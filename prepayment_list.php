@@ -205,9 +205,7 @@ $rs_result = mysqli_query ($connect, $query);
 
 <!-- Modals -->
 <div class="container-fluid">
-
     <?php include 'partSite/modal.php'; ?>
-    
 </div>
 <!--  -->
 

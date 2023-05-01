@@ -82,11 +82,11 @@ $rs_result = mysqli_query ($connect, $query);
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -95,7 +95,6 @@ $rs_result = mysqli_query ($connect, $query);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css" />
     <link rel="stylesheet" href="css/style.css">
     <title>ortosavdo</title>
-    
 </head>
 <body>  
 
@@ -109,14 +108,17 @@ $rs_result = mysqli_query ($connect, $query);
     </div>    
 </div>
 
+
+<!-- Toolbar-->
 <div class="toolbar">
         <div class="container-fluid">
             <div class="toolbar_wrapper">
-                <div class="toolbar_wrapper">
-                <div><a href="cash_in_add.php"> <button type="button" class="btn btn-success">Добавить</button> </a></div>
+                <div>
+                    <a href="cash_in_add.php"> <button type="button" class="btn btn-success">Добавить</button> </a>
+                </div>
                 <div class="filter-container">
                     <div style="background-color:<?php echo $bg_sts;?>" class="filter-container-item first" data-toggle="modal" data-target="#filter">
-                     <span class="glyphicon glyphicon-filter"></span>
+                    <span class="glyphicon glyphicon-filter"></span>
                     </div>
                     <div style="display:<?php echo $display_sts;?>" class="filter-container-item">
                         <span><span id="row_c"><?php echo $limit; ?></span> / <?php echo $all_count; ?></span>
@@ -135,46 +137,57 @@ $rs_result = mysqli_query ($connect, $query);
                     </div>
                 </div>  
             </div>
+
         </div>
 </div>
+<!--  -->
 
+
+<!-- Cash in list -->
 <div class="all_table" style="margin-top:5px;">
     <div class="container-fluid">
-        <table class="table table-hover">
+        <table class="table table-hover" style="border-collapse:collapse;">
         <thead>
             <tr>
-            <th scope="col">Номер</th>
-            <th scope="col">Вид движения</th>
-            <th scope="col">Тип оплаты</th>
-            <th scope="col">Сумма оплата</th>
-            <th scope="col">Дата</th>
-            <th scope="col">Просмотр</th>
-            <th scope="col">Редактировать</th>
-            <th scope="col">Отменить</th>
-
+                <th scope="col">Ид</th>
+                <th scope="col">Вид движения</th>
+                <th scope="col">Тип оплаты</th>
+                <th scope="col">Сумма оплата</th>
+                <th scope="col">Дата</th>
+                <th scope="col">Статус</th>
             </tr>
         </thead>
         <tbody class="postList">
 
         <?php     
-            $i = 0;
-            while ($row = mysqli_fetch_array($rs_result)) {
-            $i++;
+             $i = 0;
+             while ($row = mysqli_fetch_array($rs_result)) {
+                $i++;
+                if ($row['del'] == 0) {
+                    $sts = "Принят";
+                    $sts_color = "green";
+                    $sts_display = "inline-block";
+                }else {
+                    $sts = "Отменень";
+                    $sts_color = "red";
+                    $sts_display = "none";
+                }
         ?> 
+            <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+
+                <td><?php echo $row["id"]; ?></td>
+                <td><?php $name  = get_status_in($connect, $row["types_id"]); echo $name["name"]; ?></td>
+                <td><?php echo $row['type_payment']; ?></td>
+                <td><?php echo number_format($row['sum_in'], 0, ',', ' '); ?></td>
+                <td><?php echo $date = date("d.m.Y", strtotime($row["date_cash"])); ?></td>
+                <td style="color: <?php echo $sts_color; ?>"><?php echo $sts; ?></td>
+            </tr>
             <tr>
-            <td><?php echo $row["id"]; ?></td>
-
-            <td><?php $name  = get_status_in($connect, $row["types_id"]); echo $name["name"]; ?></td>
-
-            
-
-            <td><?php echo $row['type_payment']; ?></td>
-            <td><?php echo number_format($row['sum_in'], 0, ',', ' '); ?></td>
-            <td><?php echo $date = date("d.m.Y", strtotime($row["date_cash"])); ?></td>
-            <td><a href="#">Просмотр</a></td>
-            <td><a href="#">Редактировать</a></td>
-            <td><a href="#">Отменить</a></td>
-
+                <td colspan="12" style="border:0px; background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
+                    <a href="cash_in_view.php?id=<?php echo $row["id"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
+                    <a href="cash_in_edit.php?id=<?php echo $row["id"]; ?>"><button style="display: <?php echo $sts_display; ?>" class="btn btn-custom">Редактировать</button> </a>
+                    <a href="action.php?change_del_cash_in_id=<?=$row['id']?>"><button style="display: <?php echo $sts_display; ?>" class="btn btn-custom" onclick="return confirm('Отменить?')">Отменить</button> </a>
+                </td>   
             </tr>
         <?php       
             };     
@@ -189,15 +202,14 @@ $rs_result = mysqli_query ($connect, $query);
         </table>
     </div>
 </div>
+<!--  -->
 
 
-
-
+<!-- Modals -->
 <div class="container-fluid">
-
     <?php include 'partSite/modal.php'; ?>
-    
 </div>
+<!--  -->
 
 <!-- Modal filter-->
 <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -259,13 +271,21 @@ $rs_result = mysqli_query ($connect, $query);
 
 <!-- END MODAL -->
 
-
+<!-- Connect outsite js scripts -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"></script>
-<script>
 
+<script>
+     $('.accordian-body').on('show.bs.collapse', function () {
+    $(this).closest("table")
+        .find(".collapse.in")
+        .not(this)
+        // .collapse('toggle')
+})
+// set class from selectize library
 $('.normalize').selectize();
+// 
 
 $(document).ready(function () {
     $(document).on('click', '#loadBtn', function () {
