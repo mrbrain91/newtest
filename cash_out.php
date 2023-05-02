@@ -19,7 +19,7 @@ $sql = "SELECT * FROM state_out";
 $state_out = mysqli_query ($connect, $sql);
 
 // for count
-$count_query = "SELECT count(*) as allcount FROM cashbox WHERE state_out!='0' ORDER BY id DESC";
+$count_query = "SELECT count(*) as allcount FROM cashbox WHERE sum_out!='0' ORDER BY id DESC";
 $count_result = mysqli_query($connect,$count_query);
 $count_fetch = mysqli_fetch_array($count_result);
 $postCount = $count_fetch['allcount'];
@@ -41,7 +41,8 @@ if (isset($_POST['id_state']) AND isset($_POST['from_date']) AND isset($_POST['t
    
    
     $query = "SELECT * FROM cashbox WHERE types_id = '$id_state' AND sum_out!='0' AND date_cash >= '$fr_date' AND date_cash <= '$to_date' ORDER BY id DESC";
-    $all_debt_query = "SELECT sum(sum_out) as all_debt, count(id) as allcount FROM cashbox WHERE types_id = '$id_state' AND sum_out!='0' AND date_cash >= '$fr_date' AND date_cash <= '$to_date' ORDER BY id DESC";
+
+    $all_debt_query = "SELECT sum(sum_out) as all_debt, count(id) as allcount FROM cashbox WHERE types_id = '$id_get_' AND sum_out!='0' AND date_cash >= '$fr_date' AND date_cash <= '$to_date' ORDER BY id DESC";
    
  
 
@@ -102,9 +103,10 @@ $rs_result = mysqli_query ($connect, $query);
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Расход с кассы (РКО)</span>
+        <span class="right_cus">Расход в кассу (ПКО)</span>
     </div>    
 </div>
+
 
 <!-- Toolbar-->
 <div class="toolbar">
@@ -138,7 +140,9 @@ $rs_result = mysqli_query ($connect, $query);
         </div>
 </div>
 <!--  -->
-<!-- Cash out list -->
+
+
+<!-- Cash in list -->
 <div class="all_table" style="margin-top:5px;">
     <div class="container-fluid">
         <table class="table table-hover" style="border-collapse:collapse;">
@@ -155,18 +159,18 @@ $rs_result = mysqli_query ($connect, $query);
         <tbody class="postList">
 
         <?php     
-            $i = 0;
-            while ($row = mysqli_fetch_array($rs_result)) {
-            $i++;
-            if ($row['del'] == 0) {
-                $sts = "Принят";
-                $sts_color = "green";
-                $sts_display = "inline-block";
-            }else {
-                $sts = "Отменень";
-                $sts_color = "red";
-                $sts_display = "none";
-            }
+             $i = 0;
+             while ($row = mysqli_fetch_array($rs_result)) {
+                $i++;
+                if ($row['del'] == 0) {
+                    $sts = "Принят";
+                    $sts_color = "green";
+                    $sts_display = "inline-block";
+                }else {
+                    $sts = "Отменень";
+                    $sts_color = "red";
+                    $sts_display = "none";
+                }
         ?> 
             <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
                 <td><?php echo $row["id"]; ?></td>
@@ -197,12 +201,12 @@ $rs_result = mysqli_query ($connect, $query);
 </div>
 <!--  -->
 
+
 <!-- Modals -->
 <div class="container-fluid">
     <?php include 'partSite/modal.php'; ?>
 </div>
 <!--  -->
-
 
 <!-- Modal filter-->
 <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -264,7 +268,6 @@ $rs_result = mysqli_query ($connect, $query);
 
 <!-- END MODAL -->
 
-
 <!-- Connect outsite js scripts -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -280,6 +283,7 @@ $rs_result = mysqli_query ($connect, $query);
 
 // set class from selectize library
 $('.normalize').selectize();
+// 
 
 $(document).ready(function () {
     $(document).on('click', '#loadBtn', function () {

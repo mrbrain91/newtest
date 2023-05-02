@@ -173,7 +173,6 @@ $rs_result = mysqli_query ($connect, $query);
                 }
         ?> 
             <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
-
                 <td><?php echo $row["id"]; ?></td>
                 <td><?php $name  = get_status_in($connect, $row["types_id"]); echo $name["name"]; ?></td>
                 <td><?php echo $row['type_payment']; ?></td>
@@ -191,7 +190,6 @@ $rs_result = mysqli_query ($connect, $query);
         <?php       
             };     
         ?>
-           
         </tbody>
         </table>
         <table class="table table-hover" style="background-color:#ebf0ff; border-left: 4px solid #7396ff;">
@@ -282,6 +280,7 @@ $rs_result = mysqli_query ($connect, $query);
         .not(this)
         // .collapse('toggle')
 })
+
 // set class from selectize library
 $('.normalize').selectize();
 // 
