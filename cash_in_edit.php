@@ -13,20 +13,19 @@ if (isset($_GET['id'])) {
     $rs_result = mysqli_query ($connect, $query);  
     $res = mysqli_fetch_assoc($rs_result);
     $date = date('Y-m-d', strtotime($res['date_cash']));
-
 }
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
+
+    
         echo $id;
         echo $prepayment_date = $_POST['prepayment_date'];
+        echo $cash_comment = $_POST['cash_comment'];
         echo $prepayment_sum = str_replace(' ', '', $_POST['prepayment_sum']);
         echo $payment_type = $_POST['payment_type'];
-        edit_main_prepayment($connect, $id, $prepayment_date, $prepayment_sum, $payment_type);
+        // function edit cash in 
+        edit_cash_in($connect, $id, $prepayment_date, $prepayment_sum, $payment_type, $cash_comment);
 }
-
-//get counterparties
-$sql = "SELECT * FROM counterparties_tbl";
-$counterparties_tbl = mysqli_query ($connect, $sql);
 
 
 ?>
@@ -55,14 +54,14 @@ $counterparties_tbl = mysqli_query ($connect, $sql);
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Просмотр приход №<?php echo $id; ?></span>
+        <span class="right_cus">Редактировать приход №<?php echo $id; ?></span>
 
     </div>    
 </div>
 
 <div class="toolbar">
     <div class="container-fluid">
-        <!-- <input data-toggle="modal" data-target="#exampleModalAll" class="btn btn-success" type="submit" value="Сохранить" /> -->
+        <input data-toggle="modal" data-target="#exampleModalAll" class="btn btn-success" type="submit" value="Сохранить" />
         <a href="cash_in.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
     </div>
@@ -80,58 +79,46 @@ $counterparties_tbl = mysqli_query ($connect, $sql);
             <div class="row">
                
             <div class="col-md-3">
-                    <input disabled type="date" value="<?php echo $date; ?>" class="form-control" name="prepayment_date" form="input_form">
+                    <input required type="date" value="<?php echo $date; ?>" class="form-control" name="prepayment_date" form="input_form">
                 </div>
             </div>
             <div class="row mt">
                 <div class="col-md-3">
                     <span>Вид движения</span>
                 </div>
+                <div class="col-md-3">
+                    <span>Тип оплаты</span>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-3"> 
                     <input disabled type="text" value='<?php $name  = get_status_in($connect, $res["types_id"]); echo $name["name"]; ?>' class="form-control">
                 </div>
+                <div class="col-md-3">
+                    <select required name="payment_type" class="normalize" form="input_form">
+                        <option value="<?php echo $res['type_payment']?>"><?php echo $res['type_payment']?></option>
+                        <option value="Перечисление">Перечисление</option>
+                        <option value="Наличные деньги">Наличные деньги</option>
+                    </select>
+                </div>
+
             </div>
             <div class="row mt">
-                <div class="col-md-3">
-                    <span>Тип оплаты</span>
-                </div>
                 <div class="col-md-3">
                     <span>Сумма</span>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-md-3">
-                    <input disabled type="text" value="<?php echo $res['type_payment']?>" class="form-control">
-                </div>
-                <div class="col-md-3">
-                    <input disabled required value='<?php echo number_format($res['sum_in'], 0, ',', ' '); ?>' class="form-control autonumeric" name="prepayment_sum" form="input_form">
-                </div>                
-            </div>
-
-
-            <div class="row mt">
-                <div class="col-md-3">
-                    <span>Примечание:</span>
+                    <span>Примечание</span>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3" style="width: 25%;
-                    min-height: 38px;
-                    color: #666666;
-                    border: 1px dotted #cccccc;
-                    border-radius: 5px;
-                    padding: 7px;
-                    margin-top: 5px;
-                    margin-left: 6px;">
-                    <span>
-                        <?php echo $res['comment']?>
-                    </span>
-                </div>   
+                <div class="col-md-3">
+                    <input required value='<?php echo number_format($res['sum_in'], 0, ',', ' '); ?>' class="form-control autonumeric" name="prepayment_sum" form="input_form">
+                </div>
+                <div class="col-md-3">
+                    <textarea name="cash_comment" type="text" class="form-control" value="" rows="1" placeholder=""><?php echo $res['comment']?></textarea>
+                </div>
             </div>
-
-
         </form>
     </div>
 </section>
