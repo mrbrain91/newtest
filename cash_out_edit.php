@@ -7,25 +7,25 @@ if (!isset($_SESSION['usersname'])) {
   header("location: index.php");
 }
 
-$last_id = get_id_new_order($connect);
-
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $query = "SELECT * FROM cashbox WHERE id='$id'";  
+    $rs_result = mysqli_query ($connect, $query);  
+    $res = mysqli_fetch_assoc($rs_result);
+    $date = date('Y-m-d', strtotime($res['date_cash']));
+}
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
 
-        $cash_date = $_POST['cash_date'];
-        $state_id = $_POST['state_id'];
-        $cash_type = $_POST['cash_type'];
-        $cash_sum = str_replace(' ', '', $_POST['cash_sum']);
-        $cash_comment = $_POST['cash_comment'];
-
-
-        cash_out_add($connect, $state_id,  $cash_sum, $cash_type, $cash_comment, $cash_date);
     
+        echo $id;
+        echo $prepayment_date = $_POST['prepayment_date'];
+        echo $cash_comment = $_POST['cash_comment'];
+        echo $prepayment_sum = str_replace(' ', '', $_POST['prepayment_sum']);
+        echo $payment_type = $_POST['payment_type'];
+        // function edit cash in 
+        edit_cash_out($connect, $id, $prepayment_date, $prepayment_sum, $payment_type, $cash_comment);
 }
-
-//get counterparties
-$sql = "SELECT * FROM state_out";
-$state_tbl = mysqli_query ($connect, $sql);
 
 
 ?>
@@ -54,7 +54,8 @@ $state_tbl = mysqli_query ($connect, $sql);
     <div class="container-fluid">
         <i class="fa fa-clone" aria-hidden="true"></i>
         <i class="fa fa-angle-double-right right_cus"></i>
-        <span class="right_cus">Добавления расходника</span>
+        <span class="right_cus">Редактировать расход №<?php echo $id; ?></span>
+
     </div>    
 </div>
 
@@ -62,13 +63,13 @@ $state_tbl = mysqli_query ($connect, $sql);
     <div class="container-fluid">
         <input data-toggle="modal" data-target="#exampleModalAll" class="btn btn-success" type="submit" value="Сохранить" />
         <a href="cash_out.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
+
     </div>
 </div>
 
 <section class="card_head">
     <div class="container-fluid">
         <form action="" method="POST" class="horizntal-form" id="input_form">
-
             
             <div class="row">
                 <div class="col-md-3">
@@ -78,7 +79,7 @@ $state_tbl = mysqli_query ($connect, $sql);
             <div class="row">
                
             <div class="col-md-3">
-                    <input required type="date" value="<?php echo date("Y-m-d"); ?>" class="form-control" name="cash_date">
+                    <input required type="date" value="<?php echo $date; ?>" class="form-control" name="prepayment_date" form="input_form">
                 </div>
             </div>
             <div class="row mt">
@@ -91,27 +92,19 @@ $state_tbl = mysqli_query ($connect, $sql);
             </div>
             <div class="row">
                 <div class="col-md-3"> 
-                <select required class="normalize" name="state_id">
-                        <option value=""></option>
-                        <?php    
-                            while ($option_state = mysqli_fetch_array($state_tbl)) {    
-                        ?>
-                            <option value="<?php echo $option_state["id"];?>"><?php echo $option_state["name"]?></option>
-                        <?php
-                            };    
-                        ?>
-                    </select>
+                    <input disabled type="text" value='<?php $name  = get_status_out($connect, $res["types_id"]); echo $name["name"]; ?>' class="form-control">
                 </div>
                 <div class="col-md-3">
-                    <select required name="cash_type" class="normalize"">
-                        <option value=""></option>
+                    <select required name="payment_type" class="normalize" form="input_form">
+                        <option value="<?php echo $res['type_payment']?>"><?php echo $res['type_payment']?></option>
                         <option value="Перечисление">Перечисление</option>
                         <option value="Наличные деньги">Наличные деньги</option>
                     </select>
                 </div>
+
             </div>
             <div class="row mt">
-            <div class="col-md-3">
+                <div class="col-md-3">
                     <span>Сумма</span>
                 </div>
                 <div class="col-md-3">
@@ -120,10 +113,10 @@ $state_tbl = mysqli_query ($connect, $sql);
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    <input required  class="form-control autonumeric" name="cash_sum">
-                </div>  
+                    <input required value='<?php echo number_format($res['sum_out'], 0, ',', ' '); ?>' class="form-control autonumeric" name="prepayment_sum" form="input_form">
+                </div>
                 <div class="col-md-3">
-                    <textarea name="cash_comment" type="text" class="form-control" value="" rows="1" placeholder="">Расход с кассы</textarea>
+                    <textarea name="cash_comment" type="text" class="form-control" value="" rows="1" placeholder=""><?php echo $res['comment']?></textarea>
                 </div>
             </div>
         </form>
@@ -169,6 +162,26 @@ new  AutoNumeric.multiple('.autonumeric', autoNumericOptionsEuro);
 
 //End AutoMuneric
 
+// -------------------------------------------- select bazadan olish-------------------------------------------------------
+
+function showCustomer(str) {
+    // console.log(str);
+  var xhttp;    
+  if (str == "") {
+    document.getElementById("balance").innerHTML = "";
+    // document.getElementById("sample").innerHTML = 'hi';
+    return;
+  }
+  xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+    document.getElementById("balance").innerHTML = this.responseText;
+
+    }
+  };
+  xhttp.open("GET", "getcustomer.php?id_c="+str+"", true);
+  xhttp.send();
+}
 
 
 </script>

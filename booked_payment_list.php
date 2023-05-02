@@ -143,7 +143,7 @@ $all_count = $all_debt_fetch['allcount'];
             <th scope="col">Дата пересчета</th>
             <th scope="col">Тип оплата</th>
             <th scope="col">Сумма</th>
-            <th>Отмена</th>
+            <!-- <th>Отмена</th> -->
 
             </tr>
         </thead>
@@ -163,7 +163,7 @@ $all_count = $all_debt_fetch['allcount'];
 
                 <td><?php echo $row["payment_type"]; ?></td>
                 <td><?php echo number_format($row["prepayment"], 0, ',', ' '); ?></td>
-                <td><a href="#">отмена</a></td>
+                <!-- <td><a href="#">отмена</a></td> -->
             </tr>
 
             <?php       

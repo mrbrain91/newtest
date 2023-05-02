@@ -55,7 +55,6 @@ else {
     $display_true = 'true';
     $display_none = 'none';
 
-
 }
 
 // for count/count

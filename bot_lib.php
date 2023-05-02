@@ -903,6 +903,21 @@ function edit_cash_in($connect, $id, $prepayment_date, $prepayment_sum, $payment
 	}	
 }
 
+// function edit cash out
+function edit_cash_out($connect, $id, $prepayment_date, $prepayment_sum, $payment_type, $cash_comment) {
+	
+	$sql = "UPDATE `cashbox` 
+			SET
+			date_cash = '$prepayment_date',
+			sum_out = '$prepayment_sum',
+			type_payment = '$payment_type',
+			comment = '$cash_comment'
+			WHERE id = '$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("cash_out.php");
+	}	
+}
+
 function edit_supplier_debt($connect, $id, $prepayment_date, $prepayment_sum, $payment_type) {
 	
 	$sql = "UPDATE `supplier` 
