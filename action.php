@@ -211,6 +211,18 @@ if (isset($_GET['change_del_supplier_id'])) {
 	}
 }
 
+//change status del cash_in
+if (isset($_GET['change_del_cash_in_id'])) {
+    $id = $_GET['change_del_cash_in_id'];
+    $sql = "UPDATE cashbox SET del = !del WHERE id='$id'";
+	if(mysqli_query($connect, $sql)) {
+		redirect("cash_in.php");
+	}
+}
+
+
+
+
 
 
 

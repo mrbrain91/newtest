@@ -60,10 +60,7 @@ $state_tbl = mysqli_query ($connect, $sql);
 
 <div class="toolbar">
     <div class="container-fluid">
-        <!-- <button type="button" class="btn btn-primary">Сохранить</button> -->
-        <!-- <button type="submit" form="order_form" name="save_add_pro" class="btn btn-success">Принять</button> -->
-        <td><input class="btn btn-success" type="submit" form="cash_in_form" name="submit" value="Сохранить" />
-
+        <input data-toggle="modal" data-target="#exampleModalAll" class="btn btn-success" type="submit" value="Сохранить" />
         <a href="cash_in.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
 
     </div>
@@ -71,7 +68,7 @@ $state_tbl = mysqli_query ($connect, $sql);
 
 <section class="card_head">
     <div class="container-fluid">
-        <form action="" method="POST" class="horizntal-form" id="cash_in_form">
+        <form action="" method="POST" class="horizntal-form" id="input_form">
 
             
             <div class="row">

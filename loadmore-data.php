@@ -111,29 +111,39 @@ if (isset($_POST['rowopsup'])) {
 
 if (isset($_POST['rowcashin'])) {
   $start = $_POST['rowcashin'];
+  $i = $start;
   $limit = 15;
   $query = "SELECT * FROM cashbox WHERE sum_in != '0' ORDER BY id desc LIMIT ".$start.",".$limit;
-
   $result = mysqli_query($connect,$query);
 
   if ($result->num_rows > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
+      $i++;
+      if ($row['del'] == 0) {
+          $sts = "Принят";
+          $sts_color = "green";
+          $sts_display = "inline-block";
+      }else {
+          $sts = "Отменень";
+          $sts_color = "red";
+          $sts_display = "none";
+      }
       ?>
-         <tr>
+         <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
             <td><?php echo $row["id"]; ?></td>
-
             <td><?php $name  = get_status_in($connect, $row["types_id"]); echo $name["name"]; ?></td>
-
-            
-
             <td><?php echo $row['type_payment']; ?></td>
             <td><?php echo number_format($row['sum_in'], 0, ',', ' '); ?></td>
             <td><?php echo $date = date("d.m.Y", strtotime($row["date_cash"])); ?></td>
-            <td><a href="#">Просмотр</a></td>
-            <td><a href="#">Редактировать</a></td>
-            <td><a href="#">Отменить</a></td>
-
+            <td style="color: <?php echo $sts_color; ?>"><?php echo $sts; ?></td>
             </tr>
+            <tr>
+            <td colspan="12" style="border:0px; background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
+                <a href="cash_in_view.php?id=<?php echo $row["id"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
+                <a href="cash_in_edit.php?id=<?php echo $row["id"]; ?>"><button style="display: <?php echo $sts_display; ?>" class="btn btn-custom">Редактировать</button> </a>
+                <a href="action.php?change_del_cash_in_id=<?=$row['id']?>"><button style="display: <?php echo $sts_display; ?>" class="btn btn-custom" onclick="return confirm('Отменить?')">Отменить</button> </a>
+            </td>   
+        </tr>
     <?php }
   }
 }

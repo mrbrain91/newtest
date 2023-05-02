@@ -293,7 +293,7 @@ $(document).ready(function () {
       var row = Number($('#row').val());
       var count = Number($('#postCount').val());
       var limit = 15;
-
+      var i = <?php echo $i;?>;  
       row = row + limit;
     
       $('#row').val(row);
@@ -302,7 +302,8 @@ $(document).ready(function () {
       $.ajax({
         type: 'POST',
         url: 'loadmore-data.php',
-        data: 'rowcashin=' + row,
+        data: 'rowcashin=' + row +  '&i=' + i,
+
         success: function (data) {
           var rowCount = row + limit;
           $("#row_c").text(rowCount);
