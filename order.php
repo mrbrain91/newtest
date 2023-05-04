@@ -25,6 +25,7 @@ $limit = 15;
 $display_sts_filer_on = 'none';
 
 
+
 // filter form 
 if (isset($_POST['id_contractor']) AND isset($_POST['from_date']) AND isset($_POST['to_date'])) {
     $id_cont = $_POST['id_contractor'];
