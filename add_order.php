@@ -28,23 +28,28 @@ $sql = "SELECT * FROM price_item_tbl WHERE price_id=(SELECT max(id) FROM price_t
 $product_list = mysqli_query ($connect, $sql);
 //end get product
 
-
+$display_toggle = 'none';
 
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
 
-    add_each_ord($connect);
+    $prod_names = $_POST['prod_name'];
+    $unique_prod_names = array_unique($prod_names);
 
-    $main_order_contractor = $_POST['main_order_contractor'];
-	$main_order_sale_agent = $_POST['main_order_sale_agent'];
-	$main_order_date = $_POST['main_order_date'];
-	$main_order_paymen_type = $_POST['main_order_paymen_type'];
-	$total_name = get_sum_main_ord($connect);
+    if (count($prod_names) != count($unique_prod_names)) {
+        $display_toggle = 'block';
+    }else {
+        add_each_ord($connect);
 
+        $main_order_contractor = $_POST['main_order_contractor'];
+        $main_order_sale_agent = $_POST['main_order_sale_agent'];
+        $main_order_date = $_POST['main_order_date'];
+        $main_order_paymen_type = $_POST['main_order_paymen_type'];
+        $total_name = get_sum_main_ord($connect);
 
-
-    add_main_ord($connect, $main_order_contractor, $main_order_sale_agent, $main_order_date, $main_order_paymen_type, $total_name);
-
+        add_main_ord($connect, $main_order_contractor, $main_order_sale_agent, $main_order_date, $main_order_paymen_type, $total_name);
+       
+    }
 }
 
 
@@ -91,15 +96,22 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
 </div>
 
 <div class="toolbar">
-        <div class="container-fluid">
-        
-            <td><input data-toggle="modal" data-target="#exampleModal1" class="btn btn-success" type="submit" value="Принять" />
-            <a href="order.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
-
-            
-
+    <div class="container-fluid">
+        <div class="toolbar_wrapper">
+            <div>
+                <td><input data-toggle="modal" data-target="#exampleModal1" class="btn btn-success" type="submit" value="Принять" />
+                <a href="order.php"><button type="button" class="btn btn-custom">Закрыть</button></a>
+            </div>
+            <div style='display:<?php echo $display_toggle; ?>; margin:0px;' class="alert alert-danger">
+                <strong style="margin-right: 22px;">Ошибка: Названия продуктов повторяются.!</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         </div>
+    </div>
 </div>
+
 
 <div class="card_head">
     <div class="container-fluid">
@@ -189,12 +201,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
             <tbody>
                 <tr>
                     <td class="col-sm-4">
-                        <select required name="prod_name[]" form="order_form" class="form-control" id='prod_name_1' for='1' onchange="showCustomer(this.value,'1')">
+                        <select required name="prod_name[]" form="order_form" class="normalize" id='prod_name_1' for='1' onchange="showCustomer(this.value,'1')">
                             <option value="" class="form-control" >--выберитe продукцию---</option>
                             <?php     
                                 while ($option = mysqli_fetch_array($product_list)) {    
                             ?> 
-                                <option class="form-control" value="<?php echo $option["name"];?>"><?php $name = get_prod_name($connect, $option['name']); echo $name['name'];?></option>
+                                <option value="<?php echo $option["name"];?>"><?php $name = get_prod_name($connect, $option['name']); echo $name['name'];?></option>
 
                             <?php       
                                 };    
@@ -361,7 +373,7 @@ $(document).ready(function () {
         var newRow = $("<tr>");
         var cols = "";                                                      
                 
-        cols += '<td><select required name="prod_name[]" form="order_form" class="form-control custom-select" id="prod_name_'+inc+'" for="'+inc+'" onchange="showCustomer(this.value,'+inc+')"><option value="">--выберите продукцию--</option><?php while ($option = mysqli_fetch_array($product_list)) { ?> <option value="<?php echo $option["name"];?>"><?php  $name = get_prod_name($connect, $option["name"]); echo $name["name"]; ?></option> <?php }; ?></select></td>';
+        cols += '<td><select required name="prod_name[]" form="order_form" id="prod_name_'+inc+'" for="'+inc+'" onchange="showCustomer(this.value,'+inc+')"><option value="">--выберите продукцию--</option><?php while ($option = mysqli_fetch_array($product_list)) { ?> <option value="<?php echo $option["name"];?>"><?php  $name = get_prod_name($connect, $option["name"]); echo $name["name"]; ?></option> <?php }; ?></select></td>';
 
         cols += '<td><input required type="number" name="quantity[]"  class="form-control quantity" id="quantity_'+inc+'" for="'+inc+'" form="order_form"/></td>';
         cols += '<td><div id="txtHint_'+inc+'"><input disabled data-type="product_price" type="number" name="product_price[]"  class="form-control product_price" id="product_price_'+inc+'" for="'+inc+'" form="order_form"/></div></td>';
@@ -374,6 +386,9 @@ $(document).ready(function () {
         newRow.append(cols);
         $("table.order-list").append(newRow);
         counter++;
+
+        $('#prod_name_'+inc+'').selectize();
+        
     });
 
 

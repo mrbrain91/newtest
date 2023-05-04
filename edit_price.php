@@ -79,10 +79,10 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Добавить') {
                     <a href="price.php"> <button type="button" class="btn btn-custom">Закрыть</button> </a>
                 </div>
                 <div style='display:<?php echo $display_toggle; ?>; margin:0px;' class="alert alert-danger">
-                <strong style="margin-right: 22px;">Указанная запись уже существует!</strong>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <strong style="margin-right: 22px;">Указанная запись уже существует!</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                </button>
+                    </button>
                 </div>
             </div>
         </div>

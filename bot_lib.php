@@ -1028,14 +1028,13 @@ function add_each_ord($connect) {
                 $prod_name=$_POST['prod_name'][$row];
                 $count_name=$_POST['quantity'][$row];
                 $date_name=$_POST['main_order_date'];                   
-                echo $price_name=$_POST['product_price'][$row];
+                $price_name=$_POST['product_price'][$row];
                 $sale_name=$_POST['sale'][$row];
     			$total_name = ($count_name * $price_name) + ($count_name * $price_name * $sale_name) / 100;
 				$order_id = $last_id + 1;
 
-             $sql = "INSERT INTO `main_ord__item_tbl` (`order_id`, `prod_name`, `count_name`, `date_name`, `price_name`, `sale_name`, `total_name`) VALUES ('".$order_id."','".$prod_name."','".$count_name."','".$date_name."','".$price_name."','".$sale_name."','".$total_name."');";
+             	$sql = "INSERT INTO `main_ord__item_tbl` (`order_id`, `prod_name`, `count_name`, `date_name`, `price_name`, `sale_name`, `total_name`) VALUES ('".$order_id."','".$prod_name."','".$count_name."','".$date_name."','".$price_name."','".$sale_name."','".$total_name."');";
               
-
 			if (mysqli_query($connect, $sql)) {
 				echo 'successfully';
 			}
@@ -1043,7 +1042,6 @@ function add_each_ord($connect) {
 				echo("Error description: " . $mysqli -> error);
 			}
     }
-	
 	
 	redirect("order.php");
 
