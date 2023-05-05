@@ -74,8 +74,6 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
     <link rel="stylesheet" href="css/bootstrap-grid.min.css">
     <!--selectize css-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css" /> 
-
-
     <link rel="stylesheet" href="css/style.css">
 
     <title>ortosavdo</title>
@@ -192,7 +190,16 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                     <td>Количество</td>
                     <!-- <td>Срок годности</td> -->
                     <td>Цена</td>
-                    <td>Скидка (%)</td>
+                    <td>
+                        Скидка:  
+                        
+                        <input form="order_form" type="radio" id="ChoiseSum" name="saletype" value="ChoiseSum" checked />
+                        <label for="ChoiseSum">$</label>
+
+                        <input form="order_form"  type="radio" id="ChoicePercent" name="saletype" value="ChoicePercent" />
+                        <label for="ChoicePercent">%</label>
+
+                    </td>
                     <td>Сумма</td>
                     <td></td>
                 </tr>
@@ -213,7 +220,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                         </select>
                     </td>
                     <td class="col-sm-1">
-                        <input required type="number" name="quantity[]" min="0"  class="form-control quantity" id='quantity_1' for='1' form="order_form"/>
+                        <input required type="number" name="quantity[]" min="1"  class="form-control quantity" id='quantity_1' for='1' form="order_form"/>
                     </td>
                     <td class="col-sm-1">
                         <div id="txtHint_1">
@@ -276,6 +283,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
 
 
+
 </body>
 
 <script>
@@ -288,7 +296,6 @@ $('.normalize').selectize();
 $(function() {
   $('.selectpicker').selectpicker();
 });
-
 
 
 
@@ -315,39 +322,87 @@ function showCustomer(str, inc) {
 
 
 
-// Add a generic event listener for any change on quantity or price classed inputs
-$("#orders").on('input', 'input.quantity,input.sale,input.product_price', function() {
-  getTotalCost($(this).attr("for"));
+
+$(document).ready(function() {
+  $('input[type=radio][name=saletype]').change(function() {
+    $("#orders").on('input', 'input.quantity,input.sale,input.product_price', function() {
+        getTotalCost($(this).attr("for"));
+        });
+
+        $(document).on('click', '.btn_remove', function() {
+        var button_id = $(this).attr('id');
+        $('#row'+button_id+'').remove();
+        });
+
+        // Using a new index rather than your global variable i
+        function getTotalCost(ind) {
+        var qty = $('#quantity_'+ind).val();
+        var sale = $('#sale_'+ind).val();
+        var price = $('#product_price_'+ind).val();
+
+        if (this.value === 'ChoiseSum') {
+            var totNumber = (price - (-sale))*qty;
+        }
+        else if (this.value === 'ChoicePercent') {
+            var totNumber = (qty * price)+(qty * price*sale)/100;
+        }
+
+        var tot = totNumber;
+        $('#total_cost_'+ind).val(tot);
+        calculateSubTotal();
+        }
+
+        function calculateSubTotal() {
+        var subtotal = 0;
+        $('.total_cost').each(function() {
+            subtotal += parseFloat($(this).val());
+        });
+
+        $('#subtotal').val(subtotal);
+        }
+    });
+  
+  // Check if no radio button is selected on page load
+  if (!$('input[type=radio][name=myRadio]:checked').length) {
+     // Set the status to 2 if the second radio button is selected
+     $("#orders").on('input', 'input.quantity,input.sale,input.product_price', function() {
+        getTotalCost($(this).attr("for"));
+        });
+
+        $(document).on('click', '.btn_remove', function() {
+        var button_id = $(this).attr('id');
+        $('#row'+button_id+'').remove();
+        });
+
+        // Using a new index rather than your global variable i
+        function getTotalCost(ind) {
+        var qty = $('#quantity_'+ind).val();
+        var sale = $('#sale_'+ind).val();
+        var price = $('#product_price_'+ind).val();
+        var totNumber = (price - (-sale))*qty;
+        var tot = totNumber;
+        $('#total_cost_'+ind).val(tot);
+        calculateSubTotal();
+        }
+
+        function calculateSubTotal() {
+        var subtotal = 0;
+        $('.total_cost').each(function() {
+            subtotal += parseFloat($(this).val());
+        });
+
+        $('#subtotal').val(subtotal);
+        }
+    }
 });
 
-$(document).on('click', '.btn_remove', function() {
-  var button_id = $(this).attr('id');
-  $('#row'+button_id+'').remove();
-});
-
-// Using a new index rather than your global variable i
-function getTotalCost(ind) {
-  var qty = $('#quantity_'+ind).val();
-  var sale = $('#sale_'+ind).val();
-  var price = $('#product_price_'+ind).val();
-  var totNumber = (qty * price)+(qty * price*sale)/100;
 
 
 
-  var tot = totNumber;
-  $('#total_cost_'+ind).val(tot);
-  calculateSubTotal();
-}
 
 
-function calculateSubTotal() {
-  var subtotal = 0;
-  $('.total_cost').each(function() {
-     subtotal += parseFloat($(this).val());
-  });
 
-  $('#subtotal').val(subtotal);
-}
+
 
 // -----------------------------row qoshish-----------------------------------------------------------------------------------------------
 
@@ -357,10 +412,8 @@ function calculateSubTotal() {
     $sql = "SELECT * FROM price_item_tbl WHERE price_id=(SELECT max(id) FROM price_tbl)";  
     $product_list = mysqli_query ($connect, $sql);
     //end get product
-
-
-
 ?>
+
 
 
 $(document).ready(function () {
@@ -374,7 +427,7 @@ $(document).ready(function () {
                 
         cols += '<td><select required name="prod_name[]" form="order_form" id="prod_name_'+inc+'" for="'+inc+'" onchange="showCustomer(this.value,'+inc+')"><option value="">--выберите продукцию--</option><?php while ($option = mysqli_fetch_array($product_list)) { ?> <option value="<?php echo $option["name"];?>"><?php  $name = get_prod_name($connect, $option["name"]); echo $name["name"]; ?></option> <?php }; ?></select></td>';
 
-        cols += '<td><input required type="number" name="quantity[]"  class="form-control quantity" id="quantity_'+inc+'" for="'+inc+'" form="order_form"/></td>';
+        cols += '<td><input required type="number" name="quantity[]" min="1" class="form-control quantity" id="quantity_'+inc+'" for="'+inc+'" form="order_form"/></td>';
         cols += '<td><div id="txtHint_'+inc+'"><input disabled data-type="product_price" type="number" name="product_price[]"  class="form-control product_price" id="product_price_'+inc+'" for="'+inc+'" form="order_form"/></div></td>';
         cols += '<td><input required type="number" name="sale[]" value="0" class="form-control sale" id="sale_'+inc+'" for="'+inc+'" form="order_form"/></td>';
 
@@ -422,6 +475,14 @@ function showCustomerBalance(str) {
   xhttp.send();
 }
 
+$(document).ready(function() {
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+});
 
 
 </script>

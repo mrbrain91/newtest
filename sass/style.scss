@@ -148,17 +148,17 @@ input[type="text"] {
 	font-size: 13px;
 }
 
-input[type='radio']:checked:after {
-	width: 14px;
-	height: 14px;
-	border-radius: 15px;
-	position: relative;
-	background-color: $color_1;
-	content: '';
-	display: inline-block;
-	visibility: visible;
-	border: 1px solid white;
-}
+// input[type='radio']:checked:after {
+// 	width: 14px;
+// 	height: 14px;
+// 	border-radius: 15px;
+// 	position: relative;
+// 	background-color: $color_1;
+// 	content: '';
+// 	display: inline-block;
+// 	visibility: visible;
+// 	// border: 1px solid white;
+// }
 
 .container {
 	width: 100%;
