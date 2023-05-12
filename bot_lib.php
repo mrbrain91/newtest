@@ -1047,7 +1047,7 @@ function add_each_ord($connect) {
 			}
 		}
 	header("Location: order.php?message=Добавлен новый заказ!");
-	exit();
+	// exit();
 }
 
 

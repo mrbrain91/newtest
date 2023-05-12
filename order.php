@@ -160,6 +160,7 @@ $rs_result = mysqli_query ($connect, $query);
                 <th scope="col">Дата заказа</th>
                 <th scope="col">Тип оплаты</th>
                 <th scope="col">Сумма сделки</th>
+                <th scope="col">Состояние</th>
             </tr>
         </thead>
         <tbody class="postList">
@@ -177,6 +178,7 @@ $rs_result = mysqli_query ($connect, $query);
             <td><?php echo $date = date("d.m.Y", strtotime($row["ord_date"])); ?></td>
             <td><?php echo $row["payment_type"]; ?></td>
             <td><?php echo number_format($row['transaction_amount'], 0, '.', ' '); ?></td>
+            <td><span class="status new">Новый</span></td>
         </tr>
         <tr>
             <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 

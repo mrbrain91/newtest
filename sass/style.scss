@@ -573,5 +573,25 @@ input[type="radio"]:checked + label {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	color: green;
-  }
+}
+.status {
+    display: inline-block;
+    padding: 3px 6px;
+    border-radius: 4px;
+    // font-weight: bold;
+}
   
+.new {
+    background-color: #2196F3; /* Blue */
+	color: white;
+}
+ 
+.archived {
+    background-color: #9E9E9E; /* Grey */
+	color: white;
+}
+
+.cancelled {
+    background-color: #FF3547; /* Red */
+    color: white;
+}

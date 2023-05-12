@@ -207,6 +207,7 @@ if (isset($_POST['roworder'])) {
           <td><?php echo $date = date("d.m.Y", strtotime($row["ord_date"])); ?></td>
           <td><?php echo $row["payment_type"]; ?></td>
           <td><?php echo number_format($row['transaction_amount'], 0, '.', ' '); ?></td>
+          <td><span class="status new">Новый</span></td>
         </tr>
         <tr >
             <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
@@ -328,6 +329,7 @@ if (isset($_POST['rowarchive'])) {
             <td><?php echo $date = date("d.m.Y", strtotime($row["ord_date"])); ?></td>
             <td><?php echo $row["payment_type"]; ?></td>
             <td><?php echo number_format($row['transaction_amount'], 0, '.', ' '); ?></td>
+            <td><span class="status archived">Архивировано</span></td>
         </tr>
         <tr >
             <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
@@ -358,6 +360,7 @@ if (isset($_POST['rowdel'])) {
             <td><?php echo $date = date("d.m.Y", strtotime($row["ord_date"])); ?></td>
             <td><?php echo $row["payment_type"]; ?></td>
             <td><?php echo number_format($row['transaction_amount'], 0, '.', ' '); ?></td>
+            <td><span class="status cancelled">Отменено</span></td>
         </tr>
         <tr >
             <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
