@@ -7,6 +7,10 @@ if (!isset($_SESSION['usersname'])) {
   header("location: index.php");
 }
 
+// Retrieve the notification1 message from the URL parameter
+$message = isset($_GET['message']) ? $_GET['message'] : '';
+
+
 
 
 
@@ -112,6 +116,12 @@ $rs_result = mysqli_query ($connect, $query);
                 <div>
                     <a href="add_order.php"> <button type="button" class="btn btn-success">Добавить</button> </a>
                 </div>
+                <?php
+                                        // Add the following code wherever you want to display the notification1
+                    if (!empty($message)) {
+                        echo '<div id="notification1" class="notification1">' . $message . '</div>';
+                    }
+                ?>
                 <div class="filter-container">
                     <div style="background-color:<?php echo $bg_sts;?>" class="filter-container-item first" data-toggle="modal" data-target="#filter">
                     <span class="glyphicon glyphicon-filter"></span>
@@ -268,6 +278,23 @@ $rs_result = mysqli_query ($connect, $query);
 
 
 <script>
+    
+// Display the notification1 for 5 seconds before fading out
+setTimeout(function() {
+    var notification1 = document.getElementById('notification1');
+    if (notification1) {
+        notification1.style.opacity = 1;
+        (function fadeOut() {
+            if ((notification1.style.opacity -= .1) < 0) {
+                notification1.style.display = "none";
+            } else {
+                setTimeout(fadeOut, 50);
+            }
+        })();
+    }
+}, 5000);
+
+
     $('.accordian-body').on('show.bs.collapse', function () {
     $(this).closest("table")
         .find(".collapse.in")

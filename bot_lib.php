@@ -1046,7 +1046,8 @@ function add_each_ord($connect) {
 				echo("Error description: " . $mysqli -> error);
 			}
 		}
-	redirect("order.php");
+	header("Location: order.php?message=Добавлен новый заказ!");
+	exit();
 }
 
 
