@@ -698,7 +698,8 @@ function add_debt($connect, $archive_id, $contractor_id, $debt, $ord_date, $paym
 			mysqli_query($connect, $query);
 		}
 
-		redirect("order.php");
+		header("Location: order.php?message=Успешно заархивирован заказ №_".$archive_id."");
+
 	}
 	else {
 		die(mysqli_error($connect));
@@ -709,7 +710,9 @@ function add_debt($connect, $archive_id, $contractor_id, $debt, $ord_date, $paym
 function delete_debt($connect, $restore_id){
 	$sql = "DELETE FROM `debts` WHERE order_id IN ('$restore_id')";
 	if(mysqli_query($connect, $sql)) {
-		redirect("archive_order.php");
+		// redirect("archive_order.php");
+		header("Location: archive_order.php?message=Успешно восстановлен  заказ №_".$restore_id."");
+
 	}
 	else {
 		die(mysqli_error($connect));
@@ -1046,7 +1049,8 @@ function add_each_ord($connect) {
 				echo("Error description: " . $mysqli -> error);
 			}
 		}
-	header("Location: order.php?message=Добавлен новый заказ!");
+	header("Location: order.php?message=Добавлен новый заказ №_".$order_id."");
+	
 	// exit();
 }
 

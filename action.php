@@ -49,6 +49,8 @@ if (isset($_GET['delete_id'])) {
     if (upd_order_sts_del($connect, $delete_id)) {
        if (upd_order_itm_sts_del($connect, $delete_id)) {
             header("Location: order.php"); 
+	header("Location: order.php?message=Успешно отменен заказ №_".$delete_id."");
+
        }
     }
     
