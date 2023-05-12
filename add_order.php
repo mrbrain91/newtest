@@ -324,65 +324,63 @@ function showCustomer(str, inc) {
 
 
 $(document).ready(function() {
-  $('input[type=radio][name=saletype]').change(function() {
-    $("#orders").on('input', 'input.quantity,input.sale,input.product_price', function() {
-        getTotalCost($(this).attr("for"));
+
+    $('input[type=radio][name=saletype]').change(function() {
+        $("#orders").on('input', 'input.quantity,input.sale,input.product_price', function() {
+            getTotalCost($(this).attr("for"));
         });
 
-        $(document).on('click', '.btn_remove', function() {
-        var button_id = $(this).attr('id');
-        $('#row'+button_id+'').remove();
-        });
-
+        var selectedSale = this.value;
         // Using a new index rather than your global variable i
         function getTotalCost(ind) {
-        var qty = $('#quantity_'+ind).val();
-        var sale = $('#sale_'+ind).val();
-        var price = $('#product_price_'+ind).val();
 
-        if (this.value === 'ChoiseSum') {
-            var totNumber = (price - (-sale))*qty;
-        }
-        else if (this.value === 'ChoicePercent') {
-            var totNumber = (qty * price)+(qty * price*sale)/100;
-        }
+            var qty = parseInt($('#quantity_'+ind).val());
+            var sale = parseInt($('#sale_'+ind).val());
+            var price = parseInt($('#product_price_'+ind).val());
+            
+             if (selectedSale === 'ChoicePercent') {
+                var totNumber = (qty * price)+(qty * price*sale)/100;
+            }
+            else if (selectedSale === 'ChoiseSum') {
+                var totNumber = (price - (-sale))*qty;
+            }
 
-        var tot = totNumber;
-        $('#total_cost_'+ind).val(tot);
-        calculateSubTotal();
+            var tot = totNumber;
+            $('#total_cost_'+ind).val(tot);
+            calculateSubTotal();
         }
 
         function calculateSubTotal() {
-        var subtotal = 0;
-        $('.total_cost').each(function() {
-            subtotal += parseFloat($(this).val());
-        });
-
-        $('#subtotal').val(subtotal);
+            var subtotal = 0;
+            $('.total_cost').each(function() {
+                subtotal += parseFloat($(this).val());
+            });
+            $('#subtotal').val(subtotal);
         }
     });
-  
-  // Check if no radio button is selected on page load
-  if (!$('input[type=radio][name=myRadio]:checked').length) {
-     // Set the status to 2 if the second radio button is selected
-     $("#orders").on('input', 'input.quantity,input.sale,input.product_price', function() {
-        getTotalCost($(this).attr("for"));
+
+    
+    // Check if no radio button is selected on page load
+    if (!$('input[type=radio][name=myRadio]:checked').length) {
+
+        $("#orders").on('input', 'input.quantity,input.sale,input.product_price', function() {
+            getTotalCost($(this).attr("for"));
         });
 
         $(document).on('click', '.btn_remove', function() {
-        var button_id = $(this).attr('id');
-        $('#row'+button_id+'').remove();
+            var button_id = $(this).attr('id');
+            $('#row'+button_id+'').remove();
         });
 
-        // Using a new index rather than your global variable i
+      
         function getTotalCost(ind) {
-        var qty = $('#quantity_'+ind).val();
-        var sale = $('#sale_'+ind).val();
-        var price = $('#product_price_'+ind).val();
-        var totNumber = (price - (-sale))*qty;
-        var tot = totNumber;
-        $('#total_cost_'+ind).val(tot);
-        calculateSubTotal();
+            var qty = $('#quantity_'+ind).val();
+            var sale = $('#sale_'+ind).val();
+            var price = $('#product_price_'+ind).val();
+            var totNumber = (price - (-sale))*qty;
+            var tot = totNumber;
+            $('#total_cost_'+ind).val(tot);
+            calculateSubTotal();
         }
 
         function calculateSubTotal() {
@@ -394,7 +392,13 @@ $(document).ready(function() {
         $('#subtotal').val(subtotal);
         }
     }
-});
+
+    $(document).on('click', '.btn_remove', function() {
+        var button_id = $(this).attr('id');
+        $('#row'+button_id+'').remove();
+    });
+
+}); // end document ready line
 
 
 
@@ -457,7 +461,6 @@ $(document).ready(function () {
 // -------------------------------------------- select bazadan olish-------------------------------------------------------
 
 function showCustomerBalance(str) {
-    // console.log(str);
   var xhttp;    
   if (str == "") {
     document.getElementById("balance").innerHTML = "";

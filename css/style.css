@@ -481,3 +481,27 @@ table > thead > tr > td {
 .subtotal {
   color: black !important;
 }
+
+input[type="radio"] {
+  display: none;
+}
+
+label {
+  display: inline-block;
+  padding: 2px 10px;
+  background-color: #f5f5f5;
+  color: #333;
+  border-radius: 4px;
+  margin: 0;
+}
+
+label:hover {
+  cursor: pointer;
+  background-color: #b3b3b3;
+}
+
+input[type="radio"]:checked + label {
+  color: #333;
+  border-radius: 4px;
+  border: 1px solid #333333;
+}
