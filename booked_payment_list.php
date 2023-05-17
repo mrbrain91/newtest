@@ -230,7 +230,7 @@ $all_count = $all_debt_fetch['allcount'];
                     </select>
                 </div>
                 <div class="col-md-3"> 
-                    <input required type="date" value="<?php echo date("Y-m-d"); ?>" class="form-control" name="from_date" form="filer_form">
+                    <input required type="date" value="2023-01-01" class="form-control" name="from_date" form="filer_form">
                 </div>
                 
                 <div class="col-md-3">

@@ -148,7 +148,7 @@ if (isset($_POST['id_contractor'])) {
                     </select>
                 </div>
                 <div class="col-md-2"> 
-                    <input required type="date" value="<?php echo date("Y-m-d"); ?>" class="form-control" name="from_date" form="order_form">
+                    <input required type="date" value="2023-01-01" class="form-control" name="from_date" form="order_form">
                 </div>
                 -
                 <div class="col-md-2">

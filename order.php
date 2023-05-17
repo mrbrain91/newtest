@@ -252,12 +252,19 @@ $rs_result = mysqli_query ($connect, $query);
                     </select>
                 </div>
                 <div class="col-md-3"> 
-                    <input required type="date" value="<?php echo date("Y-m-d"); ?>" class="form-control" name="from_date" form="filer_form">
+                    <input required type="date" value="2023-01-01" class="form-control" name="from_date" form="filer_form">
                 </div>
                 
                 <div class="col-md-3">
                     <input required type="date" value="<?php echo date("Y-m-d"); ?>" class="form-control" name="to_date" form="filer_form">
-                </div>    
+                </div>  
+                <div class="col-md-3"> 
+                    <input required type="date" value="2023-01-01" class="form-control" name="from_date" form="filer_form">
+                </div>
+                
+                <div class="col-md-3">
+                    <input required type="date" value="<?php echo date("Y-m-d"); ?>" class="form-control" name="to_date" form="filer_form">
+                </div>  
             </div>
         </form>
       </div>
