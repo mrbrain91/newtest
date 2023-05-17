@@ -559,3 +559,15 @@ input[type="radio"]:checked + label {
   padding: 2px !important;
   text-align: right;
 }
+
+.invoice__bottom {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 7.5px;
+}
+
+.invoice__bottom_item {
+  width: 48%;
+}

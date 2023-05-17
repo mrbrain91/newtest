@@ -206,11 +206,10 @@ $rs_result = mysqli_query ($connect, $query);
                     <tr class="w600" style="text-align:center;">
                         <td>№</td>
                         <td>Наименование товаров</td>
+                        <td>Единица измерения</td>
                         <td>Количество</td>
-                        <td>Ед. изм.</td>
                         <td>Цена</td>
-                        <td>Скидка</td>
-                        <td>Сумма</td>
+                        <td>Стоимость поставки</td>
                     </tr>
                     
                 </thead>
@@ -222,7 +221,6 @@ $rs_result = mysqli_query ($connect, $query);
                         <td style="text-align:center;">3</td>
                         <td style="text-align:center;">4</td>
                         <td style="text-align:center;">5</td>
-                        <td style="text-align:center;">6</td>
                     </tr>
                 <?php 
                     $n = 0;    
@@ -246,17 +244,14 @@ $rs_result = mysqli_query ($connect, $query);
                             <span><?php echo $name['name']; ?></span>
                         </td>
                         <td class="col-sm-1">
-                            <span><?php echo number_format($row['count_name'], 0, ',', ' '); ?></span>
-                        </td>
-                        <td class="col-sm-1">
                             <span><?php echo $unit_name; ?></span>
                         </td>
                         <td class="col-sm-1">
-                            <span><?php echo number_format($row['price_name'], 0, ',', ' '); ?></span>
-                            
+                            <span><?php echo number_format($row['count_name'], 0, ',', ' '); ?>.0000</span>
                         </td>
                         <td class="col-sm-1">
-                            <span><?php echo $row["sale_name"]; ?>%</span>
+                            <span><?php echo number_format($row['price_name'], 0, ',', ' '); ?>.00</span>
+                            
                         </td>
                         <td class="col-sm-2">
                             <span><?php echo number_format($row['total_name'], 0, ',', ' '); ?></span>
@@ -274,7 +269,6 @@ $rs_result = mysqli_query ($connect, $query);
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                         <td class="w600"><?php echo number_format($sum, 0, ',', ' '); ?></td>
                     </tr>
                 </tbody>
@@ -282,6 +276,20 @@ $rs_result = mysqli_query ($connect, $query);
         </div>
     </div>
     <!-- end prod list -->
+    <div class="invoice__bottom">
+        <div class="invoice__bottom_item">
+            <span>Руководитель __________________________ SHARIPOV JASUR ERKINOVICH</span><br><br><br>
+            <span>Главный бухгалтер: ____________________ SHARIPOV JASUR ERKINOVICH</span><br><br><br>
+            <span>Товар отпустил: ________________________ QULMURODOV FARHOD</span> 
+        </div>
+        <div class="invoice__bottom_item">
+            <span>Получил: _________________________________________________________</span><br>
+            <span>(подписъ покупателя или уполномоченного представителя)</span><br><br>
+            <span>Довернность: _____________________________________________________</span><br><br><br>
+            <span>_____________________________________________________________________</span><br>
+            <span>ФИО покупателя</span> 
+        </div>
+    </div>
     
    
 </div>
