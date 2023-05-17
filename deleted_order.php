@@ -274,7 +274,7 @@ $rs_result = mysqli_query ($connect, $query);
     $(this).closest("table")
         .find(".collapse.in")
         .not(this)
-        //.collapse('toggle')
+        //// .collapse('toggle')
 })
 
 
