@@ -514,10 +514,12 @@ input[type="radio"]:checked + label {
   display: inline-block;
   padding: 3px 6px;
   border-radius: 4px;
+  width: 100%;
+  text-align: center;
 }
 
 .new {
-  background-color: #2196F3;
+  background-color: #01c183;
   /* Blue */
   color: white;
 }

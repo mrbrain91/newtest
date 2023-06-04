@@ -1024,23 +1024,23 @@ function add_each_ord($connect) {
 	
 	if(isset($_POST['submit']) && $_POST['submit'] == 'Принять'){
 
-		$selectedValue = $_POST['saletype'];
 		
 		foreach($_POST['prod_name'] as $row => $value){
-
+			$sale_type = $_POST['sale_type'][$row];
 			$prod_name=$_POST['prod_name'][$row];
 			$count_name=$_POST['quantity'][$row];
 			$date_name=$_POST['main_order_date'];                   
 			$price_name=$_POST['product_price'][$row];
 			$sale_name=$_POST['sale'][$row];
-			if ($selectedValue == 'ChoiseSum') {
+			if ($sale_type == 'sum') {
 				$total_name = ($price_name - (- $sale_name)) * $count_name;
-			} elseif ($selectedValue == 'ChoicePercent') {
+
+			} elseif ($sale_type == 'percent') {
 				$total_name = ($count_name * $price_name) + ($count_name * $price_name * $sale_name) / 100;
 			}
 			$order_id = $last_id + 1;
 
-			$sql = "INSERT INTO `main_ord__item_tbl` (`order_id`, `prod_name`, `count_name`, `date_name`, `price_name`, `sale_name`, `total_name`) VALUES ('".$order_id."','".$prod_name."','".$count_name."','".$date_name."','".$price_name."','".$sale_name."','".$total_name."');";
+			$sql = "INSERT INTO `main_ord__item_tbl` (`order_id`, `prod_name`, `count_name`, `date_name`, `price_name`, `sale_name`, `sale_type`, `total_name`) VALUES ('".$order_id."','".$prod_name."','".$count_name."','".$date_name."','".$price_name."','".$sale_name."','".$sale_type."','".$total_name."');";
 		
 			if (mysqli_query($connect, $sql)) {
 				echo 'successfully';

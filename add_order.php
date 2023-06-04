@@ -35,10 +35,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
 
     $prod_names = $_POST['prod_name'];
     $unique_prod_names = array_unique($prod_names);
+    
 
     if (count($prod_names) != count($unique_prod_names)) {
         $display_toggle = 'block';
     }else {
+
+
         add_each_ord($connect);
 
         $main_order_contractor = $_POST['main_order_contractor'];
@@ -189,7 +192,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                     <td>Продукция  / Производитель </td>
                     <td>Количество</td>
                     <!-- <td>Срок годности</td> -->
-                    <td>Цена</td>
+                    <td>Базовая цена</td>
                     <td>
                         Скидка:  
                         
@@ -200,7 +203,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                         <label for="ChoicePercent">%</label>
 
                     </td>
-                    <td>Сумма</td>
+                    <td>Переоценка</td>
+                    <td>Сумма к оплате</td>
                     <td></td>
                 </tr>
             </thead>
@@ -230,8 +234,13 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                     <td class="col-sm-1">
                         <input required name="sale[]" type="number" placeholder="0" max="0" value="0" class="form-control sale" id='sale_1' for='1' form="order_form"/>        
                     </td>
+                    <td class="col-sm-1">
+                        <input disabled type="text" name="after_sale[]" id='after_sale_1' value="0"  class="form-control product_price" for="1" form="order_form"/">
+                    </td>
+                        <input  type="hidden" name="sale_type[]" id='sale_type_1' value="sum"  class="form-control product_price" for="1" form="order_form"/">
                     <td class="col-sm-2">
                         <input readonly type="text" name="total_cost[] "  class="form-control total_cost" id='total_cost_1' for='1' form="order_form"/>
+                    </td>    
                     <td class="col-sm-1">
                     <button type="button" name="addrow" id="addrow" class="btn btn-success circle">+</button>
                     </td>
@@ -239,6 +248,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
             </tbody>
             <tfooter>
                 <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -322,31 +332,30 @@ function showCustomer(str, inc) {
 
 
 
-
 $(document).ready(function() {
-
-    $('input[type=radio][name=saletype]').change(function() {
+    $('input[type=radio][id=ChoicePercent]').change(function() {
+        console.log('percent');
         $("#orders").on('input', 'input.quantity,input.sale,input.product_price', function() {
             getTotalCost($(this).attr("for"));
         });
 
-        var selectedSale = this.value;
-        // Using a new index rather than your global variable i
+        $(document).on('click', '.btn_remove', function() {
+            var button_id = $(this).attr('id');
+            $('#row'+button_id+'').remove();
+        });
+
+      
         function getTotalCost(ind) {
+            var qty = $('#quantity_'+ind).val();
+            var sale = $('#sale_'+ind).val();
+            var price = $('#product_price_'+ind).val();
 
-            var qty = parseInt($('#quantity_'+ind).val());
-            var sale = parseInt($('#sale_'+ind).val());
-            var price = parseInt($('#product_price_'+ind).val());
-            
-             if (selectedSale === 'ChoicePercent') {
-                var totNumber = (qty * price)+(qty * price*sale)/100;
-            }
-            else if (selectedSale === 'ChoiseSum') {
-                var totNumber = (price - (-sale))*qty;
-            }
-
-            var tot = totNumber;
-            $('#total_cost_'+ind).val(tot);
+            var totNumber = (qty * price)+(qty * price*sale)/100;
+            var afterSale = price - ((-price*sale)/100);
+            console.log(afterSale);
+            $('#after_sale_'+ind).val(afterSale);
+            $('#sale_type_'+ind).val('percent');
+            $('#total_cost_'+ind).val(totNumber);
             calculateSubTotal();
         }
 
@@ -355,11 +364,46 @@ $(document).ready(function() {
             $('.total_cost').each(function() {
                 subtotal += parseFloat($(this).val());
             });
+
             $('#subtotal').val(subtotal);
         }
     });
 
-    
+    $('input[type=radio][id=ChoiseSum]').change(function() {
+        console.log('sum');
+        $("#orders").on('input', 'input.quantity,input.sale,input.product_price', function() {
+            getTotalCost($(this).attr("for"));
+        });
+
+        $(document).on('click', '.btn_remove', function() {
+            var button_id = $(this).attr('id');
+            $('#row'+button_id+'').remove();
+        });
+
+      
+        function getTotalCost(ind) {
+            var qty = $('#quantity_'+ind).val();
+            var sale = $('#sale_'+ind).val();
+            var price = $('#product_price_'+ind).val();
+
+            var totNumber = (price - (-sale))*qty;
+            afterSale = price - (-sale);
+            $('#after_sale_'+ind).val(afterSale);
+            $('#sale_type_'+ind).val('sum');
+            $('#total_cost_'+ind).val(totNumber);
+            calculateSubTotal();
+        }
+
+        function calculateSubTotal() {
+            var subtotal = 0;
+            $('.total_cost').each(function() {
+                subtotal += parseFloat($(this).val());
+            });
+
+            $('#subtotal').val(subtotal);
+        }
+    });
+
     // Check if no radio button is selected on page load
     if (!$('input[type=radio][name=myRadio]:checked').length) {
 
@@ -379,17 +423,20 @@ $(document).ready(function() {
             var price = $('#product_price_'+ind).val();
             var totNumber = (price - (-sale))*qty;
             var tot = totNumber;
+            var afterSale = price - (-sale);
+            $('#after_sale_'+ind).val(afterSale);
+            $('#sale_type_'+ind).val('sum');
             $('#total_cost_'+ind).val(tot);
             calculateSubTotal();
         }
 
         function calculateSubTotal() {
-        var subtotal = 0;
-        $('.total_cost').each(function() {
-            subtotal += parseFloat($(this).val());
-        });
+            var subtotal = 0;
+            $('.total_cost').each(function() {
+                subtotal += parseFloat($(this).val());
+            });
 
-        $('#subtotal').val(subtotal);
+            $('#subtotal').val(subtotal);
         }
     }
 
@@ -434,7 +481,8 @@ $(document).ready(function () {
         cols += '<td><input required type="number" name="quantity[]" min="1" class="form-control quantity" id="quantity_'+inc+'" for="'+inc+'" form="order_form"/></td>';
         cols += '<td><div id="txtHint_'+inc+'"><input disabled data-type="product_price" type="number" name="product_price[]"  class="form-control product_price" id="product_price_'+inc+'" for="'+inc+'" form="order_form"/></div></td>';
         cols += '<td><input required type="number" name="sale[]" value="0" class="form-control sale" id="sale_'+inc+'" for="'+inc+'" form="order_form"/></td>';
-
+        cols += '<td><input disabled type="text" name="after_sale[]" id="after_sale_'+inc+'" value="0" class="form-control product_price" for="'+inc+'" form="order_form"/></td>';
+        cols += '<input type="hidden" name="sale_type[]" id="sale_type_'+inc+'" value="sum" class="form-control product_price" for="'+inc+'" form="order_form"/>';
         
 
         cols += '<td><input readonly="" type="text" name="total_cost[] " class="form-control total_cost" id="total_cost_'+inc+'" for="'+inc+'" form="order_form"/></td>';

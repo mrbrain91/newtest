@@ -135,7 +135,13 @@ $rs_result = mysqli_query ($connect, $query);
                 <?php 
                     $n = 0;    
                     while ($row = mysqli_fetch_array($rs_result)) {  
-                    $n++;  
+                    $n++; 
+                    if ($row["sale_type"] === 'percent') {
+                        $sale_type = '%';
+                    }elseif($row["sale_type"] === 'sum') {
+                        $sale_type = 'сум';
+                    }
+                    
 
                     $name = get_prod_name($connect, $row["prod_name"]);
 
@@ -164,7 +170,7 @@ $rs_result = mysqli_query ($connect, $query);
                             
                         </td>
                         <td class="col-sm-1">
-                            <span><?php echo $row["sale_name"]; ?>%</span>
+                            <span><?php echo $row["sale_name"]; ?> <?php echo $sale_type; ?></span>
                         </td>
                         <td class="col-sm-2">
                             <span><?php echo number_format($row['total_name'], 0, ',', ' '); ?></span>
