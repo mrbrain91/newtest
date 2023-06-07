@@ -126,6 +126,7 @@ $rs_result = mysqli_query ($connect, $query);
                     <td>Ед. изм.</td>
                     <td>Цена</td>
                     <td>Скидка</td>
+                    <td></td>
                     <td>Сумма</td>
                     <td><span class="glyphicon glyphicon-edit"></span></td>
                     <td><span class="glyphicon glyphicon-trash"></span></td>
@@ -136,6 +137,11 @@ $rs_result = mysqli_query ($connect, $query);
                     $n = 0;    
                     while ($row = mysqli_fetch_array($rs_result)) {    
                     $n++;
+                    if ($row["sale_type"] === 'percent') {
+                        $sale_type = '%';
+                    }elseif($row["sale_type"] === 'sum') {
+                        $sale_type = 'сум';
+                    }
 
                     $name = get_prod_name($connect, $row["prod_name"]);
                     
@@ -163,13 +169,16 @@ $rs_result = mysqli_query ($connect, $query);
                         <span><?php echo number_format($row['price_name'], 0, ',', ' '); ?></span>                        
                     </td>
                     <td class="col-sm-1">
-                        <span><?php echo $row["sale_name"]; ?>%</span>
+                        <span><?php echo $row["sale_name"]; ?></span>
+                    </td>
+                    <td class="col-sm-1">
+                        <span><?php echo $sale_type; ?></span>
                     </td>
                     <td class="col-sm-2">
                         <span><?php echo number_format($row['total_name'], 0, ',', ' '); ?></span>
                     </td>
                     <td class="col-sm">
-                       <a href="edit_inside_action.php?id=<?php echo $id; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&orid=<?php echo $id; ?>&&pi=<?php echo $row["id"]; ?>&&pn=<?php echo $row["prod_name"]; ?>&&cn=<?php echo $row["count_name"]; ?>&&dn=<?php echo $row["date_name"]; ?>&&prn=<?php echo $row["price_name"]; ?>&&sn=<?php echo $row["sale_name"]; ?>&&tn=<?php echo $row["total_name"]; ?>"><span class="glyphicon glyphicon-edit"></span></a>
+                       <a href="edit_inside_action.php?id=<?php echo $id; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&orid=<?php echo $id; ?>&&pi=<?php echo $row["id"]; ?>&&pn=<?php echo $row["prod_name"]; ?>&&cn=<?php echo $row["count_name"]; ?>&&dn=<?php echo $row["date_name"]; ?>&&prn=<?php echo $row["price_name"]; ?>&&sn=<?php echo $row["sale_name"]; ?>&&st=<?php echo $row["sale_type"]; ?>&&tn=<?php echo $row["total_name"]; ?>"><span class="glyphicon glyphicon-edit"></span></a>
                     </td>
                     <td class="col-sm">
                        <a onclick="return confirm('Удалить?')" href="edit_inside_action.php?id=<?php echo $id; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&orid=<?php echo $id; ?>&&pi=<?php echo $row["id"]; ?>&&pn=<?php echo $row["prod_name"]; ?>&&cn=<?php echo $row["count_name"]; ?>&&dn=<?php echo $row["date_name"]; ?>&&prn=<?php echo $row["price_name"]; ?>&&sn=<?php echo $row["sale_name"]; ?>&&tn=<?php echo $row["total_name"]; ?>&&del=ok"><span class="glyphicon glyphicon-trash"></span></a>
@@ -185,10 +194,11 @@ $rs_result = mysqli_query ($connect, $query);
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                     <td class="w600"><?php echo number_format($sum, 0, ',', ' '); ?></td>
                     <td></td>
                     <td>
-                        <a href="edit_inside_action_add.php?id=<?php echo $id; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&orid=<?php echo $id; ?>&&pi=<?php echo $row["id"]; ?>&&pn=<?php echo $row["prod_name"]; ?>&&cn=<?php echo $row["count_name"]; ?>&&dn=<?php echo $row["date_name"]; ?>&&prn=<?php echo $row["price_name"]; ?>&&sn=<?php echo $row["sale_name"]; ?>&&tn=<?php echo $row["total_name"]; ?>"><span class="glyphicon glyphicon-plus-sign"></span></a>
+                        <a href="edit_inside_action_add.php?id=<?php echo $id; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&orid=<?php echo $id; ?>&&pi=<?php echo $row["id"]; ?>&&pn=<?php echo $row["prod_name"]; ?>&&cn=<?php echo $row["count_name"]; ?>&&dn=<?php echo $row["date_name"]; ?>&&prn=<?php echo $row["price_name"]; ?>&&sn=<?php echo $row["sale_name"]; ?>&&st=<?php echo $row["sale_type"]; ?>&&tn=<?php echo $row["total_name"]; ?>"><span class="glyphicon glyphicon-plus-sign"></span></a>
                     </td>
                 </tr>
             </tbody>

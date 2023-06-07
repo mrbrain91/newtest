@@ -40,6 +40,8 @@ if (isset($_GET['pn'])) {
 
 }
 
+$display_toggle = 'none';
+
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
     
@@ -51,6 +53,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
     $count_name = $_POST['quantity'];
     $price_name = $_POST['product_price'][0];
     $sale_name = $_POST['sale'];
+    $sale_type = $_POST['sale_type'];
     $total_name = $_POST['total_cost'];
 
 
@@ -61,15 +64,42 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
     $contractor = $_POST['contractor'];
     $date = $_POST['ord_date'];
 
-    
 
-    if(edit_page_add($connect, $id, $prod_name, $count_name, $ord_date, $price_name, $sale_name, $total_name)){
-        $sum = get_sum_id_main($connect, $orid);
-        
-        if(upd_main_order_sum($connect, $orid, $sum)){
-            header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$date."");
+    
+    $query = "SELECT * FROM main_ord__item_tbl WHERE order_id='$id'";  
+    $result = mysqli_query($connect, $query);
+    $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+
+    // Flag to track if the target ID exists
+    $exists = false;
+
+    // Check if the target ID exists in the array
+    foreach ($rows as $row) {
+        if ($row['prod_name'] == $prod_name) {
+            $exists = true;
+            break;
         }
     }
+
+    // Perform actions based on the result
+    if ($exists) {
+        // The target ID exists in the array
+        $display_toggle = 'block';
+    } else {
+        if(edit_page_add($connect, $id, $prod_name, $count_name, $ord_date, $price_name, $sale_name, $sale_type, $total_name)){
+            $sum = get_sum_id_main($connect, $orid);
+            
+            if(upd_main_order_sum($connect, $orid, $sum)){
+                header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$date."");
+            }
+        }
+       
+    }
+
+
+
+
 }
 
 
@@ -113,9 +143,19 @@ $rs_result = mysqli_query ($connect, $query);
 </div>
 
 <div class="toolbar">
-        <div class="container-fluid">
-            <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>"><button type="button" class="btn btn-custom">Закрыть</button></a>
+    <div class="container-fluid">
+        <div class="toolbar_wrapper">
+            <div>
+                <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>"><button type="button" class="btn btn-custom">Закрыть</button></a>
+            </div>
+            <div style='display:<?php echo $display_toggle; ?>; margin:0px;' class="alert alert-danger">
+                <strong style="margin-right: 22px;">Ошибка: Названия продуктов повторяются.!</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         </div>
+    </div>
 </div>
 
 <!-- start card head information -->
@@ -177,6 +217,7 @@ $rs_result = mysqli_query ($connect, $query);
                     <td>Ед. изм.</td>
                     <td>Цена</td>
                     <td>Скидка</td>
+                    <td></td>
                     <td>Сумма</td>
                     <td></td>
                     <td></td>
@@ -187,8 +228,14 @@ $rs_result = mysqli_query ($connect, $query);
                     $n = 0;    
                     while ($row = mysqli_fetch_array($rs_result)) {    
                     $n++;
+                    
 
                     $name = get_prod_name($connect, $row["prod_name"]);
+                    if ($row["sale_type"] === 'percent') {
+                        $sale_type = '%';
+                    }elseif($row["sale_type"] === 'sum') {
+                        $sale_type = 'сум';
+                    }
                     
                     $query = "SELECT * FROM products_tbl WHERE name='$name[name]'";  
                     $unit_result = mysqli_query ($connect, $query);
@@ -219,7 +266,7 @@ $rs_result = mysqli_query ($connect, $query);
                             <span><?php echo number_format($row['price_name'], 0, ',', ' '); ?></span>                        
                         </td>
                         <td class="col-sm-1">
-                            <span><?php echo $row["sale_name"]; ?>%</span>
+                            <span><?php echo $row["sale_name"]; ?></span>
                             
                             <input  type="hidden" name="orid"  form="order_form" value="<?php echo $orid;?>"/>
                             <input  type="hidden" name="pi"  form="order_form" value="<?php echo $pi;?>"/>
@@ -227,6 +274,9 @@ $rs_result = mysqli_query ($connect, $query);
                             <input  type="hidden" name="sale_agent"  form="order_form" value="<?php echo $sale_agent;?>"/>
                             <input  type="hidden" name="contractor"  form="order_form" value="<?php echo $contractor;?>"/>
                             <input  type="hidden" name="ord_date"  form="order_form" value="<?php echo $ord_date;?>"/>    
+                        </td>
+                        <td class="col-sm-1">
+                            <span><?php echo $sale_type; ?></span>                        
                         </td>
                         <td class="col-sm-2">
                             <span><?php echo number_format($row['total_name'], 0, ',', ' '); ?></span>
@@ -270,6 +320,12 @@ $rs_result = mysqli_query ($connect, $query);
                             <input required name="sale" type="number" placeholder="0" max="0" value="0" class="form-control sale" id='sale_1' for='1' form="order_form"/>
                         </td>
                         <td>
+                            <select required name="sale_type" class="form-control sale_type" id='sale_type_1' for='1' form="order_form" >
+                                    <option value="percent">%</option>
+                                    <option value="sum">сум</option>
+                            </select>
+                        </td>
+                        <td>
                             <input readonly type="text" name="total_cost"  class="form-control total_cost" id='total_cost_1' for='1' form="order_form"/>
                         </td>
                         <td>
@@ -283,6 +339,7 @@ $rs_result = mysqli_query ($connect, $query);
                     </tr>
                     <tr>
                         <td class="w600"><span style="float:left;">Итого</span></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -305,22 +362,30 @@ $rs_result = mysqli_query ($connect, $query);
     
 </div>
 
-
 </body>
 
 <script>
 
 // Add a generic event listener for any change on quantity or price classed inputs
-$("#orders").on('input', 'input.quantity,input.sale,input.product_price', function() {
+$("#orders").on('input', 'input.quantity,input.sale,input.product_price, select.sale_type', function() {
+    // console.log('changes sale type');
   getTotalCost($(this).attr("for"));
 });
 
 function getTotalCost(ind) {
   var qty = $('#quantity_'+ind).val();
   var sale = $('#sale_'+ind).val();
+  var sale_type = $('#sale_type_'+ind).val();
   var price = $('#product_price_'+ind).val();
-  var totNumber = (qty * price)+(qty * price*sale)/100;
+ 
 
+    // console.log(sale_type);
+
+    if (sale_type === 'percent') {
+        var totNumber = (qty * price)+(qty * price*sale)/100;
+    }else if (sale_type === 'sum') {
+        var totNumber = (price-(-sale))*qty;
+    }
 
 
   var tot = totNumber;

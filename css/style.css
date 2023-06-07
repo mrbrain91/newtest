@@ -228,6 +228,16 @@ table > tbody > tr > td {
   color: green;
 }
 
+.prod_list__edit select {
+  padding: 0;
+  box-shadow: none;
+  height: 100%;
+  border-radius: 0;
+  background-color: #fafafb;
+  border-bottom: 1px solid;
+  color: green;
+}
+
 .prod_list__edit button {
   border: none;
   background-color: whitesmoke;

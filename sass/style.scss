@@ -271,6 +271,16 @@ table > tbody > tr > td {
 			border-bottom: 1px solid;
 			color: green;
 		}
+		select {
+			padding: 0;
+			box-shadow: none;
+			height: 100%;
+			// border: none;
+			border-radius: 0;
+			background-color: #fafafb;
+			border-bottom: 1px solid;
+			color: green;
+		}
 		button {
 			border: none;
 			background-color: whitesmoke;	

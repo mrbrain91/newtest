@@ -352,7 +352,6 @@ $(document).ready(function() {
 
             var totNumber = (qty * price)+(qty * price*sale)/100;
             var afterSale = price - ((-price*sale)/100);
-            console.log(afterSale);
             $('#after_sale_'+ind).val(afterSale);
             $('#sale_type_'+ind).val('percent');
             $('#total_cost_'+ind).val(totNumber);

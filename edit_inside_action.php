@@ -16,6 +16,7 @@ if (isset($_GET['del']) && $_GET['del'] == 'ok') {
     $cn = $_GET['cn'];
     $prn = $_GET['prn'];
     $sn = $_GET['sn'];
+    $st = $_GET['st'];
     $dn = $_GET['dn'];
 
 
@@ -31,15 +32,27 @@ if (isset($_GET['del']) && $_GET['del'] == 'ok') {
     $sum_count = sum_count_main($connect, $id);
 
 
-    if (del_main_ord_item_tbl($connect, $pi)) {
+    // Check if the id has more than one item in the table
+    $result = mysqli_query($connect, "SELECT COUNT(*) AS item_count FROM main_ord__item_tbl WHERE order_id = '$orid'");
+    $rowss = mysqli_fetch_assoc($result);
+    $itemCount = $rowss['item_count'];
 
-        $sum = get_sum_id_main($connect, $orid);
-        
+    if ($itemCount > 1) {
+        if (del_main_ord_item_tbl($connect, $pi)) {
 
-        if (upd_main_order_sum($connect, $orid, $sum)) {
-            header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$ord_date."");
+            $sum = get_sum_id_main($connect, $orid);
+            
+    
+            if (upd_main_order_sum($connect, $orid, $sum)) {
+                header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$ord_date."");
+            }
         }
+    } else {
+        header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$ord_date."");
     }
+
+
+
 
 }
 
@@ -54,6 +67,7 @@ if (isset($_GET['pn'])) {
     $cn = $_GET['cn'];
     $prn = $_GET['prn'];
     $sn = $_GET['sn'];
+    $st = $_GET['st'];
     $dn = $_GET['dn'];
 
 
@@ -95,12 +109,22 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
     //skidka
     $s_name=$_POST['sale_name'];
 
+    //skidka type
+    $s_type=$_POST['sale_type'];
 
-    $t_name = ($c_name * $pr_name) + ($c_name * $pr_name * $s_name) / 100;
+    if ($s_type === 'percent') {
+        $t_name = ($c_name * $pr_name) + ($c_name * $pr_name * $s_name) / 100;
+    } 
+    elseif ($s_type === 'sum') {
+        $t_name = ($pr_name - (- $s_name)) * $c_name;
+    } 
+
+    
+   
 
     $last_count = get_pi_last_count($connect, $pi);
 
-    if (upd_main_ord_item($connect, $orid, $pi, $p_name, $c_name, $pr_name, $s_name, $t_name)) {
+    if (upd_main_ord_item($connect, $orid, $pi, $p_name, $c_name, $pr_name, $s_name, $s_type, $t_name)) {
 
         $sum = get_sum_id_main($connect, $orid);
         upd_main_order_sum($connect, $orid, $sum);
@@ -216,6 +240,7 @@ $rs_result = mysqli_query ($connect, $query);
                     <td>Ед. изм.</td>
                     <td>Цена</td>
                     <td>Скидка</td>
+                    <td></td>
                     <td>Сумма</td>
                     <td></td>
                     <td></td>
@@ -226,6 +251,12 @@ $rs_result = mysqli_query ($connect, $query);
                     $n = 0;    
                     while ($row = mysqli_fetch_array($rs_result)) {    
                     $n++;
+                        
+                    if ($row["sale_type"] === 'percent') {
+                        $sale_type = '%';
+                    }elseif($row["sale_type"] === 'sum') {
+                        $sale_type = 'сум';
+                    }
 
                     $name = get_prod_name($connect, $row["prod_name"]);
                     
@@ -275,7 +306,7 @@ $rs_result = mysqli_query ($connect, $query);
                             <?php
                                 }else {
                             ?>
-                                <span><?php echo $row["sale_name"]; ?>%</span>
+                                <span><?php echo $row["sale_name"]; ?></span>
                             <?php
                                 }
                             ?> 
@@ -286,6 +317,27 @@ $rs_result = mysqli_query ($connect, $query);
                             <input  type="hidden" name="sale_agent"  form="order_form" value="<?php echo $sale_agent;?>"/>
                             <input  type="hidden" name="contractor"  form="order_form" value="<?php echo $contractor;?>"/>
                             <input  type="hidden" name="ord_date"  form="order_form" value="<?php echo $ord_date;?>"/>    
+                        </td>
+                        <td class="col-sm-1">
+                            
+                            <?php 
+                                if ($row["prod_name"] == $pn) {
+                            ?>
+                                <select name="sale_type" class="form-control" form="order_form" >
+                                    <option value="<?php echo $row["sale_type"]; ?>"><?php echo $sale_type; ?></option>
+                                    <option value="sum">сум</option>
+                                    <option value="percent">%</option>
+                                </select>
+
+                            <?php
+                                }else {
+                            ?>
+                               <span><?php echo $sale_type; ?></span>
+                            <?php
+                                }
+                            ?> 
+
+
                         </td>
                         <td class="col-sm-2">
                             <span><?php echo number_format($row['total_name'], 0, ',', ' '); ?></span>
@@ -319,6 +371,7 @@ $rs_result = mysqli_query ($connect, $query);
                 ?>
                 <tr>
                     <td class="w600"><span style="float:left;">Итого</span></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>

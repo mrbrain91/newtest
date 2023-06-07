@@ -180,16 +180,15 @@ function del_return_item_tbl($connect, $pi){
 }
 
 
-function upd_main_ord_item($connect, $orid, $pi, $p_name, $c_name, $pr__name, $s_name, $t_name){
+function upd_main_ord_item($connect, $orid, $pi, $p_name, $c_name, $pr__name, $s_name, $s_type, $t_name){
 
-	
-	
 	$sql = "UPDATE main_ord__item_tbl 
 	SET 
 	prod_name = '$p_name', 
 	count_name = '$c_name',
 	price_name = '$pr__name',
 	sale_name = '$s_name',
+	sale_type = '$s_type',
 	total_name = '$t_name'
 	WHERE id='$pi' AND order_id='$orid'";
 	$result = mysqli_query($connect, $sql);
@@ -979,9 +978,9 @@ function add_supplier($connect, $name, $alternative_name, $inn, $nds, $raschetny
 }
 
 // edit page add product function
-function edit_page_add($connect, $order_id, $prod_name, $count_name, $date_name, $price_name, $sale_name, $total_name) {
+function edit_page_add($connect, $order_id, $prod_name, $count_name, $date_name, $price_name, $sale_name, $sale_type, $total_name) {
 
-	$sql = "INSERT INTO `main_ord__item_tbl` (`order_id`, `prod_name`, `count_name`, `date_name`, `price_name`, `sale_name`, `total_name`) VALUES ('".$order_id."','".$prod_name."','".$count_name."','".$date_name."','".$price_name."','".$sale_name."','".$total_name."');";	
+	$sql = "INSERT INTO `main_ord__item_tbl` (`order_id`, `prod_name`, `count_name`, `date_name`, `price_name`, `sale_name`, `sale_type`, `total_name`) VALUES ('".$order_id."','".$prod_name."','".$count_name."','".$date_name."','".$price_name."','".$sale_name."','".$sale_type."','".$total_name."');";	
 	$res = mysqli_query($connect, $sql);
 
 	if(!$res)
