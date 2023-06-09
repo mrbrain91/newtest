@@ -128,7 +128,7 @@ $rs_result = mysqli_query ($connect, $query);
                         <td>Ед. изм.</td>
                         <td>Цена</td>
                         <td>Скидка</td>
-                        <td>Сумма</td>
+                        <td>Сумма </td>
                     </tr>
                 </thead>
                 <tbody>
@@ -183,7 +183,7 @@ $rs_result = mysqli_query ($connect, $query);
                         };    
                     ?>
                     <tr>
-                        <td class="w600"><span style="float:left;">Итого</span></td>
+                        <td class="w600"><span style="float:left;">Итого к оплате</span></td>
                         <td></td>
                         <td></td>
                         <td></td>
