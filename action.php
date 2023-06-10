@@ -9,7 +9,7 @@ if (isset($_GET['archive_id'])) {
     $archive_id = $_GET['archive_id'];
     $contractor = $_GET['contractor_id'];
     $debt = $_GET['debt'];
-    $ord_date = $_GET['ord_date'];
+    $ord_date = $_GET['ord_deliver_date'];
     $payment_type = $_GET['payment_type'];
     if (upd_order_sts($connect, $archive_id)) {
        if (upd_order_itm_sts($connect, $archive_id)) {

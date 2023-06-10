@@ -152,6 +152,7 @@ $rs_result = mysqli_query ($connect, $query);
                 <th scope="col">Контрагент</th>
                 <th scope="col">Торговый представитель</th>
                 <th scope="col">Дата заказа</th>
+                <th scope="col">Дата отгрузки</th>
                 <th scope="col">Тип оплаты</th>
                 <th scope="col">Сумма сделки</th>
                 <th scope="col">Состояние</th>
@@ -170,6 +171,7 @@ $rs_result = mysqli_query ($connect, $query);
             <td><?php $user = get_contractor($connect, $row["contractor"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
             <td><?php $user = get_user($connect, $row["sale_agent"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
             <td><?php echo $date = date("d.m.Y", strtotime($row["ord_date"])); ?></td>
+            <td><?php echo $date = date("d.m.Y", strtotime($row["ord_deliver_date"])); ?></td>
             <td><?php echo $row["payment_type"]; ?></td>
             <td><?php echo number_format($row['transaction_amount'], 0, '.', ' '); ?></td>
             <td><span class="status cancelled">Отменен</span></td>

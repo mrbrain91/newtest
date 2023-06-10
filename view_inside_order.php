@@ -16,6 +16,8 @@ if (isset($_GET['id'])) {
     $contractor = $_GET['contractor'];
     $ord_date = $_GET['date'];
 
+    $ord_deliver_date = $_GET['del_date'];
+
     $sum = get_sum_id_main($connect, $id)."<br>";
     $sum_count = sum_count_main($connect, $id)."<br>";
     
@@ -90,6 +92,15 @@ $rs_result = mysqli_query ($connect, $query);
                     </div>
                     <div class="col-sm-8">
                         <?php echo $ord_date = date("d.m.Y", strtotime($ord_date)); ?>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                    Дата отгрузки
+                    </div>
+                    <div class="col-sm-8">
+                        <?php echo $ord_date = date("d.m.Y", strtotime($ord_deliver_date)); ?>
                     </div>
                 </div>
 

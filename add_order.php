@@ -47,10 +47,11 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
         $main_order_contractor = $_POST['main_order_contractor'];
         $main_order_sale_agent = $_POST['main_order_sale_agent'];
         $main_order_date = $_POST['main_order_date'];
+        $main_order_deliver_date = $_POST['main_order_deliver_date'];
         $main_order_paymen_type = $_POST['main_order_paymen_type'];
         $total_name = get_sum_main_ord($connect);
 
-        add_main_ord($connect, $main_order_contractor, $main_order_sale_agent, $main_order_date, $main_order_paymen_type, $total_name);
+        add_main_ord($connect, $main_order_contractor, $main_order_sale_agent, $main_order_date, $main_order_deliver_date, $main_order_paymen_type, $total_name);
        
     }
 }
@@ -122,12 +123,18 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
                     <span>Дата сделки</span>
                 </div>
                 <div class="col-md-3">
+                    <span>Дата отгрузки</span>
+                </div>
+                <div class="col-md-3">
                     <span>Условия оплаты</span>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     <input type="date" value="<?php echo date("Y-m-d"); ?>"  class="form-control" name="main_order_date" form="order_form">
+                </div>
+                <div class="col-md-3">
+                    <input type="date" value="<?php echo date("Y-m-d"); ?>"  class="form-control" name="main_order_deliver_date" form="order_form">
                 </div>
                 <div class="col-md-3">
                     <select required name="main_order_paymen_type" form="order_form" class="normalize">

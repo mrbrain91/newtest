@@ -289,6 +289,28 @@ table > tbody > tr > td {
 	}
 }
 
+.cutom_edit_delivery {
+	// display: flex;
+	// align-items: center;
+	input {
+		padding: 0;
+		box-shadow: none;
+		height: 100%;
+		border: none;
+		border-radius: 0;
+		background-color: #fafafb;
+		border-bottom: 1px solid;
+		color: green;
+		width: 30%;
+		float: left;
+		height: 18px;
+	}
+	button {
+		border: none;
+		margin-left: 10px;
+	}
+}
+
 .edit_add{
 	&_select {
 		cursor: pointer;

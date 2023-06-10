@@ -217,20 +217,21 @@ if (isset($_POST['roworder'])) {
           $display_btn5 = 'true';
         }
       ?>
-         <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+           <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
             <td><?php echo $row["id"]; ?></td>
             <td><?php $user = get_contractor($connect, $row["contractor"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
             <td><?php $user = get_user($connect, $row["sale_agent"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
             <td><?php echo $date = date("d.m.Y", strtotime($row["ord_date"])); ?></td>
+            <td><?php echo $date = date("d.m.Y", strtotime($row["ord_deliver_date"])); ?></td>
             <td><?php echo $row["payment_type"]; ?></td>
             <td><?php echo number_format($row['transaction_amount'], 0, '.', ' '); ?></td>  
             <td><span class="status <?php echo $btn?>"><?php echo $status?></span></td>
         </tr>
         <tr>
             <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
-                <a href="view_inside_order.php?id=<?php echo $row["id"]; ?>&&payment_type=<?php echo $row["payment_type"]; ?>&&sale_agent=<?php echo $row["sale_agent"]; ?>&&contractor=<?php echo $row["contractor"]; ?>&&date=<?php echo $row["ord_date"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
-                <a href="edit_inside_order.php?id=<?php echo $row["id"]; ?>&&payment_type=<?php echo $row["payment_type"]; ?>&&sale_agent=<?php echo $row["sale_agent"]; ?>&&contractor=<?php echo $row["contractor"]; ?>&&date=<?php echo $row["ord_date"]; ?>"><button style="display:<?php echo $display_btn3; ?>" class="btn btn-custom">Редактировать</button> </a>
-                <a href="action.php?archive_id=<?=$row['id']?>&&contractor_id=<?=$row['contractor']?>&&debt=<?=$row['transaction_amount']?>&&ord_date=<?=$row['ord_date']?>&&payment_type=<?=$row['payment_type']?>"><button style="display:<?php echo $display_btn1; ?>" onclick="return confirm('Доставлено?')" class="btn btn-custom">Доставлено</button> </a>
+                <a href="view_inside_order.php?id=<?php echo $row["id"]; ?>&&payment_type=<?php echo $row["payment_type"]; ?>&&sale_agent=<?php echo $row["sale_agent"]; ?>&&contractor=<?php echo $row["contractor"]; ?>&&date=<?php echo $row["ord_date"]; ?>&&del_date=<?php echo $row["ord_deliver_date"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
+                <a href="edit_inside_order.php?id=<?php echo $row["id"]; ?>&&payment_type=<?php echo $row["payment_type"]; ?>&&sale_agent=<?php echo $row["sale_agent"]; ?>&&contractor=<?php echo $row["contractor"]; ?>&&date=<?php echo $row["ord_date"]; ?>&&del_date=<?php echo $row["ord_deliver_date"]; ?>"><button style="display:<?php echo $display_btn3; ?>" class="btn btn-custom">Редактировать</button> </a>
+                <a href="action.php?archive_id=<?=$row['id']?>&&contractor_id=<?=$row['contractor']?>&&debt=<?=$row['transaction_amount']?>&&ord_deliver_date=<?=$row['ord_deliver_date']?>&&payment_type=<?=$row['payment_type']?>"><button style="display:<?php echo $display_btn1; ?>" onclick="return confirm('Доставлено?')" class="btn btn-custom">Доставлено</button> </a>
                 <a href="action.php?renew_id=<?=$row['id']?>"><button style="display:<?php echo $display_btn2; ?>" onclick="return confirm('Новый?')" class="btn btn-custom">Новый</button> </a>
                 <a href="action.php?closed_id=<?=$row['id']?>"><button style="display:<?php echo $display_btn5; ?>" onclick="return confirm('Архив?')" class="btn btn-custom">Архив</button> </a>
                 <a href="action.php?delete_id=<?=$row['id']?>"><button style="display:<?php echo $display_btn4; ?>" onclick="return confirm('Отменить?')" class="btn btn-custom">Отменить</button> </a>
@@ -341,11 +342,12 @@ if (isset($_POST['rowarchive'])) {
     while ($row = mysqli_fetch_assoc($result)) {
       $i++;
       ?>
-        <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+         <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
             <td><?php echo $row["id"]; ?></td>
             <td><?php $user = get_contractor($connect, $row["contractor"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
             <td><?php $user = get_user($connect, $row["sale_agent"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
             <td><?php echo $date = date("d.m.Y", strtotime($row["ord_date"])); ?></td>
+            <td><?php echo $date = date("d.m.Y", strtotime($row["ord_deliver_date"])); ?></td>
             <td><?php echo $row["payment_type"]; ?></td>
             <td><?php echo number_format($row['transaction_amount'], 0, '.', ' '); ?></td>
             <td><span class="status archived">Архив</span></td>
@@ -377,6 +379,7 @@ if (isset($_POST['rowdel'])) {
             <td><?php $user = get_contractor($connect, $row["contractor"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
             <td><?php $user = get_user($connect, $row["sale_agent"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
             <td><?php echo $date = date("d.m.Y", strtotime($row["ord_date"])); ?></td>
+            <td><?php echo $date = date("d.m.Y", strtotime($row["ord_deliver_date"])); ?></td>
             <td><?php echo $row["payment_type"]; ?></td>
             <td><?php echo number_format($row['transaction_amount'], 0, '.', ' '); ?></td>
             <td><span class="status cancelled">Отменен</span></td>

@@ -584,6 +584,18 @@ function upd_main_order_sum($connect, $orid, $sum){
 	return true;
 }
 
+// function update delivered date
+function upd_main_order_deliver_date($connect, $orid, $delivery_date){
+	$sql = "UPDATE main_ord_tbl
+	SET 
+	ord_deliver_date = '$delivery_date'
+	WHERE id='$orid'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
 
 function upd_store_sum($connect, $orid, $sum){
 	$sql = "UPDATE order_tbl
@@ -1278,13 +1290,14 @@ function add_prod($connect, $id_supplier, $total_name, $order_date, $order_note)
 }
 
 // orto 
-function add_main_ord($connect, $main_order_contractor, $main_order_sale_agent, $main_order_date, $main_order_paymen_type, $total_name) {
+function add_main_ord($connect, $main_order_contractor, $main_order_sale_agent, $main_order_date, $main_order_deliver_date, $main_order_paymen_type, $total_name) {
 	
-	$t = "INSERT INTO main_ord_tbl (contractor, sale_agent, ord_date, payment_type, transaction_amount) VALUES ('%s', '%s', '%s', '%s', '%s')";
+	$t = "INSERT INTO main_ord_tbl (contractor, sale_agent, ord_date, ord_deliver_date, payment_type, transaction_amount) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')";
 	
 	$query = sprintf($t, mysqli_real_escape_string($connect, $main_order_contractor),
 						mysqli_real_escape_string($connect, $main_order_sale_agent),
 						mysqli_real_escape_string($connect, $main_order_date),
+						mysqli_real_escape_string($connect, $main_order_deliver_date),
 						mysqli_real_escape_string($connect, $main_order_paymen_type),
 						mysqli_real_escape_string($connect, $total_name));
     $result = mysqli_query($connect, $query);

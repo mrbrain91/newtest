@@ -15,6 +15,7 @@ if (isset($_GET['id'])) {
     $sale_agent = $_GET['sale_agent'];
     $contractor = $_GET['contractor'];
     $ord_date = $_GET['date'];
+    $ord_deliver_date = $_GET['del_date'];
 
     $sum = get_sum_id_main($connect, $id);
     $sum_count = sum_count_main($connect, $id);
@@ -90,7 +91,16 @@ $rs_result = mysqli_query ($connect, $query);
                     <?php echo $ord_date = date("d.m.Y", strtotime($ord_date)); ?>
                 </div>
             </div>
+            <div class="row">
+                    <div class="col-sm-4">
+                    Дата отгрузки
+                    </div>
+                    <div class="col-sm-8">
+                        <?php echo date("d.m.Y", strtotime($ord_deliver_date)); ?>
+                       <a href="edit_inside_action.php?id=<?php echo $id; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&del_date=<?php echo $ord_deliver_date; ?>&&orid=<?php echo $id; ?>&&pi=<?php echo $row["id"]; ?>&&pn=<?php echo $row["prod_name"]; ?>&&cn=<?php echo $row["count_name"]; ?>&&dn=<?php echo $row["date_name"]; ?>&&prn=<?php echo $row["price_name"]; ?>&&sn=<?php echo $row["sale_name"]; ?>&&st=<?php echo $row["sale_type"]; ?>&&tn=<?php echo $row["total_name"]; ?>&&ed=<?php echo 'ok'; ?>"><span style='float:right;' class="glyphicon glyphicon-edit"></span></a>
 
+                    </div>
+            </div>
             <div class="row">
                 <div class="col-sm-4">
                 Условия оплаты
@@ -178,10 +188,10 @@ $rs_result = mysqli_query ($connect, $query);
                         <span><?php echo number_format($row['total_name'], 0, ',', ' '); ?></span>
                     </td>
                     <td class="col-sm">
-                       <a href="edit_inside_action.php?id=<?php echo $id; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&orid=<?php echo $id; ?>&&pi=<?php echo $row["id"]; ?>&&pn=<?php echo $row["prod_name"]; ?>&&cn=<?php echo $row["count_name"]; ?>&&dn=<?php echo $row["date_name"]; ?>&&prn=<?php echo $row["price_name"]; ?>&&sn=<?php echo $row["sale_name"]; ?>&&st=<?php echo $row["sale_type"]; ?>&&tn=<?php echo $row["total_name"]; ?>"><span class="glyphicon glyphicon-edit"></span></a>
+                       <a href="edit_inside_action.php?id=<?php echo $id; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&del_date=<?php echo $ord_deliver_date; ?>&&orid=<?php echo $id; ?>&&pi=<?php echo $row["id"]; ?>&&pn=<?php echo $row["prod_name"]; ?>&&cn=<?php echo $row["count_name"]; ?>&&dn=<?php echo $row["date_name"]; ?>&&prn=<?php echo $row["price_name"]; ?>&&sn=<?php echo $row["sale_name"]; ?>&&st=<?php echo $row["sale_type"]; ?>&&tn=<?php echo $row["total_name"]; ?>"><span class="glyphicon glyphicon-edit"></span></a>
                     </td>
                     <td class="col-sm">
-                       <a onclick="return confirm('Удалить?')" href="edit_inside_action.php?id=<?php echo $id; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&orid=<?php echo $id; ?>&&pi=<?php echo $row["id"]; ?>&&pn=<?php echo $row["prod_name"]; ?>&&cn=<?php echo $row["count_name"]; ?>&&dn=<?php echo $row["date_name"]; ?>&&prn=<?php echo $row["price_name"]; ?>&&sn=<?php echo $row["sale_name"]; ?>&&tn=<?php echo $row["total_name"]; ?>&&del=ok"><span class="glyphicon glyphicon-trash"></span></a>
+                       <a onclick="return confirm('Удалить?')" href="edit_inside_action.php?id=<?php echo $id; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&del_date=<?php echo $ord_deliver_date; ?>&&orid=<?php echo $id; ?>&&pi=<?php echo $row["id"]; ?>&&pn=<?php echo $row["prod_name"]; ?>&&cn=<?php echo $row["count_name"]; ?>&&dn=<?php echo $row["date_name"]; ?>&&prn=<?php echo $row["price_name"]; ?>&&sn=<?php echo $row["sale_name"]; ?>&&tn=<?php echo $row["total_name"]; ?>&&del=ok"><span class="glyphicon glyphicon-trash"></span></a>
                     </td>
                 </tr>
                 <?php     

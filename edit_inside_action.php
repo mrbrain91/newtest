@@ -76,6 +76,8 @@ if (isset($_GET['pn'])) {
     $sale_agent = $_GET['sale_agent'];
     $contractor = $_GET['contractor'];
     $ord_date = $_GET['date'];
+    $ord_deliver_date = $_GET['del_date'];
+    
 
 
     
@@ -84,8 +86,49 @@ if (isset($_GET['pn'])) {
 
 }
 
+$input_display = 'none';
+$span_display = 'none';
+
+if (isset($_GET['ed'])) {
+    $input_display = true;
+    $span_display = 'none';
+}else {
+    $input_display = 'none';
+    $span_display = true;
+}
+
+
+
+
+if(isset($_POST['submit']) && $_POST['submit'] == 'edit_deliver_ok') {
+
+    if (isset($_POST['delivery_date'])) {
+        $delivery_date = $_POST['delivery_date'];
+        $orid=$_POST['orid'];
+
+
+        $payment_type = $_POST['payment_type'];
+        $sale_agent = $_POST['sale_agent'];
+        $contractor = $_POST['contractor'];
+        $date = $_POST['ord_date'];
+
+        if (upd_main_order_deliver_date($connect, $orid, $delivery_date)) {
+            header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$date."&&del_date=".$delivery_date."");
+        }
+        
+    }
+    
+
+}
+
+
+
+
 
 if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
+
+    
+    
 
     $orid=$_POST['orid'];
     $pi=$_POST['pi'];
@@ -95,6 +138,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
     $sale_agent = $_POST['sale_agent'];
     $contractor = $_POST['contractor'];
     $date = $_POST['ord_date'];
+    $delivery_date = $_POST['delivery_date'];
+
 
     //maxsulot idsi
     $p_name=$_POST['prod_name'];
@@ -129,7 +174,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
         $sum = get_sum_id_main($connect, $orid);
         upd_main_order_sum($connect, $orid, $sum);
 
-        header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$date."");
+        header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$date."&&del_date=".$delivery_date."");
     }
     
 }
@@ -200,6 +245,46 @@ $rs_result = mysqli_query ($connect, $query);
                 </div>
                 <div class="col-sm-8">
                     <?php echo $ord_date = date("d.m.Y", strtotime($ord_date)); ?>
+                </div>
+            </div>
+
+            <div class="row" style="display:<?php echo $input_display; ?>">
+                    <div class="col-sm-4">
+                    Дата отгрузки
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="cutom_edit_delivery">
+                            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" id="edit_deliver_form">
+
+                                <input required type="date" name="delivery_date"  class="form-control cutom_edit_delivery" form="edit_deliver_form" value="<?php echo $ord_deliver_date; ?>"/>
+                                <input  type="hidden" name="orid"  form="edit_deliver_form" value="<?php echo $orid;?>"/>
+                                <input  type="hidden" name="payment_type"  form="edit_deliver_form" value="<?php echo $payment_type;?>"/>
+                                <input  type="hidden" name="sale_agent"  form="edit_deliver_form" value="<?php echo $sale_agent;?>"/>
+                                <input  type="hidden" name="contractor"  form="edit_deliver_form" value="<?php echo $contractor;?>"/>
+                                <input  type="hidden" name="ord_date"  form="edit_deliver_form" value="<?php echo $ord_date;?>"/>   
+
+                                <div style='float:right; '>
+                                    <button type="submit" form="edit_deliver_form" name="submit" value="edit_deliver_ok">
+                                        <span style="color:green;" class="glyphicon glyphicon-ok"></span>  
+                                    </button>
+                                    <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&del_date=<?php echo $ord_deliver_date; ?>">
+                                        <button type="button">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </a>
+                                </div>
+                            </form>
+                                
+                        </div>
+                       
+                    </div>
+            </div>
+            <div class="row" style="display:<?php echo $span_display; ?>">
+                <div class="col-sm-4">
+                Дата отгрузки
+                </div>
+                <div class="col-sm-8">
+                    <?php echo $ord_deliver_date = date("d.m.Y", strtotime($ord_deliver_date)); ?>
                 </div>
             </div>
 
@@ -316,7 +401,9 @@ $rs_result = mysqli_query ($connect, $query);
                             <input  type="hidden" name="payment_type"  form="order_form" value="<?php echo $payment_type;?>"/>
                             <input  type="hidden" name="sale_agent"  form="order_form" value="<?php echo $sale_agent;?>"/>
                             <input  type="hidden" name="contractor"  form="order_form" value="<?php echo $contractor;?>"/>
-                            <input  type="hidden" name="ord_date"  form="order_form" value="<?php echo $ord_date;?>"/>    
+                            <input  type="hidden" name="ord_date"  form="order_form" value="<?php echo $ord_date;?>"/> 
+                            <input  type="hidden" name="delivery_date"  form="order_form" value="<?php echo $ord_deliver_date;?>"/> 
+                        
                         </td>
                         <td class="col-sm-1">
                             

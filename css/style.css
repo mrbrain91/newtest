@@ -243,6 +243,25 @@ table > tbody > tr > td {
   background-color: whitesmoke;
 }
 
+.cutom_edit_delivery input {
+  padding: 0;
+  box-shadow: none;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  background-color: #fafafb;
+  border-bottom: 1px solid;
+  color: green;
+  width: 30%;
+  float: left;
+  height: 18px;
+}
+
+.cutom_edit_delivery button {
+  border: none;
+  margin-left: 10px;
+}
+
 .edit_add_select {
   cursor: pointer;
   height: 29px;
