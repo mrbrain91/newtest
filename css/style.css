@@ -540,6 +540,12 @@ input[type="radio"]:checked + label {
   color: white;
 }
 
+.delivered {
+  background-color: #dc3545;
+  /* Red */
+  color: white;
+}
+
 .cancelled {
   background-color: #dc3545;
   /* Red */

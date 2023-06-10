@@ -9,7 +9,7 @@
         </button>
       </div>
       <div class="modal-body">
-      Хотите архивировать?
+      Хотите Доставлено?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>

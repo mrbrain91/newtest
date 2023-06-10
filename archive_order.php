@@ -17,7 +17,7 @@ $counterparties_tbl = mysqli_query ($connect, $sql);
 
 
 // for count
-$count_query = "SELECT count(*) as allcount FROM main_ord_tbl WHERE order_status='1' ORDER BY id DESC";
+$count_query = "SELECT count(*) as allcount FROM main_ord_tbl WHERE order_status='4' ORDER BY id DESC";
 $count_result = mysqli_query($connect,$count_query);
 $count_fetch = mysqli_fetch_array($count_result);
 $postCount = $count_fetch['allcount'];
@@ -37,17 +37,17 @@ if (isset($_POST['id_contractor']) AND isset($_POST['from_date']) AND isset($_PO
     $display_sts_filer_on = 'true';
     
     
-     $query = "SELECT * FROM main_ord_tbl WHERE contractor = '$id_cont' AND order_status='1' AND ord_date >= '$fr_date' AND ord_date <= '$to_date' ORDER BY id DESC";
+     $query = "SELECT * FROM main_ord_tbl WHERE contractor = '$id_cont' AND order_status='4' AND ord_date >= '$fr_date' AND ord_date <= '$to_date' ORDER BY id DESC";
  
-     $all_debt_query = "SELECT sum(transaction_amount) as all_debt, count(id) as allcount FROM main_ord_tbl WHERE contractor = '$id_cont' AND order_status='1' AND ord_date >= '$fr_date' AND ord_date <= '$to_date' ORDER BY id DESC";
+     $all_debt_query = "SELECT sum(transaction_amount) as all_debt, count(id) as allcount FROM main_ord_tbl WHERE contractor = '$id_cont' AND order_status='4' AND ord_date >= '$fr_date' AND ord_date <= '$to_date' ORDER BY id DESC";
     
   
  
  }
  else {
      //list all
-     $query = "SELECT * FROM main_ord_tbl WHERE order_status='1' ORDER BY id desc LIMIT 0,".$limit;
-     $all_debt_query = "SELECT sum(transaction_amount) as all_debt, count(id) as allcount FROM main_ord_tbl WHERE order_status='1'";
+     $query = "SELECT * FROM main_ord_tbl WHERE order_status='4' ORDER BY id desc LIMIT 0,".$limit;
+     $all_debt_query = "SELECT sum(transaction_amount) as all_debt, count(id) as allcount FROM main_ord_tbl WHERE order_status='4'";
      
      $display_true = 'true';
      $display_none = 'none';

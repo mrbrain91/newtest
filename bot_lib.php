@@ -383,13 +383,25 @@ function upd_store_sts($connect, $store_id){
 function upd_order_sts_res($connect, $restore_id){
 	$sql = "UPDATE main_ord_tbl
 	SET 
-	order_status = '0'
+	order_status = '1'
 	WHERE id='$restore_id'";
 	$result = mysqli_query($connect, $sql);
 	if(!$result)
 		die(mysqli_error($connect));
 	return true;
 }
+
+function upd_order_sts_tonew($connect, $renew_id){
+	$sql = "UPDATE main_ord_tbl
+	SET 
+	order_status = '0'
+	WHERE id='$renew_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
 
 
 // prixod prinyat move to draft
@@ -410,6 +422,17 @@ function upd_order_sts_del($connect, $delete_id){
 	SET 
 	order_status = '2'
 	WHERE id='$delete_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+function upd_order_sts_close($connect, $closed_id){
+	$sql = "UPDATE main_ord_tbl
+	SET 
+	order_status = '4'
+	WHERE id='$closed_id'";
 	$result = mysqli_query($connect, $sql);
 	if(!$result)
 		die(mysqli_error($connect));
@@ -469,13 +492,26 @@ function upd_store_itm_sts($connect, $store_id){
 function upd_order_itm_sts_res($connect, $restore_id){
 	$sql = "UPDATE main_ord__item_tbl
 	SET 
-	order_itm_sts = '0'
+	order_itm_sts = '1'
 	WHERE order_id='$restore_id'";
 	$result = mysqli_query($connect, $sql);
 	if(!$result)
 		die(mysqli_error($connect));
 	return true;
 }
+
+
+function upd_order_itm_sts_tonew($connect, $renew_id){
+	$sql = "UPDATE main_ord__item_tbl
+	SET 
+	order_itm_sts = '0'
+	WHERE order_id='$renew_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
 
 // prixod prinyat move to draft
 function upd_store_itm_sts_res($connect, $draft_store_id){
@@ -494,6 +530,17 @@ function upd_order_itm_sts_del($connect, $delete_id){
 	SET 
 	order_itm_sts = '2'
 	WHERE order_id='$delete_id'";
+	$result = mysqli_query($connect, $sql);
+	if(!$result)
+		die(mysqli_error($connect));
+	return true;
+}
+
+function upd_order_itm_sts_close($connect, $closed_id){
+	$sql = "UPDATE main_ord__item_tbl
+	SET 
+	order_itm_sts = '4'
+	WHERE order_id='$closed_id'";
 	$result = mysqli_query($connect, $sql);
 	if(!$result)
 		die(mysqli_error($connect));
@@ -706,11 +753,11 @@ function add_debt($connect, $archive_id, $contractor_id, $debt, $ord_date, $paym
 
 }
 
-function delete_debt($connect, $restore_id){
-	$sql = "DELETE FROM `debts` WHERE order_id IN ('$restore_id')";
+function delete_debt($connect, $renew_id){
+	$sql = "DELETE FROM `debts` WHERE order_id IN ('$renew_id')";
 	if(mysqli_query($connect, $sql)) {
 		// redirect("archive_order.php");
-		header("Location: archive_order.php?message=Успешно восстановлен  заказ №_".$restore_id."");
+		header("Location: order.php?message=Успешно изменен статус заказа №_".$restore_id."");
 
 	}
 	else {

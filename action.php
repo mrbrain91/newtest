@@ -22,12 +22,26 @@ if (isset($_GET['archive_id'])) {
 //end order move to archive
 
 
+
+// renew order move delivered to new
+if (isset($_GET['renew_id'])) {
+    $renew_id = $_GET['renew_id'];
+    if (upd_order_sts_tonew($connect, $renew_id)) {
+       if (upd_order_itm_sts_tonew($connect, $renew_id)) {
+            delete_debt($connect, $renew_id);
+		    header("Location: order.php?message=Успешно изменен статус заказа №_".$restore_id."");
+       }
+    }
+}
+// end 
+
 // archive order move order.php
 if (isset($_GET['restore_id'])) {
     $restore_id = $_GET['restore_id'];
     if (upd_order_sts_res($connect, $restore_id)) {
        if (upd_order_itm_sts_res($connect, $restore_id)) {
-            delete_debt($connect, $restore_id);
+            // delete_debt($connect, $restore_id);
+		header("Location: archive_order.php?message=Успешно восстановлен заказа №_".$restore_id."");
        }
     }
 }
@@ -55,6 +69,17 @@ if (isset($_GET['delete_id'])) {
     }
     
 }
+
+if (isset($_GET['closed_id'])) {
+    $closed_id = $_GET['closed_id'];
+    if (upd_order_sts_close($connect, $closed_id)) {
+       if (upd_order_itm_sts_close($connect, $closed_id)) {
+	    header("Location: order.php?message=Успешно заархивирован заказ №_".$closed_id."");
+       }
+    }
+    
+}
+
 
 
 // prixod sklad
