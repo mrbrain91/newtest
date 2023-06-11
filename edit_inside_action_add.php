@@ -32,6 +32,8 @@ if (isset($_GET['pn'])) {
     $sale_agent = $_GET['sale_agent'];
     $contractor = $_GET['contractor'];
     $ord_date = $_GET['date'];
+    $ord_deliver_date = $_GET['del_date'];
+
 
 
     
@@ -63,6 +65,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
     $sale_agent = $_POST['sale_agent'];
     $contractor = $_POST['contractor'];
     $date = $_POST['ord_date'];
+    $delivery_date = $_POST['delivery_date'];
+
 
 
     
@@ -91,7 +95,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Сохранить') {
             $sum = get_sum_id_main($connect, $orid);
             
             if(upd_main_order_sum($connect, $orid, $sum)){
-                header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$date."");
+                header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$date."&&del_date=".$delivery_date."");
             }
         }
        
@@ -146,7 +150,7 @@ $rs_result = mysqli_query ($connect, $query);
     <div class="container-fluid">
         <div class="toolbar_wrapper">
             <div>
-                <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>"><button type="button" class="btn btn-custom">Закрыть</button></a>
+                <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&del_date=<?php echo $ord_deliver_date; ?>"><button type="button" class="btn btn-custom">Закрыть</button></a>
             </div>
             <div style='display:<?php echo $display_toggle; ?>; margin:0px;' class="alert alert-danger">
                 <strong style="margin-right: 22px;">Ошибка: Названия продуктов повторяются.!</strong>
@@ -177,6 +181,14 @@ $rs_result = mysqli_query ($connect, $query);
                 </div>
                 <div class="col-sm-8">
                     <?php echo $ord_date = date("d.m.Y", strtotime($ord_date)); ?>
+                </div>
+            </div>
+            <div class="row"">
+                <div class="col-sm-4">
+                Дата отгрузки
+                </div>
+                <div class="col-sm-8">
+                    <?php echo $ord_deliver_date = date("d.m.Y", strtotime($ord_deliver_date)); ?>
                 </div>
             </div>
 
@@ -274,6 +286,8 @@ $rs_result = mysqli_query ($connect, $query);
                             <input  type="hidden" name="sale_agent"  form="order_form" value="<?php echo $sale_agent;?>"/>
                             <input  type="hidden" name="contractor"  form="order_form" value="<?php echo $contractor;?>"/>
                             <input  type="hidden" name="ord_date"  form="order_form" value="<?php echo $ord_date;?>"/>    
+                            <input  type="hidden" name="delivery_date"  form="order_form" value="<?php echo $ord_deliver_date;?>"/> 
+
                         </td>
                         <td class="col-sm-1">
                             <span><?php echo $sale_type; ?></span>                        
@@ -334,7 +348,7 @@ $rs_result = mysqli_query ($connect, $query);
                             </button>
                         </td>
                         <td>
-                            <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>"><button type="button"><span class="glyphicon glyphicon-remove"></span></button></a>
+                            <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&del_date=<?php echo $ord_deliver_date; ?>"><button type="button"><span class="glyphicon glyphicon-remove"></span></button></a>
                         </td>
                     </tr>
                     <tr>

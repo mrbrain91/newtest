@@ -208,7 +208,7 @@ $rs_result = mysqli_query ($connect, $query);
                     <td class="w600"><?php echo number_format($sum, 0, ',', ' '); ?></td>
                     <td></td>
                     <td>
-                        <a href="edit_inside_action_add.php?id=<?php echo $id; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&orid=<?php echo $id; ?>&&pi=<?php echo $row["id"]; ?>&&pn=<?php echo $row["prod_name"]; ?>&&cn=<?php echo $row["count_name"]; ?>&&dn=<?php echo $row["date_name"]; ?>&&prn=<?php echo $row["price_name"]; ?>&&sn=<?php echo $row["sale_name"]; ?>&&st=<?php echo $row["sale_type"]; ?>&&tn=<?php echo $row["total_name"]; ?>"><span class="glyphicon glyphicon-plus-sign"></span></a>
+                        <a href="edit_inside_action_add.php?id=<?php echo $id; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&del_date=<?php echo $ord_deliver_date; ?>&&orid=<?php echo $id; ?>&&pi=<?php echo $row["id"]; ?>&&pn=<?php echo $row["prod_name"]; ?>&&cn=<?php echo $row["count_name"]; ?>&&dn=<?php echo $row["date_name"]; ?>&&prn=<?php echo $row["price_name"]; ?>&&sn=<?php echo $row["sale_name"]; ?>&&st=<?php echo $row["sale_type"]; ?>&&tn=<?php echo $row["total_name"]; ?>"><span class="glyphicon glyphicon-plus-sign"></span></a>
                     </td>
                 </tr>
             </tbody>

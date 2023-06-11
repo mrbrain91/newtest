@@ -25,6 +25,8 @@ if (isset($_GET['del']) && $_GET['del'] == 'ok') {
     $sale_agent = $_GET['sale_agent'];
     $contractor = $_GET['contractor'];
     $ord_date = $_GET['date'];
+    $ord_deliver_date = $_GET['del_date'];
+
 
 
     
@@ -44,11 +46,11 @@ if (isset($_GET['del']) && $_GET['del'] == 'ok') {
             
     
             if (upd_main_order_sum($connect, $orid, $sum)) {
-                header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$ord_date."");
+                header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$ord_date."&&del_date=".$ord_deliver_date."");
             }
         }
     } else {
-        header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$ord_date."");
+        header("Location: edit_inside_order.php?id=".$orid."&&payment_type=".$payment_type."&&sale_agent=".$sale_agent."&&contractor=".$contractor."&&date=".$ord_date."&&del_date=".$ord_deliver_date."");
     }
 
 
@@ -222,7 +224,7 @@ $rs_result = mysqli_query ($connect, $query);
 
 <div class="toolbar">
         <div class="container-fluid">
-            <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>"><button type="button" class="btn btn-custom">Закрыть</button></a>
+            <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&del_date=<?php echo $ord_deliver_date; ?>"><button type="button" class="btn btn-custom">Закрыть</button></a>
         </div>
 </div>
 
@@ -445,7 +447,7 @@ $rs_result = mysqli_query ($connect, $query);
                             <?php 
                                 if ($row["prod_name"] == $pn) {
                             ?>
-                            <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>"><button type="button"><span class="glyphicon glyphicon-remove"></span></button></a>
+                            <a href="edit_inside_order.php?id=<?php echo $orid; ?>&&payment_type=<?php echo $payment_type; ?>&&sale_agent=<?php echo $sale_agent; ?>&&contractor=<?php echo $contractor; ?>&&date=<?php echo $ord_date; ?>&&del_date=<?php echo $ord_deliver_date; ?>"><button type="button"><span class="glyphicon glyphicon-remove"></span></button></a>
                             <!-- <input class="glyphicon glyphicon-edit" type="submit" form="order_form" name="submit" value="Сохранить" /> -->
                             <?php
                                 }
