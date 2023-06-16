@@ -200,12 +200,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Принять') {
             <tbody>
                 <tr>
                     <td class="col-sm-4">
-                        <select required name="prod_name[]" form="return_form" class="form-control" id='prod_name_1' for='1' onchange="showCustomer(this.value,'1')">
+                        <select required name="prod_name[]" form="return_form" class="normalize" id='prod_name_1' for='1' onchange="showCustomer(this.value,'1')">
                             <option value="" class="form-control" >--выберитe продукцию---</option>
                             <?php     
                                 while ($option = mysqli_fetch_array($product_list)) {    
                             ?> 
-                                <option class="form-control" value="<?php echo $option["name"];?>"><?php $name = get_prod_name($connect, $option['name']); echo $name['name'];?></option>
+                                <option value="<?php echo $option["name"];?>"><?php $name = get_prod_name($connect, $option['name']); echo $name['name'];?></option>
 
                             <?php       
                                 };    
@@ -372,7 +372,7 @@ $(document).ready(function () {
         var newRow = $("<tr>");
         var cols = "";                                                      
                 
-        cols += '<td><select required name="prod_name[]" form="return_form" class="form-control custom-select" id="prod_name_'+inc+'" for="'+inc+'" onchange="showCustomer(this.value,'+inc+')"><option value="">--выберите продукцию--</option><?php while ($option = mysqli_fetch_array($product_list)) { ?> <option value="<?php echo $option["name"];?>"><?php  $name = get_prod_name($connect, $option["name"]); echo $name["name"]; ?></option> <?php }; ?></select></td>';
+        cols += '<td><select required name="prod_name[]" form="return_form" id="prod_name_'+inc+'" for="'+inc+'" onchange="showCustomer(this.value,'+inc+')"><option value="">--выберите продукцию--</option><?php while ($option = mysqli_fetch_array($product_list)) { ?> <option value="<?php echo $option["name"];?>"><?php  $name = get_prod_name($connect, $option["name"]); echo $name["name"]; ?></option> <?php }; ?></select></td>';
 
         cols += '<td><input required type="number" name="quantity[]"  class="form-control quantity" id="quantity_'+inc+'" for="'+inc+'" form="return_form"/></td>';
         cols += '<td><div id="txtHint_'+inc+'"><input disabled data-type="product_price" type="number" name="product_price[]"  class="form-control product_price" id="product_price_'+inc+'" for="'+inc+'" form="return_form"/></div></td>';
@@ -385,6 +385,10 @@ $(document).ready(function () {
         newRow.append(cols);
         $("table.return-list").append(newRow);
         counter++;
+
+        $('#prod_name_'+inc+'').selectize();
+
+
     });
 
 

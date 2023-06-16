@@ -756,7 +756,7 @@ function add_debt($connect, $archive_id, $contractor_id, $debt, $ord_date, $paym
 			mysqli_query($connect, $query);
 		}
 
-		header("Location: order.php?message=Успешно заархивирован заказ №_".$archive_id."");
+		header("Location: order.php?message=Успешно доставлено заказ №_".$archive_id."");
 
 	}
 	else {

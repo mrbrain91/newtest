@@ -277,7 +277,6 @@ table > tbody > tr > td {
 .card_head {
   font-size: 12px;
   color: #8d8d8d;
-  display: flex;
   justify-content: space-between;
   padding: 10px;
   margin-top: 14px;
@@ -551,12 +550,14 @@ input[type="radio"]:checked + label {
   background-color: #28a745;
   /* Blue */
   color: white;
+  padding: 3px 20px;
 }
 
 .archived {
   background-color: #335a95;
   /* Grey */
   color: white;
+  padding: 3px 22px;
 }
 
 .delivered {
@@ -566,9 +567,10 @@ input[type="radio"]:checked + label {
 }
 
 .cancelled {
-  background-color: #dc3545;
+  background-color: #2c3644;
   /* Red */
   color: white;
+  padding: 3px 15px;
 }
 
 .invoice {

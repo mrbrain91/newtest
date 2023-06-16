@@ -72,8 +72,10 @@ if ($all_count < $limit) {
 
 //for list 
 $rs_result = mysqli_query ($connect, $query);
-
-
+$span = 'none';
+if(mysqli_num_rows($rs_result) == 0) {
+    $span = true;
+} 
 
 
 ?>
@@ -165,6 +167,11 @@ $rs_result = mysqli_query ($connect, $query);
             </tr>
         </thead>
         <tbody class="postList">
+        <tr style="display:<?php echo $span; ?>; text-align: center;">
+            <td>
+               Нет записи
+            </td>
+        </tr>
             
 <?php     
     $i = 0;
@@ -189,7 +196,9 @@ $rs_result = mysqli_query ($connect, $query);
       }
 
 ?> 
+        
         <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+            
             <td><?php echo $row["id"]; ?></td>
             <td><?php $user = get_contractor($connect, $row["contractor"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
             <td><?php $user = get_user($connect, $row["sale_agent"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>

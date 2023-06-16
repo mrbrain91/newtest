@@ -29,7 +29,7 @@ if (isset($_GET['renew_id'])) {
     if (upd_order_sts_tonew($connect, $renew_id)) {
        if (upd_order_itm_sts_tonew($connect, $renew_id)) {
             delete_debt($connect, $renew_id);
-		    header("Location: order.php?message=Успешно изменен статус заказа №_".$restore_id."");
+		    header("Location: order.php?message=Успешно изменен статус заказа №_".$renew_id."");
        }
     }
 }

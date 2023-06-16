@@ -94,7 +94,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Добавить') {
         <div class="card_head card_head_mt0">
         <form action=""  method="POST" class="horizntal-form" id="order_form">
             <div class="row mt">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <span>Продукция</span>
                 </div>
                 <div class="col-md-2">
@@ -102,7 +102,7 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Добавить') {
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <select required name="product_name" form="order_form" class="normalize">
                         <option value="">--выберитe---</option>
                         <?php     

@@ -299,24 +299,24 @@ if (isset($_POST['rowreturn'])) {
     while ($row = mysqli_fetch_assoc($result)) {
       $i++;
       if ($row["return_status"] == 0) {
-        $status_order = 'Принят';
-        $color = '#28a745';
+         $status_order = 'Принят';
+        $status_type = 'archived';
         $dsp_toggle = 'none';
 
       }elseif ($row["return_status"] == 1) {
-          $status_order = 'Удален';
-          $color = '#dc3545';
-          $dsp_toggle = 'none';
+            $status_order = 'Удален';
+            $status_type = 'cancelled';
+            $dsp_toggle = 'none';
       }
       ?>
-       <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+      <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
             <td><?php echo $row["id"]; ?></td>
             <td><?php $user = get_contractor($connect, $row["contractor"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
             <td><?php $user = get_user($connect, $row["sale_agent"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
             <td><?php echo $date = date("d.m.Y", strtotime($row["return_date"])); ?></td>
             <td><?php echo $row["payment_type"]; ?></td>
             <td><?php echo number_format($row['transaction_amount'], 0, '.', ' '); ?></td>
-            <td><span style="border: 1px solid; background-color: <?php echo $color;?>; padding: 5px 10px; border-radius: 4px; color: white;"><?php echo $status_order; ?></span></td>
+            <td><span class='status <?php echo $status_type; ?>'><?php echo $status_order; ?></span></td>
         </tr>
         <tr>
             <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
@@ -342,7 +342,7 @@ if (isset($_POST['rowarchive'])) {
     while ($row = mysqli_fetch_assoc($result)) {
       $i++;
       ?>
-         <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+          <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
             <td><?php echo $row["id"]; ?></td>
             <td><?php $user = get_contractor($connect, $row["contractor"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
             <td><?php $user = get_user($connect, $row["sale_agent"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
@@ -354,7 +354,7 @@ if (isset($_POST['rowarchive'])) {
         </tr>
         <tr >
             <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
-                <a href="inside_archive_order.php?id=<?php echo $row["id"]; ?>&&payment_type=<?php echo $row["payment_type"]; ?>&&sale_agent=<?php echo $row["sale_agent"]; ?>&&contractor=<?php echo $row["contractor"]; ?>&&date=<?php echo $row["ord_date"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
+                <a href="inside_archive_order.php?id=<?php echo $row["id"]; ?>&&payment_type=<?php echo $row["payment_type"]; ?>&&sale_agent=<?php echo $row["sale_agent"]; ?>&&contractor=<?php echo $row["contractor"]; ?>&&date=<?php echo $row["ord_date"]; ?>&&del_date=<?php echo $row["ord_deliver_date"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
                 <a href="action.php?restore_id=<?=$row['id']?>"><button onclick="return confirm('Восстановить?')" class="btn btn-custom">Восстановить</button> </a>
             </div> </td>
         </tr>
@@ -374,7 +374,7 @@ if (isset($_POST['rowdel'])) {
     while ($row = mysqli_fetch_assoc($result)) {
       $i++;
       ?>
-         <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
+          <tr data-toggle="collapse" data-target="#row<?php echo $i;?>" aria-expanded="true" class="accordion-toggle">
             <td><?php echo $row["id"]; ?></td>
             <td><?php $user = get_contractor($connect, $row["contractor"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
             <td><?php $user = get_user($connect, $row["sale_agent"]);?>&nbsp;<?php echo $user["surname"]; ?>&nbsp;<?php echo $user["name"]; ?>&nbsp;<?php echo $user["fathername"]; ?></td>
@@ -386,7 +386,7 @@ if (isset($_POST['rowdel'])) {
         </tr>
         <tr >
             <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
-                <a href="inside_deleted_order.php?id=<?php echo $row["id"]; ?>&&payment_type=<?php echo $row["payment_type"]; ?>&&sale_agent=<?php echo $row["sale_agent"]; ?>&&contractor=<?php echo $row["contractor"]; ?>&&date=<?php echo $row["ord_date"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
+                <a href="inside_deleted_order.php?id=<?php echo $row["id"]; ?>&&payment_type=<?php echo $row["payment_type"]; ?>&&sale_agent=<?php echo $row["sale_agent"]; ?>&&contractor=<?php echo $row["contractor"]; ?>&&date=<?php echo $row["ord_date"]; ?>&&del_date=<?php echo $row["ord_deliver_date"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
             </div> </td>
         </tr>
     <?php }

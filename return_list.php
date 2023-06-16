@@ -67,6 +67,12 @@ if ($all_count < $limit) {
 
 //for list 
 $rs_result = mysqli_query ($connect, $query);
+$span = 'none';
+if(mysqli_num_rows($rs_result) == 0) {
+    $span = true;
+} 
+
+
 
 
 
@@ -153,6 +159,11 @@ $rs_result = mysqli_query ($connect, $query);
             </tr>
         </thead>
         <tbody class="postList">
+        <tr style="display:<?php echo $span; ?>; text-align: center;">
+            <td>
+               Нет записи
+            </td>
+        </tr>
             
 <?php     
     $i = 0;
@@ -160,12 +171,12 @@ $rs_result = mysqli_query ($connect, $query);
     $i++;
     if ($row["return_status"] == 0) {
         $status_order = 'Принят';
-        $color = '#28a745';
+        $status_type = 'archived';
         $dsp_toggle = 'none';
 
     }elseif ($row["return_status"] == 1) {
         $status_order = 'Удален';
-        $color = '#dc3545';
+        $status_type = 'cancelled';
         $dsp_toggle = 'none';
     }
 
@@ -177,7 +188,7 @@ $rs_result = mysqli_query ($connect, $query);
             <td><?php echo $date = date("d.m.Y", strtotime($row["return_date"])); ?></td>
             <td><?php echo $row["payment_type"]; ?></td>
             <td><?php echo number_format($row['transaction_amount'], 0, '.', ' '); ?></td>
-            <td><span style="border: 1px solid; background-color: <?php echo $color;?>; padding: 5px 10px; border-radius: 4px; color: white;"><?php echo $status_order; ?></span></td>
+            <td><span class='status <?php echo $status_type; ?>'><?php echo $status_order; ?></span></td>
         </tr>
         <tr>
             <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 

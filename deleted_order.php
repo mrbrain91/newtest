@@ -71,7 +71,10 @@ if ($all_count < $limit) {
 
 //for list 
 $rs_result = mysqli_query ($connect, $query);
-
+$span = 'none';
+if(mysqli_num_rows($rs_result) == 0) {
+    $span = true;
+} 
 
 
 
@@ -159,6 +162,11 @@ $rs_result = mysqli_query ($connect, $query);
             </tr>
         </thead>
         <tbody class="postList">
+        <tr style="display:<?php echo $span; ?>; text-align: center;">
+            <td>
+               Нет записи
+            </td>
+        </tr>
             
 <?php     
     $i = 0;
@@ -178,7 +186,7 @@ $rs_result = mysqli_query ($connect, $query);
         </tr>
         <tr >
             <td colspan="12" style="border:0px;  background-color: #fafafb;" class="hiddenRow"><div class="accordian-body collapse" id="row<?php echo $i;?>"> 
-                <a href="inside_deleted_order.php?id=<?php echo $row["id"]; ?>&&payment_type=<?php echo $row["payment_type"]; ?>&&sale_agent=<?php echo $row["sale_agent"]; ?>&&contractor=<?php echo $row["contractor"]; ?>&&date=<?php echo $row["ord_date"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
+                <a href="inside_deleted_order.php?id=<?php echo $row["id"]; ?>&&payment_type=<?php echo $row["payment_type"]; ?>&&sale_agent=<?php echo $row["sale_agent"]; ?>&&contractor=<?php echo $row["contractor"]; ?>&&date=<?php echo $row["ord_date"]; ?>&&del_date=<?php echo $row["ord_deliver_date"]; ?>"><button class="btn btn-custom">Просмотр</button> </a>
             </div> </td>
         </tr>
         
