@@ -59,7 +59,9 @@ if (isset($_POST['id_contractor'])) {
     
 }
 
-
+$currentDate = date("Y-m-d");
+$endOfDay = '23:59:59';
+$dateValue = $currentDate . ' ' . $endOfDay;
 
 
 ?>
@@ -152,7 +154,8 @@ if (isset($_POST['id_contractor'])) {
                 </div>
                 -
                 <div class="col-md-2">
-                    <input required type="date" value="<?php echo date("Y-m-d"); ?>" class="form-control" name="to_date" form="order_form">
+                    <input required type="datetime-local" value="<?php echo $dateValue; ?>" class="form-control" name="to_date" form="order_form">
+                    <!-- <input required type="date" value="<?php echo date("Y-m-d"); ?>" class="form-control" name="to_date" form="order_form"> -->
                 </div>    
             </div>
         </form>
